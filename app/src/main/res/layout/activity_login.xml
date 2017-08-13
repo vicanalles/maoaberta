@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/backgroundColorApp"
+    tools:context=".presentation.ui.activity.LoginActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/image_view_logo_app"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="70dp"
+            android:src="@drawable/logo_mao_aberta"
+            app:civ_border_color="#FF000000"
+            app:civ_border_width="2dp" />
+
+        <EditText
+            android:id="@+id/edit_text_login"
+            android:layout_width="240dp"
+            android:layout_height="40dp"
+            android:layout_below="@id/image_view_logo_app"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="30dp"
+            android:background="@color/textColorApp"
+            android:hint="Login"
+            android:paddingLeft="10dp"
+            android:textColor="@android:color/black"
+            android:textSize="26sp" />
+
+        <EditText
+            android:id="@+id/edit_text_password"
+            android:layout_width="240dp"
+            android:layout_height="40dp"
+            android:layout_below="@id/edit_text_login"
+            android:layout_marginTop="15dp"
+            android:background="@color/textColorApp"
+            android:hint="Senha"
+            android:paddingLeft="10dp"
+            android:textColor="@android:color/black"
+            android:textSize="26sp"
+            android:layout_centerHorizontal="true"/>
+
+        <Button
+            android:id="@+id/button_login_app"
+            android:layout_width="240dp"
+            android:layout_height="40dp"
+            android:layout_below="@id/edit_text_password"
+            android:layout_marginTop="30dp"
+            android:background="@color/tabLayoutBottomColor"
+            android:text="Acessar"
+            android:textColor="@color/textColorApp"
+            android:textSize="20sp"
+            android:layout_centerHorizontal="true"/>
+
+        <TextView
+            android:layout_width="240dp"
+            android:layout_height="20dp"
+            android:layout_below="@id/button_login_app"
+            android:layout_marginTop="5dp"
+            android:text="Não tem cadastro? Cadastre-se agora!"
+            android:textColor="@color/textColorApp"
+            android:layout_centerHorizontal="true"/>
+    </RelativeLayout>
+
+</RelativeLayout>

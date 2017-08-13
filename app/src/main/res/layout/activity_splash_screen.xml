@@ -1,6 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/backgroundColorApp">
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/image_view_logo_app"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="50dp"
+            android:src="@drawable/logo_mao_aberta"
+            app:civ_border_color="#FF000000"
+            app:civ_border_width="2dp" />
+
+        <TextView
+            android:id="@+id/text_view_bem_vindo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="BEM VINDO AO MÃO ABERTA"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/image_view_logo_app"
+            android:layout_marginTop="50dp"
+            android:textColor="@color/textColorApp"
+            android:textSize="25sp"/>
+
+        <TextView
+            android:id="@+id/text_view_ajude"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ajude Instituições"
+            android:textColor="@color/textColorApp"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/text_view_bem_vindo"
+            android:layout_marginTop="25dp"
+            android:textSize="23sp"/>
+
+        <TextView
+            android:id="@+id/text_view_ajude_sempre"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Com o que quiser e quando puder."
+            android:textColor="@color/textColorApp"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/text_view_ajude"
+            android:layout_marginTop="5dp"
+            android:textSize="21sp"/>
+
+        <ProgressBar
+            android:id="@+id/progress_bar_splash_screen"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/text_view_ajude_sempre"
+            android:layout_marginTop="5dp"/>
+    </RelativeLayout>
 </LinearLayout>

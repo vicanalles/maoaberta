@@ -1,4 +1,4 @@
-package com.maoaberta.vinicius.maoaberta.presentation;
+package com.maoaberta.vinicius.maoaberta.presentation.ui.activity;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;

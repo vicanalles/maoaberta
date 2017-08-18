@@ -1,15 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    
-    <TextView
-        android:id="@+id/text_view_1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Tela 1"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"/>
+    android:layout_height="match_parent"
+    android:background="@color/backgroundColorApp"
+    android:orientation="vertical">
 
-</RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <EditText
+            android:id="@+id/edit_text_nome_cadastro_cliente"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:background="@color/textColorApp"
+            android:fontFamily="sans-serif"
+            android:hint="@string/nome_cliente"
+            android:inputType="text"
+            android:paddingLeft="10dp"
+            android:textAlignment="textStart"
+            android:textColor="@android:color/black"
+            android:textSize="23sp"
+            android:textStyle="normal" />
+
+    </RelativeLayout>
+
+</LinearLayout>

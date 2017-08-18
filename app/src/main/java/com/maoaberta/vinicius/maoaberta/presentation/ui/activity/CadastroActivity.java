@@ -13,7 +13,6 @@ import android.widget.TextView;
 
 import com.maoaberta.vinicius.maoaberta.R;
 import com.maoaberta.vinicius.maoaberta.presentation.ui.adapter.ViewPagerAdapter;
-import com.maoaberta.vinicius.maoaberta.util.SlidingTabLayout;
 
 /**
  * Created by Vinicius Canalles on 16/08/2017.

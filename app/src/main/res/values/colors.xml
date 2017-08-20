@@ -6,4 +6,5 @@
     <color name="backgroundColorApp">#18BC9C</color>
     <color name="tabLayoutBottomColor">#2C3E50</color>
     <color name="textColorApp">#ffffff</color>
+    <color name="facebook_background_button_color">#3B5998</color>
 </resources>

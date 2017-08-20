@@ -5,4 +5,5 @@
     <string name="entrar">Entrar</string>
     <string name="cadastrar_agora">Não tem cadastro? Cadastre-se agora!</string>
     <string name="nome_cliente">Nome</string>
+    <string name="sobrenome">Sobrenome</string>
 </resources>

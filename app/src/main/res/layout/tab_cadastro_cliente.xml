@@ -18,7 +18,7 @@
             android:background="@drawable/rounded_edittext"
             android:fontFamily="sans-serif"
             android:hint="@string/nome_cliente"
-            android:inputType="text"
+            android:inputType="textCapWords"
             android:paddingLeft="10dp"
             android:textAlignment="textStart"
             android:textColor="@color/textColorBlack"
@@ -26,7 +26,7 @@
             android:textStyle="normal" />
 
         <EditText
-            android:id="@+id/edit_text_sobrenome_cadastro_cliente"
+            android:id="@+id/edit_text_telefone_cadastro_cliente"
             android:layout_width="match_parent"
             android:layout_height="30dp"
             android:layout_below="@id/edit_text_nome_cadastro_cliente"
@@ -35,7 +35,7 @@
             android:background="@drawable/rounded_edittext"
             android:fontFamily="sans-serif"
             android:hint="@string/telefone"
-            android:inputType="text"
+            android:inputType="phone"
             android:paddingLeft="10dp"
             android:textAlignment="textStart"
             android:textColor="@color/textColorBlack"
@@ -46,7 +46,7 @@
             android:id="@+id/edit_text_email_cadastro_cliente"
             android:layout_width="match_parent"
             android:layout_height="30dp"
-            android:layout_below="@id/edit_text_sobrenome_cadastro_cliente"
+            android:layout_below="@id/edit_text_telefone_cadastro_cliente"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="5dp"
             android:background="@drawable/rounded_edittext"

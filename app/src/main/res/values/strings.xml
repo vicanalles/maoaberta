@@ -10,4 +10,8 @@
     <string name="cadastrar">Cadastrar</string>
     <string name="string_text_gmail">Cadastre-se com Gmail</string>
     <string name="confirmar_senha">Confirmar Senha</string>
+    <string name="razao_social">Razão Social</string>
+    <string name="nome_fantasia">Nome Fantasia</string>
+    <string name="cnpj">CNPJ</string>
+    <string name="nome_responsavel">Nome do Responsável</string>
 </resources>

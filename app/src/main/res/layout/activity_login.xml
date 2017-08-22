@@ -17,7 +17,7 @@
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="20dp"
             android:src="@drawable/logo_mao_aberta" />
 
         <EditText
@@ -62,7 +62,7 @@
             android:background="@drawable/rounded_button"
             android:fontFamily="sans-serif"
             android:text="@string/entrar"
-            android:textColor="@color/textColorApp"
+            android:textColor="@color/textColorWhite"
             android:textSize="20sp"
             android:textStyle="normal" />
 
@@ -76,7 +76,7 @@
             android:fontFamily="sans-serif"
             android:text="@string/cadastrar_agora"
             android:textAlignment="center"
-            android:textColor="@color/textColorApp"
+            android:textColor="@color/textColorWhite"
             android:textStyle="normal" />
     </RelativeLayout>
 

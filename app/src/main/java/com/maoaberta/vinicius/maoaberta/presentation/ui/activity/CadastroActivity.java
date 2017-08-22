@@ -41,7 +41,7 @@ public class CadastroActivity extends AppCompatActivity {
         // Assiging the Sliding Tab Layout View
         tabs = (TabLayout) findViewById(R.id.tabs);
         tabs.setTabTextColors(ColorStateList.valueOf(Color.WHITE));
-        tabs.setSelectedTabIndicatorColor(Color.WHITE);
+        tabs.setSelectedTabIndicatorColor(getResources().getColor(R.color.backgroundColorApp));
         tabs.setupWithViewPager(pager);
 
         //Definição da fonte e da cor do texto das tabs

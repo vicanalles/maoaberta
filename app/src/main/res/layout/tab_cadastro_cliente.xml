@@ -12,40 +12,40 @@
         <EditText
             android:id="@+id/edit_text_nome_cadastro_cliente"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="30dp"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="10dp"
             android:background="@drawable/rounded_edittext"
             android:fontFamily="sans-serif"
             android:hint="@string/nome_cliente"
-            android:inputType="textCapCharacters"
+            android:inputType="text"
             android:paddingLeft="10dp"
             android:textAlignment="textStart"
             android:textColor="@android:color/black"
-            android:textSize="23sp"
+            android:textSize="15sp"
             android:textStyle="normal" />
 
         <EditText
             android:id="@+id/edit_text_sobrenome_cadastro_cliente"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="30dp"
             android:layout_below="@id/edit_text_nome_cadastro_cliente"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="10dp"
             android:background="@drawable/rounded_edittext"
             android:fontFamily="sans-serif"
             android:hint="@string/sobrenome"
-            android:inputType="textCapCharacters"
+            android:inputType="text"
             android:paddingLeft="10dp"
             android:textAlignment="textStart"
             android:textColor="@android:color/black"
-            android:textSize="23sp"
+            android:textSize="15sp"
             android:textStyle="normal" />
 
         <EditText
             android:id="@+id/edit_text_email_cadastro_cliente"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="30dp"
             android:layout_below="@id/edit_text_sobrenome_cadastro_cliente"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="10dp"
@@ -56,13 +56,13 @@
             android:paddingLeft="10dp"
             android:textAlignment="textStart"
             android:textColor="@android:color/black"
-            android:textSize="23sp"
+            android:textSize="15sp"
             android:textStyle="normal" />
 
         <EditText
             android:id="@+id/edit_text_senha_cadastro_cliente"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="30dp"
             android:layout_below="@id/edit_text_email_cadastro_cliente"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="10dp"
@@ -73,13 +73,26 @@
             android:paddingLeft="10dp"
             android:textAlignment="textStart"
             android:textColor="@android:color/black"
-            android:textSize="23sp"
+            android:textSize="15sp"
             android:textStyle="normal" />
 
-        <LinearLayout
+        <Button
+            android:id="@+id/button_cadastrar_cliente"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_below="@id/edit_text_senha_cadastro_cliente"
+            android:text="@string/cadastrar"
+            android:textAlignment="center"
+            android:textColor="@color/textColorWhite"
+            android:textSize="15sp"
+            android:background="@color/tabLayoutBottomColor"
+            android:layout_marginTop="10dp"/>
+
+        <LinearLayout
+            android:id="@+id/linear_layout_facebook"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_below="@id/button_cadastrar_cliente"
             android:layout_marginTop="10dp"
             android:background="@color/facebook_background_button_color"
             android:orientation="horizontal">
@@ -96,11 +109,41 @@
                 android:layout_height="40dp"
                 android:fontFamily="sans-serif"
                 android:gravity="center_vertical"
-                android:text="Cadastrar-se com Facebook"
+                android:text="@string/string_text_facebook"
                 android:textAlignment="center"
-                android:textColor="@color/textColorApp"
-                android:textSize="20sp"
+                android:layout_gravity="center_vertical"
+                android:textColor="@color/textColorWhite"
+                android:textSize="15sp"
                 android:textStyle="normal" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp"
+            android:background="@color/gmail_background_button_color"
+            android:layout_below="@id/linear_layout_facebook">
+
+            <ImageView
+                android:id="@+id/image_view_gmail_logo"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/ic_action_gmail"/>
+
+            <TextView
+                android:id="@+id/text_view_gmail_cadastro"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:fontFamily="sans-serif"
+                android:gravity="center_vertical"
+                android:text="@string/string_text_gmail"
+                android:textAlignment="center"
+                android:layout_gravity="center_vertical"
+                android:textColor="@color/textColorWhite"
+                android:textSize="15sp"
+                android:textStyle="normal"/>
+
         </LinearLayout>
 
     </RelativeLayout>

@@ -3,8 +3,8 @@
     android:id="@android:id/text1"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:textSize="20sp"
-    android:textColor="@color/textColorApp"
+    android:textSize="15sp"
+    android:textColor="@color/textColorBlack"
     android:textStyle="normal"
     android:gravity="center">
 

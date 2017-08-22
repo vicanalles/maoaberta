@@ -39,8 +39,8 @@ public class LoginActivity extends AppCompatActivity {
         textViewAbrirCadastro = (TextView) findViewById(R.id.text_view_abrir_cadastro);
         buttonLogin = (Button) findViewById(R.id.button_login_app);
 
-        editTextEmail.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_account_circle, 0, 0, 0);
-        editTextPassword.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_lock_outline, 0, 0, 0);
+        //editTextEmail.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_account_circle, 0, 0, 0);
+        //editTextPassword.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_lock_outline, 0, 0, 0);
 
         textViewAbrirCadastro.setOnClickListener(new View.OnClickListener() {
             @Override

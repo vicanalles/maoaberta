@@ -9,6 +9,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.TextView;
 
 import com.maoaberta.vinicius.maoaberta.R;
@@ -25,6 +26,7 @@ public class CadastroActivity extends AppCompatActivity {
     TabLayout tabs;
     CharSequence titles[]={"Cliente","Organização"};
     int numbOftabs =2;
+    TextView tv;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -40,15 +42,37 @@ public class CadastroActivity extends AppCompatActivity {
 
         // Assiging the Sliding Tab Layout View
         tabs = (TabLayout) findViewById(R.id.tabs);
-        tabs.setTabTextColors(ColorStateList.valueOf(Color.WHITE));
-        tabs.setSelectedTabIndicatorColor(getResources().getColor(R.color.backgroundColorApp));
+        tabs.setSelectedTabIndicatorColor(getResources().getColor(R.color.tabLayoutBottomColor));
         tabs.setupWithViewPager(pager);
 
         //Definição da fonte e da cor do texto das tabs
         for(int i = 0; i < tabs.getTabCount(); i++){
-            TextView tv = (TextView) LayoutInflater.from(this).inflate(R.layout.custom_tab, null);
+            tv = (TextView) LayoutInflater.from(this).inflate(R.layout.custom_tab, null);
             tv.setTypeface(Typeface.SANS_SERIF);
             tabs.getTabAt(i).setCustomView(tv);
+
+            if(tabs.getTabAt(i).isSelected()){
+                tv.setTextColor(getResources().getColor(R.color.textColorWhite));
+            }else{
+                tv.setTextColor(getResources().getColor(R.color.textColorBlack));
+            }
         }
+
+        tabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
     }
 }

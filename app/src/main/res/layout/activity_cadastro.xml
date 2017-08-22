@@ -20,7 +20,6 @@
         android:layout_height="30dp"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="20dp"
-        android:background="@color/textColorBlack"
         android:elevation="2dp"
         app:tabBackground="@drawable/tab_color_selector"/>
 

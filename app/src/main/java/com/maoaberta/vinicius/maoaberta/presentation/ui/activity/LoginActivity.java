@@ -1,22 +1,20 @@
 package com.maoaberta.vinicius.maoaberta.presentation.ui.activity;
 
-import android.app.Activity;
-import android.app.Dialog;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.os.Build;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.view.View;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
-import android.widget.EditText;
+import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
+import android.text.style.ForegroundColorSpan;
+import android.view.LayoutInflater;
 import android.widget.TextView;
 
 import com.maoaberta.vinicius.maoaberta.R;
+import com.maoaberta.vinicius.maoaberta.presentation.ui.adapter.ViewPagerAdapterCadastro;
+import com.maoaberta.vinicius.maoaberta.presentation.ui.adapter.ViewPagerAdapterLogin;
 
 /**
  * Created by Vinicius on 12/08/2017.
@@ -24,60 +22,84 @@ import com.maoaberta.vinicius.maoaberta.R;
 
 public class LoginActivity extends AppCompatActivity {
 
-    TextView textViewAbrirCadastro;
-    EditText editTextEmail;
-    EditText editTextPassword;
-    Button buttonLogin;
+    ViewPager pagerLogin;
+    ViewPagerAdapterLogin adapterLogin;
+    TabLayout tabsLogin;
+    CharSequence titlesLogin[]={"Cliente","Organização"};
+    int numbOftabsLogin =2;
+    TextView tv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        editTextEmail = (EditText) findViewById(R.id.edit_text_login);
-        editTextPassword = (EditText) findViewById(R.id.edit_text_password);
-        textViewAbrirCadastro = (TextView) findViewById(R.id.text_view_abrir_cadastro);
-        buttonLogin = (Button) findViewById(R.id.button_login_app);
+        // Creating The ViewPagerAdapterCadastro and Passing Fragment Manager, Titles fot the Tabs and Number Of Tabs.
+        adapterLogin =  new ViewPagerAdapterLogin(getSupportFragmentManager(), titlesLogin, numbOftabsLogin);
 
-        //editTextEmail.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_account_circle, 0, 0, 0);
-        //editTextPassword.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_lock_outline, 0, 0, 0);
+        // Assigning ViewPager View and setting the adapterLogin
+        pagerLogin = (ViewPager) findViewById(R.id.pager_login);
+        pagerLogin.setAdapter(adapterLogin);
 
-        textViewAbrirCadastro.setOnClickListener(new View.OnClickListener() {
+        // Assiging the Sliding Tab Layout View
+        tabsLogin = (TabLayout) findViewById(R.id.tabs_login);
+        tabsLogin.setSelectedTabIndicatorColor(getResources().getColor(R.color.tabLayoutBottomColor));
+        tabsLogin.setupWithViewPager(pagerLogin);
+
+        //Definição da fonte e da cor do texto das tabsLogin
+        for(int i = 0; i < tabsLogin.getTabCount(); i++){
+            tv = (TextView) LayoutInflater.from(this).inflate(R.layout.custom_tab, null);
+            tv.setTypeface(Typeface.SANS_SERIF);
+            tabsLogin.getTabAt(i).setCustomView(tv);
+        }
+
+        //Criação do texto cliente na cor branco para iniciar nas tabsLogin
+        final SpannableStringBuilder cliente = new SpannableStringBuilder();
+        SpannableString spannableCliente = new SpannableString(titlesLogin[0]);
+        spannableCliente.setSpan(new ForegroundColorSpan(Color.WHITE), 0, titlesLogin[0].length(), 0);
+        cliente.append(spannableCliente);
+        tabsLogin.getTabAt(0).setText(cliente);
+
+        //Criação do texto cliente em preto para ser usado após a primeira troca de tabsLogin
+        final SpannableStringBuilder clienteBlack = new SpannableStringBuilder();
+        SpannableString spannableClienteBlack = new SpannableString(titlesLogin[0]);
+        spannableClienteBlack.setSpan(new ForegroundColorSpan(Color.BLACK), 0, titlesLogin[0].length(), 0);
+        clienteBlack.append(spannableClienteBlack);
+
+        //Criação do texto organização em preto para ser usado no início das tabsLogin
+        final SpannableStringBuilder organizacao = new SpannableStringBuilder();
+        SpannableString spannableOrganizacao = new SpannableString(titlesLogin[1]);
+        spannableOrganizacao.setSpan(new ForegroundColorSpan(Color.BLACK), 0, titlesLogin[1].length(), 0);
+        organizacao.append(spannableOrganizacao);
+        tabsLogin.getTabAt(1).setText(organizacao);
+
+        tabsLogin.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(LoginActivity.this, CadastroActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        editTextEmail.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (!hasFocus) {
-                    hideKeyboard(v);
+            public void onTabSelected(TabLayout.Tab tab) {
+                pagerLogin.setCurrentItem(tab.getPosition());
+                String texto = String.valueOf(tab.getText()); //pega o texto de acordo com a posição da tab
+                SpannableStringBuilder builder = new SpannableStringBuilder(); //cria um spannableBuilder
+                SpannableString spannableString = new SpannableString(texto); //cria um spannableString
+                spannableString.setSpan(new ForegroundColorSpan(Color.WHITE), 0, texto.length(), 0); //define a nova cor
+                builder.append(spannableString); //adiciona o novo texto ao builder
+                if(tab.getPosition() == 0) {
+                    tabsLogin.getTabAt(0).setText(builder);
+                    tabsLogin.getTabAt(1).setText(organizacao);
+                }else if(tab.getPosition() == 1){
+                    tabsLogin.getTabAt(0).setText(clienteBlack);
+                    tabsLogin.getTabAt(1).setText(builder);
                 }
             }
-        });
 
-        editTextPassword.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (!hasFocus) {
-                    hideKeyboard(v);
-                }
+            public void onTabUnselected(TabLayout.Tab tab) {
+
             }
-        });
 
-        buttonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onTabReselected(TabLayout.Tab tab) {
 
             }
         });
-    }
-
-    public void hideKeyboard(View view) {
-        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
-        inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 }

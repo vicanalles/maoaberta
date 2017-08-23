@@ -11,13 +11,13 @@ import com.maoaberta.vinicius.maoaberta.presentation.ui.fragment.TabCadastroOrga
  * Created by Vinicius Canalles on 16/08/2017.
  */
 
-public class ViewPagerAdapter extends FragmentStatePagerAdapter{
+public class ViewPagerAdapterCadastro extends FragmentStatePagerAdapter{
 
-    CharSequence titles[]; // This will Store the Titles of the Tabs which are Going to be passed when ViewPagerAdapter is created
-    int numbOfTabs; // Store the number of tabs, this will also be passed when the ViewPagerAdapter is created
+    CharSequence titles[]; // This will Store the Titles of the Tabs which are Going to be passed when ViewPagerAdapterCadastro is created
+    int numbOfTabs; // Store the number of tabs, this will also be passed when the ViewPagerAdapterCadastro is created
 
     // Build a Constructor and assign the passed Values to appropriate values in the class
-    public ViewPagerAdapter(FragmentManager fm, CharSequence titles[], int numbOfTabsumb) {
+    public ViewPagerAdapterCadastro(FragmentManager fm, CharSequence titles[], int numbOfTabsumb) {
         super(fm);
         this.titles = titles;
         this.numbOfTabs = numbOfTabsumb;

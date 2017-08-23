@@ -15,7 +15,7 @@
         android:src="@drawable/logo_mao_aberta" />
 
     <android.support.design.widget.TabLayout
-        android:id="@+id/tabs"
+        android:id="@+id/tabs_cadastro"
         android:layout_width="320dp"
         android:layout_height="30dp"
         android:layout_gravity="center_horizontal"
@@ -24,7 +24,7 @@
         app:tabBackground="@drawable/tab_color_selector"/>
 
     <android.support.v4.view.ViewPager
-        android:id="@+id/pager"
+        android:id="@+id/pager_cadastro"
         android:layout_width="320dp"
         android:layout_height="0dp"
         android:layout_gravity="center_horizontal"

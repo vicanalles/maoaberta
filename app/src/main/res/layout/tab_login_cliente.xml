@@ -6,7 +6,7 @@
     android:orientation="vertical">
 
     <EditText
-        android:id="@+id/edit_text_login_cliente"
+        android:id="@+id/edit_text_email_cliente_login"
         android:layout_width="320dp"
         android:layout_height="40dp"
         android:layout_gravity="center_horizontal"
@@ -14,14 +14,14 @@
         android:background="@drawable/rounded_edittext"
         android:fontFamily="sans-serif"
         android:hint="@string/email"
-        android:inputType="text"
+        android:inputType="textEmailAddress"
         android:textColor="@android:color/black"
         android:textSize="23sp"
         android:textStyle="normal"
         android:textAlignment="center"/>
 
     <EditText
-        android:id="@+id/edit_text_password_cliente"
+        android:id="@+id/edit_text_password_cliente_login"
         android:layout_width="320dp"
         android:layout_height="40dp"
         android:layout_gravity="center_horizontal"

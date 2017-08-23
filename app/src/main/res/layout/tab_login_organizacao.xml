@@ -6,7 +6,7 @@
     android:orientation="vertical">
 
     <EditText
-        android:id="@+id/edit_text_login_cliente"
+        android:id="@+id/edit_text_cnpj_organizacao_login"
         android:layout_width="320dp"
         android:layout_height="40dp"
         android:layout_gravity="center_horizontal"
@@ -21,7 +21,7 @@
         android:textAlignment="center"/>
 
     <EditText
-        android:id="@+id/edit_text_password_cliente"
+        android:id="@+id/edit_text_password_organizacao_login"
         android:layout_width="320dp"
         android:layout_height="40dp"
         android:layout_gravity="center_horizontal"
@@ -36,7 +36,7 @@
         android:textAlignment="center"/>
 
     <Button
-        android:id="@+id/button_login_app_cliente"
+        android:id="@+id/button_login_app_organizacao"
         android:layout_width="320dp"
         android:layout_height="40dp"
         android:layout_gravity="center_horizontal"
@@ -49,7 +49,7 @@
         android:textStyle="normal" />
 
     <TextView
-        android:id="@+id/text_view_abrir_cadastro_cliente"
+        android:id="@+id/text_view_abrir_cadastro_organizacao"
         android:layout_width="320dp"
         android:layout_height="20dp"
         android:layout_gravity="center_horizontal"

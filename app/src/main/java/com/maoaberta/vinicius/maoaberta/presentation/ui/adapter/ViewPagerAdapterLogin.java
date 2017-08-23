@@ -1,52 +1,78 @@
 package com.maoaberta.vinicius.maoaberta.presentation.ui.adapter;
 
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 
-import com.maoaberta.vinicius.maoaberta.presentation.ui.fragment.TabCadastroCliente;
-import com.maoaberta.vinicius.maoaberta.presentation.ui.fragment.TabCadastroOrganizacao;
-import com.maoaberta.vinicius.maoaberta.presentation.ui.fragment.TabLoginCliente;
-import com.maoaberta.vinicius.maoaberta.presentation.ui.fragment.TabLoginOrganizacao;
+import com.maoaberta.vinicius.maoaberta.R;
 
 /**
  * Created by Vinicius Canalles on 16/08/2017.
  */
 
-public class ViewPagerAdapterLogin extends FragmentStatePagerAdapter{
+public class ViewPagerAdapterLogin extends RecyclerView.Adapter<ViewPagerAdapterLogin.ViewHolder>{
 
-    CharSequence titles[]; // This will Store the Titles of the Tabs which are Going to be passed when ViewPagerAdapterCadastro is created
-    int numbOfTabs; // Store the number of tabs, this will also be passed when the ViewPagerAdapterCadastro is created
+    private static final int TAB_LEFT = 0;
+    private static final int TAB_RIGHT = 1;
+    int numOfTabs = 2;
 
-    // Build a Constructor and assign the passed Values to appropriate values in the class
-    public ViewPagerAdapterLogin(FragmentManager fm, CharSequence titles[], int numbOfTabsumb) {
-        super(fm);
-        this.titles = titles;
-        this.numbOfTabs = numbOfTabsumb;
-    }
-
-    //This method return the fragment for the every position in the View Pager
     @Override
-    public Fragment getItem(int position) {
-
-        if(position == 0){ // if the position is 0 we are returning the First tab
-            TabLoginCliente tabLoginCliente = new TabLoginCliente();
-            return tabLoginCliente;
-        }else{ // As we are having 2 tabs if the position is now 0 it must be 1 so we are returning second tab
-            TabLoginOrganizacao tabLoginOrganizacao = new TabLoginOrganizacao();
-            return tabLoginOrganizacao;
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view;
+        switch (viewType){
+            case TAB_LEFT:
+                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.tab_login_cliente, parent, false);
+                return new ViewHolder(view, TAB_LEFT);
+            case TAB_RIGHT:
+                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.tab_login_organizacao, parent, false);
+                return new ViewHolder(view, TAB_RIGHT);
+            default:
+                return null;
         }
     }
 
-    // This method return the titles for the Tabs in the Tab Strip
     @Override
-    public CharSequence getPageTitle(int position) {
-        return titles[position];
+    public void onBindViewHolder(ViewHolder holder, int position) {
+
     }
 
-    // This method return the Number of tabs for the tabs Strip
     @Override
-    public int getCount() {
-        return numbOfTabs;
+    public int getItemCount() {
+        return numOfTabs;
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder{
+
+        EditText emailCliente;
+        EditText senhaCliente;
+        Button logarCliente;
+        TextView cadastrarCliente;
+
+        EditText cnpjOrganizacao;
+        EditText senhaOrganizacao;
+        Button logarOrganizacao;
+        TextView cadastrarOrganizacao;
+
+        public ViewHolder(View v, int type){
+            super(v);
+            switch (type){
+                case TAB_LEFT:
+                    emailCliente = (EditText) v.findViewById(R.id.edit_text_email_cliente_login);
+                    senhaCliente = (EditText) v.findViewById(R.id.edit_text_password_cliente_login);
+                    logarCliente = (Button) v.findViewById(R.id.button_login_app_cliente);
+                    cadastrarCliente = (TextView) v.findViewById(R.id.text_view_abrir_cadastro_cliente);
+                    break;
+                case TAB_RIGHT:
+                    cnpjOrganizacao = (EditText) v.findViewById(R.id.edit_text_cnpj_organizacao_login);
+                    senhaOrganizacao = (EditText) v.findViewById(R.id.edit_text_password_organizacao_login);
+                    logarOrganizacao = (Button) v.findViewById(R.id.button_login_app_organizacao);
+                    cadastrarOrganizacao = (TextView) v.findViewById(R.id.text_view_abrir_cadastro_organizacao);
+                    break;
+            }
+        }
     }
 }

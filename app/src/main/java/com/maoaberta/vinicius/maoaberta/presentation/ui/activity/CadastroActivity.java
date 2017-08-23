@@ -1,15 +1,15 @@
 package com.maoaberta.vinicius.maoaberta.presentation.ui.activity;
 
-import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
+import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.widget.TextView;
 
 import com.maoaberta.vinicius.maoaberta.R;
@@ -29,7 +29,7 @@ public class CadastroActivity extends AppCompatActivity {
     TextView tv;
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cadastro);
 
@@ -50,18 +50,44 @@ public class CadastroActivity extends AppCompatActivity {
             tv = (TextView) LayoutInflater.from(this).inflate(R.layout.custom_tab, null);
             tv.setTypeface(Typeface.SANS_SERIF);
             tabs.getTabAt(i).setCustomView(tv);
-
-            if(tabs.getTabAt(i).isSelected()){
-                tv.setTextColor(getResources().getColor(R.color.textColorWhite));
-            }else{
-                tv.setTextColor(getResources().getColor(R.color.textColorBlack));
-            }
         }
+
+        //Criação do texto cliente na cor branco para iniciar nas tabs
+        final SpannableStringBuilder cliente = new SpannableStringBuilder();
+        SpannableString spannableCliente = new SpannableString(titles[0]);
+        spannableCliente.setSpan(new ForegroundColorSpan(Color.WHITE), 0, titles[0].length(), 0);
+        cliente.append(spannableCliente);
+        tabs.getTabAt(0).setText(cliente);
+
+        //Criação do texto cliente em preto para ser usado após a primeira troca de tabs
+        final SpannableStringBuilder clienteBlack = new SpannableStringBuilder();
+        SpannableString spannableClienteBlack = new SpannableString(titles[0]);
+        spannableClienteBlack.setSpan(new ForegroundColorSpan(Color.BLACK), 0, titles[0].length(), 0);
+        clienteBlack.append(spannableClienteBlack);
+
+        //Criação do texto organização em preto para ser usado no início das tabs
+        final SpannableStringBuilder organizacao = new SpannableStringBuilder();
+        SpannableString spannableOrganizacao = new SpannableString(titles[1]);
+        spannableOrganizacao.setSpan(new ForegroundColorSpan(Color.BLACK), 0, titles[1].length(), 0);
+        organizacao.append(spannableOrganizacao);
+        tabs.getTabAt(1).setText(organizacao);
 
         tabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-
+                pager.setCurrentItem(tab.getPosition());
+                String texto = String.valueOf(tab.getText()); //pega o texto de acordo com a posição da tab
+                SpannableStringBuilder builder = new SpannableStringBuilder(); //cria um spannableBuilder
+                SpannableString spannableString = new SpannableString(texto); //cria um spannableString
+                spannableString.setSpan(new ForegroundColorSpan(Color.WHITE), 0, texto.length(), 0); //define a nova cor
+                builder.append(spannableString); //adiciona o novo texto ao builder
+                if(tab.getPosition() == 0) {
+                    tabs.getTabAt(0).setText(builder);
+                    tabs.getTabAt(1).setText(organizacao);
+                }else if(tab.getPosition() == 1){
+                    tabs.getTabAt(0).setText(clienteBlack);
+                    tabs.getTabAt(1).setText(builder);
+                }
             }
 
             @Override

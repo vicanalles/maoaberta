@@ -15,38 +15,48 @@ import android.widget.TextView;
 import com.maoaberta.vinicius.maoaberta.R;
 import com.maoaberta.vinicius.maoaberta.presentation.ui.adapter.ViewPagerAdapter;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
  * Created by Vinicius Canalles on 16/08/2017.
  */
 
 public class CadastroActivity extends AppCompatActivity {
 
+    @BindView(R.id.pager)
     ViewPager pager;
-    ViewPagerAdapter adapter;
+    @BindView(R.id.tabs)
     TabLayout tabs;
-    CharSequence titles[]={"Cliente","Organização"};
-    int numbOftabs =2;
+    @BindView(R.id.text_view_toolbar)
+    TextView text_view_toolbar_cadastro;
+
+    ViewPagerAdapter adapter;
+    CharSequence titles[] = {"Cliente", "Organização"};
+    int numbOftabs = 2;
     TextView tv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_cadastro);
+        setContentView(R.layout.activity_cadastro_constraint_layout);
+        ButterKnife.bind(this);
+
+        //Define o texto da toolbar
+        text_view_toolbar_cadastro.setText(R.string.cadastro);
 
         // Creating The ViewPagerAdapter and Passing Fragment Manager, Titles fot the Tabs and Number Of Tabs.
-        adapter =  new ViewPagerAdapter(getSupportFragmentManager(),titles,numbOftabs);
+        adapter = new ViewPagerAdapter(getSupportFragmentManager(), titles, numbOftabs);
 
         // Assigning ViewPager View and setting the adapter
-        pager = (ViewPager) findViewById(R.id.pager);
         pager.setAdapter(adapter);
 
         // Assiging the Sliding Tab Layout View
-        tabs = (TabLayout) findViewById(R.id.tabs);
         tabs.setSelectedTabIndicatorColor(getResources().getColor(R.color.tabLayoutBottomColor));
         tabs.setupWithViewPager(pager);
 
         //Definição da fonte e da cor do texto das tabs
-        for(int i = 0; i < tabs.getTabCount(); i++){
+        for (int i = 0; i < tabs.getTabCount(); i++) {
             tv = (TextView) LayoutInflater.from(this).inflate(R.layout.custom_tab, null);
             tv.setTypeface(Typeface.SANS_SERIF);
             tabs.getTabAt(i).setCustomView(tv);
@@ -81,10 +91,10 @@ public class CadastroActivity extends AppCompatActivity {
                 SpannableString spannableString = new SpannableString(texto); //cria um spannableString
                 spannableString.setSpan(new ForegroundColorSpan(Color.WHITE), 0, texto.length(), 0); //define a nova cor
                 builder.append(spannableString); //adiciona o novo texto ao builder
-                if(tab.getPosition() == 0) {
+                if (tab.getPosition() == 0) {
                     tabs.getTabAt(0).setText(builder);
                     tabs.getTabAt(1).setText(organizacao);
-                }else if(tab.getPosition() == 1){
+                } else if (tab.getPosition() == 1) {
                     tabs.getTabAt(0).setText(clienteBlack);
                     tabs.getTabAt(1).setText(builder);
                 }

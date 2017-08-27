@@ -6,6 +6,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.maoaberta.vinicius.maoaberta.R;
 
@@ -15,15 +17,10 @@ import com.maoaberta.vinicius.maoaberta.R;
 
 public class TabCadastroCliente extends Fragment {
 
-    ImageView facebookIcon;
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        View v = inflater.inflate(R.layout.tab_cadastro_cliente, container, false);
-
-        facebookIcon = (ImageView) v.findViewById(R.id.image_view_facebook_logo);
-        facebookIcon.setScaleType(ImageView.ScaleType.FIT_XY);
+        View v = inflater.inflate(R.layout.tab_cadastro_cliente_constraint_layout, container, false);
 
         return v;
     }

@@ -17,7 +17,7 @@ public class TabCadastroOrganizacao extends Fragment{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        View v = inflater.inflate(R.layout.tab_cadastro_organizacao, container, false);
+        View v = inflater.inflate(R.layout.tab_cadastro_organizacao_constraint_layout, container, false);
         return v;
     }
 }

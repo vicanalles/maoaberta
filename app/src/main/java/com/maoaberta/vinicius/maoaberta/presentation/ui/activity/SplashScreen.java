@@ -22,7 +22,7 @@ public class SplashScreen extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_splash_screen_constraint_layout);
+        setContentView(R.layout.activity_splash_screen);
         ButterKnife.bind(this);
         text_view_toolbar_splash_screen.setText(R.string.app_name);
         Handler handler = new Handler();

@@ -39,7 +39,7 @@ public class CadastroActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_cadastro_constraint_layout);
+        setContentView(R.layout.activity_cadastro);
         ButterKnife.bind(this);
 
         //Define o texto da toolbar

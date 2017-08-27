@@ -18,29 +18,28 @@ import android.widget.TextView;
 
 import com.maoaberta.vinicius.maoaberta.R;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
  * Created by Vinicius on 12/08/2017.
  */
 
 public class LoginActivity extends AppCompatActivity {
 
-    TextView textViewAbrirCadastro;
-    EditText editTextEmail;
-    EditText editTextPassword;
-    Button buttonLogin;
+    @BindView(R.id.text_view_abrir_cadastro) TextView textViewAbrirCadastro;
+    @BindView(R.id.edit_text_login) EditText editTextEmail;
+    @BindView(R.id.edit_text_password) EditText editTextPassword;
+    @BindView(R.id.button_login_app) Button buttonLogin;
+    @BindView(R.id.text_view_toolbar) TextView text_view_toolbar_login;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.activity_login_constraint_layout);
+        ButterKnife.bind(this);
 
-        editTextEmail = (EditText) findViewById(R.id.edit_text_login);
-        editTextPassword = (EditText) findViewById(R.id.edit_text_password);
-        textViewAbrirCadastro = (TextView) findViewById(R.id.text_view_abrir_cadastro);
-        buttonLogin = (Button) findViewById(R.id.button_login_app);
-
-        //editTextEmail.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_account_circle, 0, 0, 0);
-        //editTextPassword.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_lock_outline, 0, 0, 0);
+        text_view_toolbar_login.setText(R.string.app_name);
 
         textViewAbrirCadastro.setOnClickListener(new View.OnClickListener() {
             @Override

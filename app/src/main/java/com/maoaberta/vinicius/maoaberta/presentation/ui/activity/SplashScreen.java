@@ -4,8 +4,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.TextView;
 
 import com.maoaberta.vinicius.maoaberta.R;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 /**
  * Created by Vinicius on 12/08/2017.
@@ -13,10 +17,14 @@ import com.maoaberta.vinicius.maoaberta.R;
 
 public class SplashScreen extends AppCompatActivity{
 
+    @BindView(R.id.text_view_toolbar) TextView text_view_toolbar_splash_screen;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_splash_screen);
+        setContentView(R.layout.activity_splash_screen_constraint_layout);
+        ButterKnife.bind(this);
+        text_view_toolbar_splash_screen.setText(R.string.app_name);
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override

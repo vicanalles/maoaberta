@@ -14,4 +14,9 @@
     <string name="nome_fantasia">Nome Fantasia</string>
     <string name="cnpj">CNPJ</string>
     <string name="nome_responsavel">Nome do Responsável</string>
+    <string name="endereco">Endereço</string>
+    <string name="facebook">Facebook</string>
+    <string name="twitter">Twitter</string>
+    <string name="site">Site</string>
+    <string name="descricao">Descrição</string>
 </resources>

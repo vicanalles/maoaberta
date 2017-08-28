@@ -7,7 +7,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.maoaberta.vinicius.maoaberta.R;
@@ -29,7 +28,7 @@ public class PerfilOrganizacaoActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_perfil_organizacao_constraint_layout);
+        setContentView(R.layout.activity_perfil_organizacao);
         ButterKnife.bind(this);
 
         setSupportActionBar(toolbar_layout_perfil_organizacao);

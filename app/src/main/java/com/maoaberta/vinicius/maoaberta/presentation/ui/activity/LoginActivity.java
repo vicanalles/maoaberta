@@ -4,11 +4,14 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.maoaberta.vinicius.maoaberta.R;
 
@@ -25,15 +28,12 @@ public class LoginActivity extends AppCompatActivity {
     @BindView(R.id.edit_text_login) EditText editTextEmail;
     @BindView(R.id.edit_text_password) EditText editTextPassword;
     @BindView(R.id.button_login_app) Button buttonLogin;
-    @BindView(R.id.text_view_toolbar) TextView text_view_toolbar_login;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
-
-        text_view_toolbar_login.setText(R.string.app_name);
 
         textViewAbrirCadastro.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -74,5 +74,24 @@ public class LoginActivity extends AppCompatActivity {
     public void hideKeyboard(View view) {
         InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+
+            case R.id.item_configuracoes:
+                Toast.makeText(this, "Configuracoes do Dispositivo", Toast.LENGTH_LONG).show();
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }

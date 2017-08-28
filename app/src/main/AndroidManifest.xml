@@ -24,7 +24,11 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".presentation.ui.activity.CadastroActivity">
+        <activity android:name=".presentation.ui.activity.CadastroActivity"
+            android:label="@string/cadastro"
+            android:parentActivityName=".presentation.ui.activity.LoginActivity">
+            <meta-data android:name="android.support.PARENT_ACTIVITY"
+                android:value=".presentation.ui.activity.LoginActivity"/>
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.DEFAULT"/>

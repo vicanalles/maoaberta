@@ -23,4 +23,9 @@
     <string name="ajude">Ajude Instituições</string>
     <string name="disponibilidade">Com o que quiser e quando puder.</string>
     <string name="cadastro">Cadastro</string>
+    <string name="configuracoes">configurações</string>
+    <string name="login">Login</string>
+    <string name="perfil_organizacao">Perfil Organização</string>
+    <string name="atualizar_dados">Atualizar Dados</string>
+    <string name="escolher_foto">Escolher Foto...</string>
 </resources>

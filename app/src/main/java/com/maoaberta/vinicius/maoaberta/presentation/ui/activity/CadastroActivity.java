@@ -4,13 +4,23 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
+import android.support.v7.widget.Toolbar;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.maoaberta.vinicius.maoaberta.R;
 import com.maoaberta.vinicius.maoaberta.presentation.ui.adapter.ViewPagerAdapter;
@@ -24,12 +34,14 @@ import butterknife.ButterKnife;
 
 public class CadastroActivity extends AppCompatActivity {
 
+    //Todo: custom view para desabilitar o swipe entre os fragments
+
     @BindView(R.id.pager)
     ViewPager pager;
     @BindView(R.id.tabs)
     TabLayout tabs;
-    @BindView(R.id.text_view_toolbar)
-    TextView text_view_toolbar_cadastro;
+    @BindView(R.id.toolbar_layout_cadastro)
+    Toolbar toolbar;
 
     ViewPagerAdapter adapter;
     CharSequence titles[] = {"Cliente", "Organização"};
@@ -42,8 +54,7 @@ public class CadastroActivity extends AppCompatActivity {
         setContentView(R.layout.activity_cadastro);
         ButterKnife.bind(this);
 
-        //Define o texto da toolbar
-        text_view_toolbar_cadastro.setText(R.string.cadastro);
+        setSupportActionBar(toolbar);
 
         // Creating The ViewPagerAdapter and Passing Fragment Manager, Titles fot the Tabs and Number Of Tabs.
         adapter = new ViewPagerAdapter(getSupportFragmentManager(), titles, numbOftabs);
@@ -110,5 +121,24 @@ public class CadastroActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+
+            case R.id.item_configuracoes:
+                Toast.makeText(this, "Configuracoes do Dispositivo", Toast.LENGTH_LONG).show();
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }

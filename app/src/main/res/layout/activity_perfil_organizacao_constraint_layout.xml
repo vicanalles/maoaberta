@@ -1,0 +1,329 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/backgroundColorApp">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar_layout_perfil_organizacao"
+        android:layout_width="0dp"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/tabLayoutBottomColor"
+        android:elevation="4dp"
+        android:textAlignment="center"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:navigationIcon="@drawable/ic_arrow_back"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:title="@string/perfil_organizacao"
+        app:titleTextColor="@color/textColorWhite">
+
+    </android.support.v7.widget.Toolbar>
+
+    <ScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="0dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginRight="0dp"
+        android:layout_marginTop="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar_layout_perfil_organizacao"
+        app:layout_constraintVertical_bias="1.0">
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:focusableInTouchMode="true">
+
+            <RelativeLayout
+                android:id="@+id/relative_layout_image_logo"
+                android:layout_width="115dp"
+                android:layout_height="115dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp">
+
+                <ImageView
+                    android:id="@+id/image_view_logo_perfil_organizacao"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_centerHorizontal="true"
+                    android:src="@drawable/logo_mao_aberta" />
+
+                <TextView
+                    android:id="@+id/text_view_escolher_foto"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:focusable="false"
+                    android:text="@string/escolher_foto"
+                    android:textColor="@color/textColorWhite"
+                    android:textStyle="normal"
+                    android:typeface="serif" />
+
+            </RelativeLayout>
+
+
+
+            <EditText
+                android:id="@+id/edit_text_razao_social_perfil_organizacao"
+                android:layout_width="320dp"
+                android:layout_height="30dp"
+                android:layout_below="@id/relative_layout_image_logo"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/rounded_edittext"
+                android:fontFamily="sans-serif"
+                android:hint="@string/razao_social"
+                android:inputType="textPersonName"
+                android:paddingEnd="0dp"
+                android:paddingStart="10dp"
+                android:textAlignment="textStart"
+                android:textColor="@color/textColorBlack"
+                android:textSize="15sp"
+                android:textStyle="normal" />
+
+            <EditText
+                android:id="@+id/edit_text_nome_fantasia_perfil_organizacao"
+                android:layout_width="320dp"
+                android:layout_height="30dp"
+                android:layout_below="@id/edit_text_razao_social_perfil_organizacao"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/rounded_edittext"
+                android:fontFamily="sans-serif"
+                android:hint="@string/nome_fantasia"
+                android:inputType="textPersonName"
+                android:paddingEnd="0dp"
+                android:paddingStart="10dp"
+                android:textAlignment="textStart"
+                android:textColor="@color/textColorBlack"
+                android:textSize="15sp"
+                android:textStyle="normal" />
+
+            <EditText
+                android:id="@+id/edit_text_cnpj_perfil_organizacao"
+                android:layout_width="320dp"
+                android:layout_height="30dp"
+                android:layout_below="@id/edit_text_nome_fantasia_perfil_organizacao"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/rounded_edittext"
+                android:fontFamily="sans-serif"
+                android:hint="@string/cnpj"
+                android:inputType="number"
+                android:paddingEnd="0dp"
+                android:paddingStart="10dp"
+                android:textAlignment="textStart"
+                android:textColor="@color/textColorBlack"
+                android:textSize="15sp"
+                android:textStyle="normal" />
+
+            <EditText
+                android:id="@+id/edit_text_nome_responsavel_perfil_organizacao"
+                android:layout_width="320dp"
+                android:layout_height="30dp"
+                android:layout_below="@id/edit_text_cnpj_perfil_organizacao"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/rounded_edittext"
+                android:fontFamily="sans-serif"
+                android:hint="@string/nome_responsavel"
+                android:inputType="textPersonName"
+                android:paddingEnd="0dp"
+                android:paddingStart="10dp"
+                android:textAlignment="textStart"
+                android:textColor="@color/textColorBlack"
+                android:textSize="15sp"
+                android:textStyle="normal" />
+
+            <EditText
+                android:id="@+id/edit_text_email_perfil_organizacao"
+                android:layout_width="320dp"
+                android:layout_height="30dp"
+                android:layout_below="@id/edit_text_nome_responsavel_perfil_organizacao"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/rounded_edittext"
+                android:fontFamily="sans-serif"
+                android:hint="@string/email"
+                android:inputType="textEmailAddress"
+                android:paddingEnd="0dp"
+                android:paddingStart="10dp"
+                android:textAlignment="textStart"
+                android:textColor="@color/textColorBlack"
+                android:textSize="15sp"
+                android:textStyle="normal" />
+
+            <EditText
+                android:id="@+id/edit_text_telefone_perfil_organizacao"
+                android:layout_width="320dp"
+                android:layout_height="30dp"
+                android:layout_below="@id/edit_text_email_perfil_organizacao"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/rounded_edittext"
+                android:fontFamily="sans-serif"
+                android:hint="@string/telefone"
+                android:inputType="phone"
+                android:paddingEnd="0dp"
+                android:paddingStart="10dp"
+                android:textAlignment="textStart"
+                android:textColor="@color/textColorBlack"
+                android:textSize="15sp"
+                android:textStyle="normal" />
+
+            <EditText
+                android:id="@+id/edit_text_endereco_perfil_organizacao"
+                android:layout_width="320dp"
+                android:layout_height="30dp"
+                android:layout_below="@id/edit_text_telefone_perfil_organizacao"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/rounded_edittext"
+                android:fontFamily="sans-serif"
+                android:hint="@string/endereco"
+                android:inputType="textCapWords"
+                android:paddingEnd="0dp"
+                android:paddingStart="10dp"
+                android:textAlignment="textStart"
+                android:textColor="@color/textColorBlack"
+                android:textSize="15sp"
+                android:textStyle="normal" />
+
+            <EditText
+                android:id="@+id/edit_text_facebook_perfil_organizacao"
+                android:layout_width="320dp"
+                android:layout_height="30dp"
+                android:layout_below="@id/edit_text_endereco_perfil_organizacao"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/rounded_edittext"
+                android:fontFamily="sans-serif"
+                android:hint="@string/facebook"
+                android:inputType="textEmailAddress"
+                android:paddingEnd="0dp"
+                android:paddingStart="10dp"
+                android:textAlignment="textStart"
+                android:textColor="@color/textColorBlack"
+                android:textSize="15sp"
+                android:textStyle="normal" />
+
+            <EditText
+                android:id="@+id/edit_text_twitter_perfil_organizacao"
+                android:layout_width="320dp"
+                android:layout_height="30dp"
+                android:layout_below="@id/edit_text_facebook_perfil_organizacao"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/rounded_edittext"
+                android:fontFamily="sans-serif"
+                android:hint="@string/twitter"
+                android:inputType="text"
+                android:paddingEnd="0dp"
+                android:paddingStart="10dp"
+                android:textAlignment="textStart"
+                android:textColor="@color/textColorBlack"
+                android:textSize="15sp"
+                android:textStyle="normal" />
+
+            <EditText
+                android:id="@+id/edit_text_site_perfil_organizacao"
+                android:layout_width="320dp"
+                android:layout_height="30dp"
+                android:layout_below="@id/edit_text_twitter_perfil_organizacao"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/rounded_edittext"
+                android:fontFamily="sans-serif"
+                android:hint="@string/site"
+                android:inputType="textWebEditText"
+                android:paddingEnd="0dp"
+                android:paddingStart="10dp"
+                android:textAlignment="textStart"
+                android:textColor="@color/textColorBlack"
+                android:textSize="15sp"
+                android:textStyle="normal" />
+
+            <EditText
+                android:id="@+id/edit_text_descricao_perfil_organizacao"
+                android:layout_width="320dp"
+                android:layout_height="30dp"
+                android:layout_below="@id/edit_text_site_perfil_organizacao"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/rounded_edittext"
+                android:fontFamily="sans-serif"
+                android:hint="@string/descricao"
+                android:inputType="text"
+                android:paddingEnd="0dp"
+                android:paddingStart="10dp"
+                android:textAlignment="textStart"
+                android:textColor="@color/textColorBlack"
+                android:textSize="15sp"
+                android:textStyle="normal" />
+
+            <EditText
+                android:id="@+id/edit_text_senha_perfil_organizacao"
+                android:layout_width="320dp"
+                android:layout_height="30dp"
+                android:layout_below="@id/edit_text_descricao_perfil_organizacao"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/rounded_edittext"
+                android:fontFamily="sans-serif"
+                android:hint="@string/senha"
+                android:inputType="textPassword"
+                android:paddingEnd="0dp"
+                android:paddingStart="10dp"
+                android:textAlignment="textStart"
+                android:textColor="@color/textColorBlack"
+                android:textSize="15sp"
+                android:textStyle="normal" />
+
+            <EditText
+                android:id="@+id/edit_text_confirmar_senha_perfil_organizacao"
+                android:layout_width="320dp"
+                android:layout_height="30dp"
+                android:layout_below="@id/edit_text_senha_perfil_organizacao"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/rounded_edittext"
+                android:fontFamily="sans-serif"
+                android:hint="@string/confirmar_senha"
+                android:inputType="textPassword"
+                android:paddingEnd="0dp"
+                android:paddingStart="10dp"
+                android:textAlignment="textStart"
+                android:textColor="@color/textColorBlack"
+                android:textSize="15sp"
+                android:textStyle="normal" />
+
+            <Button
+                android:id="@+id/button_atualizar_dados_organizacao"
+                android:layout_width="320dp"
+                android:layout_height="30dp"
+                android:layout_below="@id/edit_text_confirmar_senha_perfil_organizacao"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/rounded_button"
+                android:fontFamily="sans-serif"
+                android:text="@string/atualizar_dados"
+                android:textAlignment="center"
+                android:textColor="@color/textColorWhite"
+                android:textSize="15sp"
+                android:textStyle="normal" />
+        </RelativeLayout>
+    </ScrollView>
+
+</android.support.constraint.ConstraintLayout>

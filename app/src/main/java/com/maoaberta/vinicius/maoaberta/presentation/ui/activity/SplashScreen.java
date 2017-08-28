@@ -17,14 +17,11 @@ import butterknife.ButterKnife;
 
 public class SplashScreen extends AppCompatActivity{
 
-    @BindView(R.id.text_view_toolbar) TextView text_view_toolbar_splash_screen;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
         ButterKnife.bind(this);
-        text_view_toolbar_splash_screen.setText(R.string.app_name);
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override

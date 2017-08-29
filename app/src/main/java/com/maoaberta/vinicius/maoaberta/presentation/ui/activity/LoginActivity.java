@@ -88,20 +88,6 @@ public class LoginActivity extends AppCompatActivity {
                 abrirConfiguracoesDoDispositivo();
             }
         });
-
-        editTextEmail.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
-            }
-        });
-
-        editTextPassword.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
-            }
-        });
     }
 
     public void hideKeyboard(View view) {

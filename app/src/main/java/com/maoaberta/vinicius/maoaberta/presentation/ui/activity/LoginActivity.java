@@ -8,6 +8,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -35,8 +36,11 @@ public class LoginActivity extends AppCompatActivity {
     Button buttonLogin;
     @BindView(R.id.toolbar_layout_login)
     Toolbar toolbar_layout_login;
+    @BindView(R.id.text_view_esqueceu_senha)
+    TextView text_view_esqueceu_senha;
 
     @Override
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
@@ -77,6 +81,27 @@ public class LoginActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+        text_view_esqueceu_senha.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                abrirConfiguracoesDoDispositivo();
+            }
+        });
+
+        editTextEmail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+            }
+        });
+
+        editTextPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+            }
+        });
     }
 
     public void hideKeyboard(View view) {
@@ -101,5 +126,10 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void abrirConfiguracoesDoDispositivo(){
+        Intent intent = new Intent(LoginActivity.this, EsqueceuSenhaActivity.class);
+        startActivity(intent);
     }
 }

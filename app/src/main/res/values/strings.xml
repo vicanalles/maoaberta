@@ -32,4 +32,7 @@
     <string name="sobre">Sobre</string>
     <string name="projeto_mao_aberta_no_github">Projeto Mão Aberta no Github</string>
     <string name="logar">Logar</string>
+    <string name="esqueceu_senha">Esqueceu sua senha?</string>
+    <string name="solicitar_nova_senha">Solicitar nova senha</string>
+    <string name="recuperar_senha">Recuperar Senha</string>
 </resources>

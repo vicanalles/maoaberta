@@ -15,7 +15,8 @@
         android:fontFamily="sans-serif"
         android:hint="@string/nome_cliente"
         android:inputType="textPersonName"
-        android:paddingLeft="10dp"
+        android:paddingStart="10dp"
+        android:paddingEnd="0dp"
         android:textAlignment="textStart"
         android:textColor="@color/textColorBlack"
         android:textSize="15sp"
@@ -38,7 +39,8 @@
         android:fontFamily="sans-serif"
         android:hint="@string/telefone"
         android:inputType="phone"
-        android:paddingLeft="10dp"
+        android:paddingStart="10dp"
+        android:paddingEnd="0dp"
         android:textAlignment="textStart"
         android:textColor="@color/textColorBlack"
         android:textSize="15sp"
@@ -61,7 +63,8 @@
         android:fontFamily="sans-serif"
         android:hint="@string/email"
         android:inputType="textEmailAddress"
-        android:paddingLeft="10dp"
+        android:paddingStart="10dp"
+        android:paddingEnd="0dp"
         android:textAlignment="textStart"
         android:textColor="@color/textColorBlack"
         android:textSize="15sp"
@@ -83,7 +86,8 @@
         android:fontFamily="sans-serif"
         android:hint="@string/senha"
         android:inputType="textPassword"
-        android:paddingLeft="10dp"
+        android:paddingStart="10dp"
+        android:paddingEnd="0dp"
         android:textAlignment="textStart"
         android:textColor="@color/textColorBlack"
         android:textSize="15sp"
@@ -106,7 +110,8 @@
         android:fontFamily="sans-serif"
         android:hint="@string/confirmar_senha"
         android:inputType="textPassword"
-        android:paddingLeft="10dp"
+        android:paddingStart="10dp"
+        android:paddingEnd="0dp"
         android:textAlignment="textStart"
         android:textColor="@color/textColorBlack"
         android:textSize="15sp"
@@ -123,7 +128,7 @@
         android:layout_width="0dp"
         android:layout_height="40dp"
         android:layout_marginTop="10dp"
-        android:background="@color/tabLayoutBottomColor"
+        android:background="@drawable/rounded_button"
         android:fontFamily="sans-serif"
         android:text="@string/cadastrar"
         android:textColor="@color/textColorWhite"
@@ -155,7 +160,8 @@
             android:id="@+id/image_view_facebook_logo"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:src="@drawable/ic_action_facebook" />
+            android:src="@drawable/ic_action_facebook"
+            android:contentDescription="@string/facebook"/>
 
         <TextView
             android:id="@+id/text_view_facebook_cadastro"
@@ -193,7 +199,8 @@
             android:id="@+id/image_view_gmail_logo"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:src="@drawable/ic_action_gmail" />
+            android:src="@drawable/ic_action_gmail"
+            android:contentDescription="@string/string_text_gmail"/>
 
         <TextView
             android:id="@+id/text_view_gmail_cadastro"

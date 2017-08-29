@@ -4,11 +4,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.TextView;
 
 import com.maoaberta.vinicius.maoaberta.R;
 
-import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
@@ -26,13 +24,13 @@ public class SplashScreen extends AppCompatActivity{
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                mostrarLogin();
+                mostrarTelaSobre();
             }
         }, 5000);
     }
 
-    private void mostrarLogin(){
-        Intent intent = new Intent(SplashScreen.this, LoginActivity.class);
+    private void mostrarTelaSobre(){
+        Intent intent = new Intent(SplashScreen.this, SobreActivity.class);
         startActivity(intent);
         finish();
     }

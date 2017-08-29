@@ -1,6 +1,8 @@
 package com.maoaberta.vinicius.maoaberta.presentation.ui.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -59,13 +61,13 @@ public class EsqueceuSenhaActivity extends AppCompatActivity {
         switch (item.getItemId()){
             case R.id.item_configuracoes:
                 abrirConfiguracoes();
+                break;
         }
 
         return super.onOptionsItemSelected(item);
     }
 
     public void abrirConfiguracoes(){
-        Toast.makeText(this, "Abrir configuracoes do dispositivo", Toast.LENGTH_LONG).show();
-        //startActivity(new Intent(Settings.ACTION_SETTINGS));
+        startActivity(new Intent(Settings.ACTION_SETTINGS));
     }
 }

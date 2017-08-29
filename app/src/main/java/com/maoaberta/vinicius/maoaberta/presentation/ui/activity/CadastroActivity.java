@@ -1,8 +1,10 @@
 package com.maoaberta.vinicius.maoaberta.presentation.ui.activity;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
@@ -135,10 +137,14 @@ public class CadastroActivity extends AppCompatActivity {
         switch (item.getItemId()){
 
             case R.id.item_configuracoes:
-                Toast.makeText(this, "Configuracoes do Dispositivo", Toast.LENGTH_LONG).show();
+                abrirConfiguracoes();
                 break;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void abrirConfiguracoes(){
+        startActivity(new Intent(Settings.ACTION_SETTINGS));
     }
 }

@@ -1,6 +1,8 @@
 package com.maoaberta.vinicius.maoaberta.presentation.ui.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -55,10 +57,14 @@ public class PerfilOrganizacaoActivity extends AppCompatActivity {
         switch (item.getItemId()) {
 
             case R.id.item_configuracoes:
-                Toast.makeText(this, "Configuracoes do Dispositivo", Toast.LENGTH_LONG).show();
+                abrirConfiguracoes();
                 break;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void abrirConfiguracoes(){
+        startActivity(new Intent(Settings.ACTION_SETTINGS));
     }
 }

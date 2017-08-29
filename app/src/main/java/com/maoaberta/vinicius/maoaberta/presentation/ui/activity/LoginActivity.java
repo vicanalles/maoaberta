@@ -3,12 +3,12 @@ package com.maoaberta.vinicius.maoaberta.presentation.ui.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -85,7 +85,7 @@ public class LoginActivity extends AppCompatActivity {
         text_view_esqueceu_senha.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                abrirConfiguracoesDoDispositivo();
+                abrirRecuperarSenha();
             }
         });
     }
@@ -107,15 +107,19 @@ public class LoginActivity extends AppCompatActivity {
         switch (item.getItemId()) {
 
             case R.id.item_configuracoes:
-                Toast.makeText(this, "Configuracoes do Dispositivo", Toast.LENGTH_LONG).show();
+                abrirConfiguracoes();
                 break;
         }
 
         return super.onOptionsItemSelected(item);
     }
 
-    public void abrirConfiguracoesDoDispositivo(){
+    public void abrirRecuperarSenha(){
         Intent intent = new Intent(LoginActivity.this, EsqueceuSenhaActivity.class);
         startActivity(intent);
+    }
+
+    public void abrirConfiguracoes(){
+        startActivity(new Intent(Settings.ACTION_SETTINGS));
     }
 }

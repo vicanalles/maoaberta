@@ -53,7 +53,14 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".presentation.ui.activity.SobreActivity">
+        <activity android:name=".presentation.ui.activity.ApresentacaoActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".presentation.ui.activity.PerfilClienteActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.DEFAULT"/>

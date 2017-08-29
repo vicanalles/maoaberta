@@ -30,7 +30,7 @@ public class SplashScreen extends AppCompatActivity{
     }
 
     private void mostrarTelaSobre(){
-        Intent intent = new Intent(SplashScreen.this, SobreActivity.class);
+        Intent intent = new Intent(SplashScreen.this, ApresentacaoActivity.class);
         startActivity(intent);
         finish();
     }

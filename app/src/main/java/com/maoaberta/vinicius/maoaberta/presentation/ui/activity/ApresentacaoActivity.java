@@ -17,7 +17,7 @@ import butterknife.ButterKnife;
  * Created by vinicius on 29/08/17.
  */
 
-public class SobreActivity extends AppCompatActivity{
+public class ApresentacaoActivity extends AppCompatActivity{
 
     @BindView(R.id.toolbar_layout_sobre)
     Toolbar toolbar_layout_sobre;
@@ -25,7 +25,7 @@ public class SobreActivity extends AppCompatActivity{
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sobre);
+        setContentView(R.layout.activity_apresentacao);
         ButterKnife.bind(this);
         setSupportActionBar(toolbar_layout_sobre);
     }
@@ -48,7 +48,7 @@ public class SobreActivity extends AppCompatActivity{
     }
 
     public void abrirTelaLogin(){
-        Intent intent = new Intent(SobreActivity.this, LoginActivity.class);
+        Intent intent = new Intent(ApresentacaoActivity.this, LoginActivity.class);
         startActivity(intent);
         finish();
     }

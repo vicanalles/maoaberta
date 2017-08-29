@@ -17,25 +17,25 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
- * Created by Vinicius on 23/08/2017.
+ * Created by vinicius on 29/08/17.
  */
 
-public class PerfilOrganizacaoActivity extends AppCompatActivity {
+public class PerfilClienteActivity extends AppCompatActivity {
 
-    @BindView(R.id.toolbar_layout_perfil_organizacao)
-    Toolbar toolbar_layout_perfil_organizacao;
-    @BindView(R.id.relative_layout_image_logo_perfil_organizacao)
-    RelativeLayout relative_layout_image_logo_perfil_organizacao;
+    @BindView(R.id.toolbar_layout_perfil_cliente)
+    Toolbar toolbar_layout_perfil_cliente;
+    @BindView(R.id.relative_layout_image_logo_perfil_cliente)
+    RelativeLayout relative_layout_image_logo_perfil_cliente;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_perfil_organizacao);
+        setContentView(R.layout.activity_perfil_cliente);
         ButterKnife.bind(this);
 
-        setSupportActionBar(toolbar_layout_perfil_organizacao);
+        setSupportActionBar(toolbar_layout_perfil_cliente);
 
-        relative_layout_image_logo_perfil_organizacao.setOnClickListener(new View.OnClickListener() {
+        relative_layout_image_logo_perfil_cliente.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Toast.makeText(getApplicationContext(), "Abrir galeria do dispositivo", Toast.LENGTH_SHORT).show();

@@ -25,8 +25,8 @@
 
     <ImageView
         android:id="@+id/image_view_logo_app_login"
-        android:layout_width="115dp"
-        android:layout_height="115dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:layout_marginBottom="0dp"
         android:layout_marginLeft="0dp"
         android:layout_marginRight="0dp"

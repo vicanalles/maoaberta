@@ -23,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.maoaberta.vinicius.maoaberta.R;
+import com.maoaberta.vinicius.maoaberta.presentation.component.CustomViewPager;
 import com.maoaberta.vinicius.maoaberta.presentation.ui.adapter.ViewPagerAdapter;
 
 import butterknife.BindView;
@@ -37,7 +38,7 @@ public class CadastroActivity extends AppCompatActivity {
     //Todo: custom view para desabilitar o swipe entre os fragments
 
     @BindView(R.id.pager)
-    ViewPager pager;
+    CustomViewPager pager;
     @BindView(R.id.tabs)
     TabLayout tabs;
     @BindView(R.id.toolbar_layout_cadastro)
@@ -61,7 +62,7 @@ public class CadastroActivity extends AppCompatActivity {
 
         // Assigning ViewPager View and setting the adapter
         pager.setAdapter(adapter);
-
+        pager.setPagingEnabled(false);
         // Assiging the Sliding Tab Layout View
         tabs.setSelectedTabIndicatorColor(getResources().getColor(R.color.tabLayoutBottomColor));
         tabs.setupWithViewPager(pager);

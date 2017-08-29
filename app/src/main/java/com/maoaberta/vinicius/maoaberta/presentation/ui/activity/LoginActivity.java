@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,16 +25,23 @@ import butterknife.ButterKnife;
 
 public class LoginActivity extends AppCompatActivity {
 
-    @BindView(R.id.text_view_abrir_cadastro) TextView textViewAbrirCadastro;
-    @BindView(R.id.edit_text_login) EditText editTextEmail;
-    @BindView(R.id.edit_text_password) EditText editTextPassword;
-    @BindView(R.id.button_login_app) Button buttonLogin;
+    @BindView(R.id.text_view_abrir_cadastro)
+    TextView textViewAbrirCadastro;
+    @BindView(R.id.edit_text_login)
+    EditText editTextEmail;
+    @BindView(R.id.edit_text_password)
+    EditText editTextPassword;
+    @BindView(R.id.button_login_app)
+    Button buttonLogin;
+    @BindView(R.id.toolbar_layout_login)
+    Toolbar toolbar_layout_login;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
+        setSupportActionBar(toolbar_layout_login);
 
         textViewAbrirCadastro.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -85,7 +93,7 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
 
             case R.id.item_configuracoes:
                 Toast.makeText(this, "Configuracoes do Dispositivo", Toast.LENGTH_LONG).show();

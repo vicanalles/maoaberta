@@ -47,8 +47,8 @@
 
             <RelativeLayout
                 android:id="@+id/relative_layout_image_logo"
-                android:layout_width="115dp"
-                android:layout_height="115dp"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="10dp">
 
@@ -67,6 +67,7 @@
                     android:focusable="false"
                     android:text="@string/escolher_foto"
                     android:textColor="@color/textColorWhite"
+                    android:textSize="13sp"
                     android:textStyle="normal"
                     android:typeface="serif" />
 
@@ -316,7 +317,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginBottom="10dp"
                 android:layout_marginTop="10dp"
-                android:background="@drawable/rounded_button"
+                android:background="@color/tabLayoutBottomColor"
                 android:fontFamily="sans-serif"
                 android:text="@string/atualizar_dados"
                 android:textAlignment="center"

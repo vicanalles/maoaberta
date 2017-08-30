@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "929107881820",
+    "firebase_url": "https://projetomaoaberta-c0386.firebaseio.com",
+    "project_id": "projetomaoaberta-c0386",
+    "storage_bucket": "projetomaoaberta-c0386.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:929107881820:android:67cfab4ccba37404",
+        "android_client_info": {
+          "package_name": "com.maoaberta.vinicius.maoaberta"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "929107881820-5dra4jpatkgcekbgv5s4659nmkbfb28i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBTNFm8UKgcO6MuRuN2xtapbi1Sh20MJ58"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

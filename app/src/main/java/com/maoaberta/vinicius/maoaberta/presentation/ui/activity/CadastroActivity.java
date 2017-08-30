@@ -6,27 +6,19 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.design.widget.TabLayout;
-import android.support.v4.view.MenuItemCompat;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.maoaberta.vinicius.maoaberta.R;
 import com.maoaberta.vinicius.maoaberta.presentation.component.CustomViewPager;
-import com.maoaberta.vinicius.maoaberta.presentation.ui.adapter.ViewPagerAdapter;
+import com.maoaberta.vinicius.maoaberta.presentation.ui.adapter.ViewPagerAdapterCadastro;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -37,18 +29,15 @@ import butterknife.ButterKnife;
 
 public class CadastroActivity extends AppCompatActivity {
 
-    //Todo: custom view para desabilitar o swipe entre os fragments
-
-    @BindView(R.id.pager)
+    @BindView(R.id.pager_cadastro)
     CustomViewPager pager;
-    @BindView(R.id.tabs)
+    @BindView(R.id.tabs_cadastro)
     TabLayout tabs;
     @BindView(R.id.toolbar_layout_cadastro)
     Toolbar toolbar;
 
-    ViewPagerAdapter adapter;
+    ViewPagerAdapterCadastro adapter;
     CharSequence titles[] = {"Cliente", "Organização"};
-    int numbOftabs = 2;
     TextView tv;
 
     @Override
@@ -58,8 +47,8 @@ public class CadastroActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
 
-        // Creating The ViewPagerAdapter and Passing Fragment Manager, Titles fot the Tabs and Number Of Tabs.
-        adapter = new ViewPagerAdapter(getSupportFragmentManager(), titles, numbOftabs);
+        // Creating The ViewPagerAdapterCadastro and Passing Fragment Manager, Titles fot the Tabs and Number Of Tabs.
+        adapter = new ViewPagerAdapterCadastro(getSupportFragmentManager(), titles);
 
         // Assigning ViewPager View and setting the adapter
         pager.setAdapter(adapter);

@@ -114,6 +114,15 @@ public class LoginActivity extends AppCompatActivity {
 
             }
         });
+
+        pager_login.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean hasFocus) {
+                if(!hasFocus){
+                    hideKeyboard(view);
+                }
+            }
+        });
     }
 
     @Override
@@ -137,6 +146,11 @@ public class LoginActivity extends AppCompatActivity {
 
     public void abrirConfiguracoes(){
         startActivity(new Intent(Settings.ACTION_SETTINGS));
+    }
+
+    public void hideKeyboard(View v){
+        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(v.getWindowToken(), 0);
     }
 
 }

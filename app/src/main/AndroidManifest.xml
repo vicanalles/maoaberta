@@ -10,7 +10,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".presentation.ui.activity.LoginActivity">
+        <activity android:name=".presentation.ui.activity.LoginActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -19,7 +20,8 @@
 
         <activity android:name=".presentation.ui.activity.EsqueceuSenhaActivity"
             android:label="@string/esqueceu_senha"
-            android:parentActivityName=".presentation.ui.activity.LoginActivity">
+            android:parentActivityName=".presentation.ui.activity.LoginActivity"
+            android:screenOrientation="portrait">
             <meta-data android:name="android.support.PARENT_ACTIVITY"
                 android:value=".presentation.ui.activity.LoginActivity"/>
             <intent-filter>
@@ -30,7 +32,8 @@
 
         <activity android:name=".presentation.ui.activity.CadastroActivity"
             android:label="@string/cadastro"
-            android:parentActivityName=".presentation.ui.activity.LoginActivity">
+            android:parentActivityName=".presentation.ui.activity.LoginActivity"
+            android:screenOrientation="portrait">
             <meta-data android:name="android.support.PARENT_ACTIVITY"
                 android:value=".presentation.ui.activity.LoginActivity"/>
             <intent-filter>
@@ -39,28 +42,32 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".presentation.ui.activity.SplashScreen">
+        <activity android:name=".presentation.ui.activity.SplashScreen"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
 
-        <activity android:name=".presentation.ui.activity.PerfilOrganizacaoActivity">
+        <activity android:name=".presentation.ui.activity.PerfilOrganizacaoActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
 
-        <activity android:name=".presentation.ui.activity.ApresentacaoActivity">
+        <activity android:name=".presentation.ui.activity.ApresentacaoActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
 
-        <activity android:name=".presentation.ui.activity.PerfilClienteActivity">
+        <activity android:name=".presentation.ui.activity.PerfilClienteActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.DEFAULT"/>

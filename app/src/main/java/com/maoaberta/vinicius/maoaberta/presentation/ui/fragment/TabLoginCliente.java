@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.maoaberta.vinicius.maoaberta.R;
 import com.maoaberta.vinicius.maoaberta.presentation.ui.activity.CadastroActivity;
 import com.maoaberta.vinicius.maoaberta.presentation.ui.activity.EsqueceuSenhaActivity;
+import com.maoaberta.vinicius.maoaberta.presentation.ui.activity.MenuPrincipalClienteActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -60,7 +61,8 @@ public class TabLoginCliente extends Fragment {
         button_app_login_cliente.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getContext(), "Abrir menu de clientes", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(getContext(), MenuPrincipalClienteActivity.class);
+                startActivity(intent);
             }
         });
 

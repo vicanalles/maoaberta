@@ -5,11 +5,10 @@
     android:background="@color/backgroundColorApp">
 
     <TextView
-        android:id="@+id/text_view_entidade_fragment"
+        android:id="@+id/text_view_menu_anuncios_interessados"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:textColor="@color/textColorWhite" />
+        android:layout_centerInParent="true"
+        android:textColor="@color/textColorWhite"/>
 
 </RelativeLayout>

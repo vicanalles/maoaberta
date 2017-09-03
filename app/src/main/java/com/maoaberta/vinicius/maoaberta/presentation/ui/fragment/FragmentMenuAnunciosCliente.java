@@ -16,20 +16,20 @@ import butterknife.ButterKnife;
  * Created by Vinicius on 03/09/2017.
  */
 
-public class FragmentMenuHomeCliente extends Fragment {
+public class FragmentMenuAnunciosCliente extends Fragment {
 
     @BindView(R.id.text_view_home_fragment)
     TextView text_view_home_fragment;
 
-    public FragmentMenuHomeCliente(){
+    public FragmentMenuAnunciosCliente(){
 
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_menu_home_cliente, container, false);
+        View view = inflater.inflate(R.layout.fragment_menu_anuncios_cliente, container, false);
         ButterKnife.bind(this, view);
-        text_view_home_fragment.setText("Home Fragment");
+        text_view_home_fragment.setText("Fragment Anúncios");
         return view;
     }
 }

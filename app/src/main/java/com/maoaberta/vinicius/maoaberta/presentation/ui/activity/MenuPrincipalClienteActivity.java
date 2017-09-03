@@ -39,8 +39,10 @@ public class MenuPrincipalClienteActivity extends AppCompatActivity{
         setSupportActionBar(toolbar_layout_menu_cliente);
 
         final String[] tabTitles = {
-                "HOME",
-                "ENTIDADES"
+                "ANÚNCIOS",
+                "ENTIDADES",
+                "MEUS ANÚNCIOS",
+                "PERFIL"
         };
 
         pager_menu_principal_cliente.setPagingEnabled(false);

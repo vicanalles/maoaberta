@@ -44,6 +44,12 @@ dependencies {
 
     //Constraint Layout
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
+
+    //Firebase Auth
+    compile 'com.google.firebase:firebase-auth:11.0.1'
+
+    //Firebase Google Auth
+    compile 'com.google.android.gms:play-services-auth:11.0.1'
 }
 
 apply plugin: 'com.google.gms.google-services'

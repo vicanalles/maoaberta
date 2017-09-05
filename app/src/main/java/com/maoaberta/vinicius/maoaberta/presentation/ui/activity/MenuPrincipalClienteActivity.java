@@ -4,14 +4,21 @@ import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.maoaberta.vinicius.maoaberta.R;
 import com.maoaberta.vinicius.maoaberta.presentation.component.CustomViewPager;
 import com.maoaberta.vinicius.maoaberta.presentation.ui.adapter.TabsPagerAdapterCliente;
@@ -38,6 +45,14 @@ public class MenuPrincipalClienteActivity extends AppCompatActivity{
         setContentView(R.layout.activity_menu_principal_cliente);
         ButterKnife.bind(this);
         setSupportActionBar(toolbar_layout_menu_cliente);
+
+        Intent intent = getIntent();
+
+        String nome = intent.getStringExtra("nome");
+        String email = intent.getStringExtra("email");
+        String id = intent.getStringExtra("id");
+
+        toolbar_layout_menu_cliente.setTitle(nome);
 
         final String[] tabTitles = {
                 "ANÚNCIOS",
@@ -72,7 +87,9 @@ public class MenuPrincipalClienteActivity extends AppCompatActivity{
                 abrirConfiguracoes();
                 break;
             case R.id.item_exit_menu_principal:
-                Toast.makeText(this, "Sair do aplicativo", Toast.LENGTH_LONG).show();
+                FirebaseAuth.getInstance().signOut();
+                finish();
+                break;
         }
         return super.onOptionsItemSelected(item);
     }

@@ -43,8 +43,8 @@ import butterknife.ButterKnife;
 
 public class TabCadastroCliente extends Fragment implements GoogleApiClient.OnConnectionFailedListener {
 
-    private static int RC_SIGN_IN = 1;
-    private FirebaseAuth mAuth;
+    private static int RC_SIGN_IN = 1; //codigo retornado ao selecionar uma conta no google
+    FirebaseAuth mAuth;
 
     @BindView(R.id.edit_text_nome_cadastro_cliente)
     EditText nomeCliente;
@@ -90,7 +90,17 @@ public class TabCadastroCliente extends Fragment implements GoogleApiClient.OnCo
         cadastrarCliente.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getContext(), "Abrir Menu Principal Cliente", Toast.LENGTH_SHORT).show();
+                if (String.valueOf(nomeCliente.getText()).equals("") || String.valueOf(telefoneCliente.getText()).equals("")||
+                        String.valueOf(emailCliente.getText()).equals("") || String.valueOf(senhaCliente.getText()).equals("") ||
+                        String.valueOf(confirmarSenha.getText()).equals("")){
+                    Toast.makeText(getActivity(), "Preencha todos os campos para se cadastrar!", Toast.LENGTH_SHORT).show();
+                }else{
+                    if(String.valueOf(senhaCliente.getText()).equals(String.valueOf(confirmarSenha.getText()))){
+                        Toast.makeText(getActivity(), "Cadastrar Cliente!", Toast.LENGTH_SHORT).show();
+                    }else{
+                        Toast.makeText(getActivity(), "Senhas incompatíveis!", Toast.LENGTH_SHORT).show();
+                    }
+                }
             }
         });
 

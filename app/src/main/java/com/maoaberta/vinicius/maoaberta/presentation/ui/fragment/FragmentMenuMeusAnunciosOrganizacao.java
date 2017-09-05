@@ -1,7 +1,6 @@
 package com.maoaberta.vinicius.maoaberta.presentation.ui.fragment;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,20 +13,20 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
- * Created by Vinicius on 03/09/2017.
+ * Created by Vinicius on 05/09/2017.
  */
 
-public class FragmentMenuMeusAnunciosCliente extends Fragment {
+public class FragmentMenuMeusAnunciosOrganizacao extends Fragment {
 
-    @BindView(R.id.text_view_menu_meus_anuncios_fragment_cliente)
-    TextView text_view_menu_meus_anuncios_fragment_cliente;
+    @BindView(R.id.text_view_menu_meus_anuncios_fragment_organizacao)
+    TextView text_view_menu_meus_anuncios_fragment_organizacao;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_menu_meus_anuncios_cliente, container, false);
+        View view = inflater.inflate(R.layout.fragment_menu_meus_anuncios_organizacao, container, false);
         ButterKnife.bind(this, view);
-        text_view_menu_meus_anuncios_fragment_cliente.setText("Meus Anúncios");
+        text_view_menu_meus_anuncios_fragment_organizacao.setText("Fragment Meus Anúncios Organização");
         return view;
     }
 }

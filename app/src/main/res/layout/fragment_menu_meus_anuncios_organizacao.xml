@@ -5,7 +5,7 @@
     android:background="@color/backgroundColorApp">
 
     <TextView
-        android:id="@+id/text_view_anuncios_fragment_cliente"
+        android:id="@+id/text_view_menu_meus_anuncios_fragment_organizacao"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"

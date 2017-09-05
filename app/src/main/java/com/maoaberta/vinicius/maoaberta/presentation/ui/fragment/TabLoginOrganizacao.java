@@ -14,6 +14,8 @@ import android.widget.Toast;
 import com.maoaberta.vinicius.maoaberta.R;
 import com.maoaberta.vinicius.maoaberta.presentation.ui.activity.CadastroActivity;
 import com.maoaberta.vinicius.maoaberta.presentation.ui.activity.EsqueceuSenhaActivity;
+import com.maoaberta.vinicius.maoaberta.presentation.ui.activity.MenuPrincipalClienteActivity;
+import com.maoaberta.vinicius.maoaberta.presentation.ui.activity.MenuPrincipalOrganizacaoActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -58,7 +60,8 @@ public class TabLoginOrganizacao extends Fragment {
         button_app_login_organizacao.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getContext(), "Abrir menu de organizacao", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(getContext(), MenuPrincipalOrganizacaoActivity.class);
+                startActivity(intent);
             }
         });
 

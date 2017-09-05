@@ -5,36 +5,18 @@
     android:layout_height="match_parent"
     android:background="@color/backgroundColorApp">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar_layout_perfil_organizacao"
-        android:layout_width="0dp"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@color/tabLayoutBottomColor"
-        android:elevation="4dp"
-        android:textAlignment="center"
-        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-        app:title="@string/perfil_organizacao"
-        app:titleTextColor="@color/textColorWhite">
-
-    </android.support.v7.widget.Toolbar>
-
     <ScrollView
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginBottom="0dp"
         android:layout_marginLeft="0dp"
         android:layout_marginRight="0dp"
-        android:layout_marginTop="0dp"
+        android:layout_marginTop="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbar_layout_perfil_organizacao"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0">
 
 
@@ -49,7 +31,7 @@
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="10dp">
+                android:layout_marginTop="20dp">
 
                 <ImageView
                     android:id="@+id/image_view_logo_perfil_organizacao"
@@ -71,7 +53,6 @@
                     android:typeface="serif" />
 
             </RelativeLayout>
-
 
 
             <EditText
@@ -263,17 +244,17 @@
                 android:layout_marginTop="10dp"
                 android:background="@drawable/rounded_edittext"
                 android:fontFamily="sans-serif"
+                android:gravity="start"
                 android:hint="@string/descricao"
                 android:inputType="textMultiLine"
+                android:maxLines="10"
                 android:paddingEnd="0dp"
                 android:paddingStart="10dp"
+                android:paddingTop="10dp"
                 android:textAlignment="textStart"
                 android:textColor="@color/textColorBlack"
                 android:textSize="15sp"
-                android:textStyle="normal"
-                android:maxLines="10"
-                android:gravity="start"
-                android:paddingTop="10dp"/>
+                android:textStyle="normal" />
 
             <EditText
                 android:id="@+id/edit_text_senha_perfil_organizacao"

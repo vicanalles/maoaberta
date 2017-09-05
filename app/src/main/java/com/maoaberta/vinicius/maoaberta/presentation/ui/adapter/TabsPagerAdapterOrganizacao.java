@@ -6,16 +6,16 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import com.maoaberta.vinicius.maoaberta.presentation.ui.fragment.FragmentMenuAnunciosCliente;
-import com.maoaberta.vinicius.maoaberta.presentation.ui.fragment.FragmentMenuMeusAnunciosCliente;
-import com.maoaberta.vinicius.maoaberta.presentation.ui.fragment.FragmentMenuEntidadesCliente;
-import com.maoaberta.vinicius.maoaberta.presentation.ui.fragment.FragmentPerfilCliente;
+import com.maoaberta.vinicius.maoaberta.presentation.ui.fragment.FragmentMenuAnunciosOrganizacao;
+import com.maoaberta.vinicius.maoaberta.presentation.ui.fragment.FragmentMenuEntidadesOrganizacao;
+import com.maoaberta.vinicius.maoaberta.presentation.ui.fragment.FragmentMenuMeusAnunciosOrganizacao;
+import com.maoaberta.vinicius.maoaberta.presentation.ui.fragment.FragmentPerfilOrganizacao;
 
 /**
- * Created by Vinicius on 03/09/2017.
+ * Created by Vinicius on 04/09/2017.
  */
 
-public class TabsPagerAdapterCliente extends FragmentPagerAdapter {
+public class TabsPagerAdapterOrganizacao extends FragmentPagerAdapter {
 
     private Context context;
 
@@ -26,7 +26,7 @@ public class TabsPagerAdapterCliente extends FragmentPagerAdapter {
             "PERFIL"
     };
 
-    public TabsPagerAdapterCliente(FragmentManager fm, Context context) {
+    public TabsPagerAdapterOrganizacao(FragmentManager fm, Context context){
         super(fm);
         this.context = context;
     }
@@ -36,18 +36,18 @@ public class TabsPagerAdapterCliente extends FragmentPagerAdapter {
 
         Fragment frag = null;
 
-        switch (position) {
+        switch (position){
             case 0:
-                frag = new FragmentMenuAnunciosCliente();
+                frag = new FragmentMenuAnunciosOrganizacao();
                 break;
             case 1:
-                frag = new FragmentMenuEntidadesCliente();
+                frag = new FragmentMenuEntidadesOrganizacao();
                 break;
             case 2:
-                frag = new FragmentMenuMeusAnunciosCliente();
+                frag = new FragmentMenuMeusAnunciosOrganizacao();
                 break;
             case 3:
-                frag = new FragmentPerfilCliente();
+                frag = new FragmentPerfilOrganizacao();
                 break;
         }
 

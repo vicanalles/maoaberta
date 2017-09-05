@@ -37,7 +37,7 @@ public class CadastroActivity extends AppCompatActivity {
     Toolbar toolbar;
 
     ViewPagerAdapterCadastro adapter;
-    CharSequence titles[] = {"Cliente", "Organização"};
+    CharSequence titles[] = {"Voluntário", "Organização"};
     TextView tv;
 
     @Override

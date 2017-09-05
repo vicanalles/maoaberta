@@ -13,20 +13,20 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
- * Created by Vinicius on 03/09/2017.
+ * Created by Vinicius on 05/09/2017.
  */
 
-public class FragmentMenuEntidadeCliente extends Fragment {
+public class FragmentMenuEntidadesOrganizacao extends Fragment {
 
-    @BindView(R.id.text_view_entidade_fragment)
-    TextView text_view_entidade_fragment;
+    @BindView(R.id.text_view_entidades_fragment_organizacao)
+    TextView text_view_entidades_fragment_organizacao;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_menu_entidade_cliente, container, false);
+        View view = inflater.inflate(R.layout.fragment_menu_entidades_organizacao, container, false);
         ButterKnife.bind(this, view);
-        text_view_entidade_fragment.setText("Entidades Participantes");
+        text_view_entidades_fragment_organizacao.setText("Fragment Entidades Organização");
         return view;
     }
 }

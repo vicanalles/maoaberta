@@ -43,7 +43,7 @@ public class LoginActivity extends AppCompatActivity {
     Toolbar toolbar_layout_login;
 
     ViewPagerAdapterLogin adapter;
-    CharSequence titles[] = {"Cliente", "Organização"};
+    CharSequence titles[] = {"Voluntário", "Organização"};
     TextView tv;
 
     @Override

@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "929107881820-vbbvkp9jaa5jgbikqipflvge1frjnale.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.maoaberta.vinicius.maoaberta",
+            "certificate_hash": "8a9cc929d1c2ad803bcaa38de8cfff0ef390cdb3"
+          }
+        },
+        {
           "client_id": "929107881820-5dra4jpatkgcekbgv5s4659nmkbfb28i.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -29,8 +37,20 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "929107881820-8254j8j7m710u90jmese1rrheg1ft9km.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.danieloliveira.ProjetoMaoAberta"
+              }
+            },
+            {
+              "client_id": "929107881820-5dra4jpatkgcekbgv5s4659nmkbfb28i.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         },
         "ads_service": {
           "status": 2

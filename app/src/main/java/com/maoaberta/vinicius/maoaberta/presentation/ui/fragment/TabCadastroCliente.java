@@ -1,19 +1,26 @@
 package com.maoaberta.vinicius.maoaberta.presentation.ui.fragment;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.view.ContextThemeWrapper;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.Auth;
@@ -64,7 +71,7 @@ public class TabCadastroCliente extends Fragment implements GoogleApiClient.OnCo
     GoogleApiClient mGoogleApiClient;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View v = inflater.inflate(R.layout.tab_cadastro_cliente, container, false);
         ButterKnife.bind(this, v);
@@ -90,15 +97,15 @@ public class TabCadastroCliente extends Fragment implements GoogleApiClient.OnCo
         cadastrarCliente.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (String.valueOf(nomeCliente.getText()).equals("") || String.valueOf(telefoneCliente.getText()).equals("")||
+                if (String.valueOf(nomeCliente.getText()).equals("") || String.valueOf(telefoneCliente.getText()).equals("") ||
                         String.valueOf(emailCliente.getText()).equals("") || String.valueOf(senhaCliente.getText()).equals("") ||
-                        String.valueOf(confirmarSenha.getText()).equals("")){
-                    Toast.makeText(getActivity(), "Preencha todos os campos para se cadastrar!", Toast.LENGTH_SHORT).show();
-                }else{
-                    if(String.valueOf(senhaCliente.getText()).equals(String.valueOf(confirmarSenha.getText()))){
+                        String.valueOf(confirmarSenha.getText()).equals("")) {
+                    alertaCamposNaoPreenchidos();
+                } else {
+                    if (String.valueOf(senhaCliente.getText()).equals(String.valueOf(confirmarSenha.getText()))) {
                         Toast.makeText(getActivity(), "Cadastrar Cliente!", Toast.LENGTH_SHORT).show();
-                    }else{
-                        Toast.makeText(getActivity(), "Senhas incompatíveis!", Toast.LENGTH_SHORT).show();
+                    } else {
+                        alertaSenhasDiferentes();
                     }
                 }
             }
@@ -112,7 +119,7 @@ public class TabCadastroCliente extends Fragment implements GoogleApiClient.OnCo
 
     }
 
-    private void signIn(){
+    private void signIn() {
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
@@ -121,14 +128,14 @@ public class TabCadastroCliente extends Fragment implements GoogleApiClient.OnCo
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(requestCode == RC_SIGN_IN){
+        if (requestCode == RC_SIGN_IN) {
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             handleSignInResult(result);
         }
     }
 
-    private void handleSignInResult(GoogleSignInResult result){
-        if (result.isSuccess()){
+    private void handleSignInResult(GoogleSignInResult result) {
+        if (result.isSuccess()) {
             GoogleSignInAccount account = result.getSignInAccount();
             Intent intent = new Intent(getContext(), MenuPrincipalClienteActivity.class);
             intent.putExtra("nome", account.getDisplayName());
@@ -137,8 +144,34 @@ public class TabCadastroCliente extends Fragment implements GoogleApiClient.OnCo
             intent.putExtra("token", account.getIdToken());
             startActivity(intent);
             getActivity().finish();
-        }else{
+        } else {
             Toast.makeText(getActivity(), "Falha na Autenticação!", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void alertaCamposNaoPreenchidos(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), R.style.AppTheme));
+        builder.setMessage(R.string.campos_nao_preenchidos);
+        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    private void alertaSenhasDiferentes(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), R.style.AppTheme));
+        builder.setMessage(R.string.senhas_diferentes);
+        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 }

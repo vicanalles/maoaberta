@@ -1,7 +1,5 @@
 package com.maoaberta.vinicius.maoaberta.presentation.ui.fragment;
 
-import android.app.Activity;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,18 +7,12 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.view.ContextThemeWrapper;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.PopupWindow;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.Auth;
@@ -31,15 +23,12 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.GoogleAuthProvider;
 import com.maoaberta.vinicius.maoaberta.R;
+import com.maoaberta.vinicius.maoaberta.domain.models.Cliente;
 import com.maoaberta.vinicius.maoaberta.presentation.ui.activity.MenuPrincipalClienteActivity;
-
-import java.util.concurrent.Executor;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -90,7 +79,7 @@ public class TabCadastroCliente extends Fragment implements GoogleApiClient.OnCo
         linear_layout_gmail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                signIn();
+
             }
         });
 
@@ -103,7 +92,10 @@ public class TabCadastroCliente extends Fragment implements GoogleApiClient.OnCo
                     alertaCamposNaoPreenchidos();
                 } else {
                     if (String.valueOf(senhaCliente.getText()).equals(String.valueOf(confirmarSenha.getText()))) {
-                        Toast.makeText(getActivity(), "Cadastrar Cliente!", Toast.LENGTH_SHORT).show();
+                        Cliente cliente = new Cliente();
+                        cliente.setEmail(String.valueOf(emailCliente.getText()));
+                        cliente.setSenha(String.valueOf(senhaCliente.getText()));
+                        createAccount(cliente.getEmail(), cliente.getSenha());
                     } else {
                         alertaSenhasDiferentes();
                     }
@@ -112,6 +104,21 @@ public class TabCadastroCliente extends Fragment implements GoogleApiClient.OnCo
         });
 
         return v;
+    }
+
+    private void createAccount(final String email, String password){
+        mAuth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (!task.isSuccessful()) {
+                            Toast.makeText(getActivity(), "Não foi possível salvar o usuário. Por favor, tente novamente!",
+                                    Toast.LENGTH_LONG).show();
+                        }else{
+                            abrirMenuPrincipalCliente(email);
+                        }
+                    }
+                });
     }
 
     @Override
@@ -173,5 +180,12 @@ public class TabCadastroCliente extends Fragment implements GoogleApiClient.OnCo
         });
         AlertDialog dialog = builder.create();
         dialog.show();
+    }
+
+    private void abrirMenuPrincipalCliente(String email){
+        Intent intent = new Intent(getContext(), MenuPrincipalClienteActivity.class);
+        intent.putExtra("emailCliente", email);
+        startActivity(intent);
+        getActivity().finish();
     }
 }

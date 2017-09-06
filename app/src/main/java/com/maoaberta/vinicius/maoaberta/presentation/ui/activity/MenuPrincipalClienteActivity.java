@@ -1,5 +1,6 @@
 package com.maoaberta.vinicius.maoaberta.presentation.ui.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
@@ -7,7 +8,9 @@ import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -32,6 +35,8 @@ import butterknife.ButterKnife;
 
 public class MenuPrincipalClienteActivity extends AppCompatActivity{
 
+    private FirebaseAuth mAuth = null;
+
     @BindView(R.id.toolbar_layout_menu_cliente)
     Toolbar toolbar_layout_menu_cliente;
     @BindView(R.id.tab_layout_menu_principal_cliente)
@@ -46,13 +51,11 @@ public class MenuPrincipalClienteActivity extends AppCompatActivity{
         ButterKnife.bind(this);
         setSupportActionBar(toolbar_layout_menu_cliente);
 
+        mAuth = FirebaseAuth.getInstance();
+
         Intent intent = getIntent();
-
-        String nome = intent.getStringExtra("nome");
-        String email = intent.getStringExtra("email");
-        String id = intent.getStringExtra("id");
-
-        toolbar_layout_menu_cliente.setTitle(nome);
+        String email = intent.getStringExtra("emailCliente");
+        toolbar_layout_menu_cliente.setTitle(email);
 
         final String[] tabTitles = {
                 "ANÚNCIOS",
@@ -87,8 +90,7 @@ public class MenuPrincipalClienteActivity extends AppCompatActivity{
                 abrirConfiguracoes();
                 break;
             case R.id.item_exit_menu_principal:
-                FirebaseAuth.getInstance().signOut();
-                finish();
+                sairDoApp();
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -96,5 +98,36 @@ public class MenuPrincipalClienteActivity extends AppCompatActivity{
 
     public void abrirConfiguracoes(){
         startActivity(new Intent(Settings.ACTION_SETTINGS));
+    }
+
+    @Override
+    public void onBackPressed() {
+        sairDoApp();
+    }
+
+    private void sairDoApp() {
+        FirebaseAuth.getInstance().signOut();
+        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.AppTheme));
+        builder.setMessage(R.string.sair_app);
+        builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                abrirTelaLogin();
+            }
+        });
+        builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    private void abrirTelaLogin(){
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
+        finish();
     }
 }

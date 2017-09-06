@@ -39,5 +39,10 @@
     <string name="saida">Saída</string>
     <string name="campos_nao_preenchidos">Alguns campos não foram preenchidos. Por favor, preencher todos os campos</string>
     <string name="ok">OK</string>
+    <string name="yes">YES</string>
+    <string name="no">NO</string>
     <string name="senhas_diferentes">Senha e Confirmação de Senha devem ser iguais. Digite novamente!</string>
+    <string name="dados_incorretos">Email ou senha inválidos. Por favor, digite novamente!</string>
+    <string name="preencher_campos">Por favor, preencha todos os campos para logar.</string>
+    <string name="sair_app">Deseja mesmo sair do aplicativo?</string>
 </resources>

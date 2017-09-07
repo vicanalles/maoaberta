@@ -79,7 +79,7 @@ public class TabCadastroCliente extends Fragment implements GoogleApiClient.OnCo
         linear_layout_gmail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                signIn();
             }
         });
 
@@ -144,13 +144,8 @@ public class TabCadastroCliente extends Fragment implements GoogleApiClient.OnCo
     private void handleSignInResult(GoogleSignInResult result) {
         if (result.isSuccess()) {
             GoogleSignInAccount account = result.getSignInAccount();
-            Intent intent = new Intent(getContext(), MenuPrincipalClienteActivity.class);
-            intent.putExtra("nome", account.getDisplayName());
-            intent.putExtra("email", account.getEmail());
-            intent.putExtra("id", account.getId());
-            intent.putExtra("token", account.getIdToken());
-            startActivity(intent);
-            getActivity().finish();
+            nomeCliente.setText(account.getDisplayName());
+            emailCliente.setText(account.getEmail());
         } else {
             Toast.makeText(getActivity(), "Falha na Autenticação!", Toast.LENGTH_SHORT).show();
         }

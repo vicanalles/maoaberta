@@ -99,9 +99,9 @@ public class TabLoginCliente extends Fragment {
         startActivity(intent);
     }
 
-    public void abrirMenuPrincipalCliente(String email){
+    public void abrirMenuPrincipalCliente(FirebaseUser user){
         Intent intent = new Intent(getContext(), MenuPrincipalClienteActivity.class);
-        intent.putExtra("emailCliente", email);
+        intent.putExtra("userName", user.getUid());
         startActivity(intent);
         getActivity().finish();
     }
@@ -114,7 +114,9 @@ public class TabLoginCliente extends Fragment {
                         if (!task.isSuccessful()) {
                             alertaDadosIncorretos();
                         } else {
-                            abrirMenuPrincipalCliente(email);
+                            AuthResult result = task.getResult();
+                            FirebaseUser user = result.getUser();
+                            abrirMenuPrincipalCliente(user);
                         }
                     }
                 });

@@ -4,12 +4,11 @@ package com.maoaberta.vinicius.maoaberta.domain.models;
  * Created by vinicius on 30/08/17.
  */
 
-public class Cliente {
+public class Voluntario {
 
     private String nome;
     private String email;
     private String telefone;
-    private String endereco;
     private String senha;
 
     public String getNome() {
@@ -34,14 +33,6 @@ public class Cliente {
 
     public void setTelefone(String telefone) {
         this.telefone = telefone;
-    }
-
-    public String getEndereco() {
-        return endereco;
-    }
-
-    public void setEndereco(String endereco) {
-        this.endereco = endereco;
     }
 
     public String getSenha() {

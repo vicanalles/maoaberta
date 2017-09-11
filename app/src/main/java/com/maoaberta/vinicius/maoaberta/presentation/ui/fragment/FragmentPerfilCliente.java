@@ -40,7 +40,7 @@ public class FragmentPerfilCliente extends Fragment {
         botao_salvar_perfil_cliente.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getContext(), "Salvar Dados do Cliente", Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), "Salvar Dados do Voluntario", Toast.LENGTH_LONG).show();
             }
         });
 

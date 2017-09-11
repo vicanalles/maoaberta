@@ -27,7 +27,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.maoaberta.vinicius.maoaberta.R;
-import com.maoaberta.vinicius.maoaberta.domain.models.Cliente;
+import com.maoaberta.vinicius.maoaberta.domain.models.Voluntario;
+import com.maoaberta.vinicius.maoaberta.domain.repository.UsuarioRepository;
 import com.maoaberta.vinicius.maoaberta.presentation.ui.activity.MenuPrincipalClienteActivity;
 
 import butterknife.BindView;
@@ -92,10 +93,15 @@ public class TabCadastroCliente extends Fragment implements GoogleApiClient.OnCo
                     alertaCamposNaoPreenchidos();
                 } else {
                     if (String.valueOf(senhaCliente.getText()).equals(String.valueOf(confirmarSenha.getText()))) {
-                        Cliente cliente = new Cliente();
-                        cliente.setEmail(String.valueOf(emailCliente.getText()));
-                        cliente.setSenha(String.valueOf(senhaCliente.getText()));
-                        createAccount(cliente.getEmail(), cliente.getSenha());
+                        Voluntario voluntario = new Voluntario();
+                        voluntario.setNome(String.valueOf(nomeCliente.getText()));
+                        voluntario.setEmail(String.valueOf(emailCliente.getText()));
+                        voluntario.setSenha(String.valueOf(senhaCliente.getText()));
+                        voluntario.setTelefone(String.valueOf(telefoneCliente.getText()));
+                        createAccount(voluntario.getEmail(), voluntario.getSenha());
+                        UsuarioRepository usuarioRepository = new UsuarioRepository();
+                        usuarioRepository.cadastrarUsuario(voluntario);
+
                     } else {
                         alertaSenhasDiferentes();
                     }
@@ -106,7 +112,7 @@ public class TabCadastroCliente extends Fragment implements GoogleApiClient.OnCo
         return v;
     }
 
-    private void createAccount(final String email, String password){
+    private void createAccount(final String email, String password) {
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
                     @Override
@@ -114,8 +120,10 @@ public class TabCadastroCliente extends Fragment implements GoogleApiClient.OnCo
                         if (!task.isSuccessful()) {
                             Toast.makeText(getActivity(), "Não foi possível salvar o usuário. Por favor, tente novamente!",
                                     Toast.LENGTH_LONG).show();
-                        }else{
-                            abrirMenuPrincipalCliente(email);
+                        } else {
+                            AuthResult result = task.getResult();
+                            FirebaseUser user = result.getUser();
+                            abrirMenuPrincipalCliente(user);
                         }
                     }
                 });
@@ -151,7 +159,7 @@ public class TabCadastroCliente extends Fragment implements GoogleApiClient.OnCo
         }
     }
 
-    private void alertaCamposNaoPreenchidos(){
+    private void alertaCamposNaoPreenchidos() {
         AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), R.style.AppTheme));
         builder.setMessage(R.string.campos_nao_preenchidos);
         builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
@@ -164,7 +172,7 @@ public class TabCadastroCliente extends Fragment implements GoogleApiClient.OnCo
         dialog.show();
     }
 
-    private void alertaSenhasDiferentes(){
+    private void alertaSenhasDiferentes() {
         AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), R.style.AppTheme));
         builder.setMessage(R.string.senhas_diferentes);
         builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
@@ -177,9 +185,9 @@ public class TabCadastroCliente extends Fragment implements GoogleApiClient.OnCo
         dialog.show();
     }
 
-    private void abrirMenuPrincipalCliente(String email){
+    private void abrirMenuPrincipalCliente(FirebaseUser user) {
         Intent intent = new Intent(getContext(), MenuPrincipalClienteActivity.class);
-        intent.putExtra("emailCliente", email);
+        intent.putExtra("userName", user.getDisplayName());
         startActivity(intent);
         getActivity().finish();
     }

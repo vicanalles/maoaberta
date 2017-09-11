@@ -54,8 +54,8 @@ public class MenuPrincipalClienteActivity extends AppCompatActivity{
         mAuth = FirebaseAuth.getInstance();
 
         Intent intent = getIntent();
-        String email = intent.getStringExtra("emailCliente");
-        toolbar_layout_menu_cliente.setTitle(email);
+        String nome = intent.getStringExtra("userName");
+        toolbar_layout_menu_cliente.setTitle(nome);
 
         final String[] tabTitles = {
                 "ANÚNCIOS",

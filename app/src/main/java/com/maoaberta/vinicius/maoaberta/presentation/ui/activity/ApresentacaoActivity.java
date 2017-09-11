@@ -43,7 +43,7 @@ public class ApresentacaoActivity extends AppCompatActivity{
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
                     // User is signed in
-                    abrirMenuPrincipalCliente(user.getEmail());
+                    abrirMenuPrincipalCliente(user);
                 } else {
                     // User is signed out
                 }
@@ -74,9 +74,9 @@ public class ApresentacaoActivity extends AppCompatActivity{
         finish();
     }
 
-    public void abrirMenuPrincipalCliente(String email){
+    public void abrirMenuPrincipalCliente(FirebaseUser user){
         Intent intent = new Intent(getApplicationContext(), MenuPrincipalClienteActivity.class);
-        intent.putExtra("emailCliente", email);
+        intent.putExtra("userName", user.getUid());
         startActivity(intent);
         finish();
     }

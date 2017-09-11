@@ -39,4 +39,8 @@ public class UsuarioRepository {
             }
         });
     }
+
+    public void getUserByUid(String userUid){
+        
+    }
 }

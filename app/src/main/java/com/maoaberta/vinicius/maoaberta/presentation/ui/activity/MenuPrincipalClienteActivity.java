@@ -106,12 +106,12 @@ public class MenuPrincipalClienteActivity extends AppCompatActivity{
     }
 
     private void sairDoApp() {
-        FirebaseAuth.getInstance().signOut();
         AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.AppTheme));
         builder.setMessage(R.string.sair_app);
         builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                FirebaseAuth.getInstance().signOut();
                 abrirTelaLogin();
             }
         });

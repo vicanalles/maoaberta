@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.StringDef;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.view.ContextThemeWrapper;
@@ -93,15 +94,8 @@ public class TabCadastroCliente extends Fragment implements GoogleApiClient.OnCo
                     alertaCamposNaoPreenchidos();
                 } else {
                     if (String.valueOf(senhaCliente.getText()).equals(String.valueOf(confirmarSenha.getText()))) {
-                        Voluntario voluntario = new Voluntario();
-                        voluntario.setNome(String.valueOf(nomeCliente.getText()));
-                        voluntario.setEmail(String.valueOf(emailCliente.getText()));
-                        voluntario.setSenha(String.valueOf(senhaCliente.getText()));
-                        voluntario.setTelefone(String.valueOf(telefoneCliente.getText()));
-                        createAccount(voluntario.getEmail(), voluntario.getSenha());
-                        UsuarioRepository usuarioRepository = new UsuarioRepository();
-                        usuarioRepository.cadastrarUsuario(voluntario);
 
+                        createAccount(String.valueOf(emailCliente.getText()), String.valueOf(senhaCliente.getText()));
                     } else {
                         alertaSenhasDiferentes();
                     }
@@ -123,7 +117,14 @@ public class TabCadastroCliente extends Fragment implements GoogleApiClient.OnCo
                         } else {
                             AuthResult result = task.getResult();
                             FirebaseUser user = result.getUser();
-                            abrirMenuPrincipalCliente(user);
+                            Voluntario voluntario = new Voluntario();
+                            voluntario.setNome(String.valueOf(nomeCliente.getText()));
+                            voluntario.setEmail(user.getEmail());
+                            voluntario.setTelefone(String.valueOf(telefoneCliente.getText()));
+                            UsuarioRepository usuarioRepository = new UsuarioRepository();
+                            usuarioRepository.cadastrarUsuario(voluntario);
+                            Toast.makeText(getActivity(), "Voluntário cadastrado com sucesso!!", Toast.LENGTH_LONG).show();
+                            abrirMenuPrincipalCliente(voluntario);
                         }
                     }
                 });
@@ -185,9 +186,9 @@ public class TabCadastroCliente extends Fragment implements GoogleApiClient.OnCo
         dialog.show();
     }
 
-    private void abrirMenuPrincipalCliente(FirebaseUser user) {
+    private void abrirMenuPrincipalCliente(Voluntario voluntario) {
         Intent intent = new Intent(getContext(), MenuPrincipalClienteActivity.class);
-        intent.putExtra("userName", user.getDisplayName());
+        intent.putExtra("userName", voluntario.getNome());
         startActivity(intent);
         getActivity().finish();
     }

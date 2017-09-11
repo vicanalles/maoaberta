@@ -61,13 +61,13 @@ dependencies {
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
 
     //Firebase Auth
-    compile 'com.google.firebase:firebase-auth:11.0.1'
+    compile 'com.google.firebase:firebase-auth:11.2.2'
 
     //Firebase Google Auth
-    compile 'com.google.android.gms:play-services-auth:11.0.1'
+    compile 'com.google.android.gms:play-services-auth:11.2.2'
 
     //Firebase Database
-    compile 'com.google.firebase:firebase-database:11.0.1'
+    compile 'com.google.firebase:firebase-database:11.2.2'
 }
 
 apply plugin: 'com.google.gms.google-services'

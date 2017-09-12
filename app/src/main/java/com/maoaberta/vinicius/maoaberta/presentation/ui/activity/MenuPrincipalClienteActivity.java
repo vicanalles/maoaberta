@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AlertDialog;
@@ -17,12 +16,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.maoaberta.vinicius.maoaberta.R;
+import com.maoaberta.vinicius.maoaberta.domain.models.Voluntario;
 import com.maoaberta.vinicius.maoaberta.domain.repository.UsuarioRepository;
 import com.maoaberta.vinicius.maoaberta.presentation.component.CustomViewPager;
 import com.maoaberta.vinicius.maoaberta.presentation.ui.adapter.TabsPagerAdapterCliente;
@@ -37,6 +34,8 @@ import butterknife.ButterKnife;
 public class MenuPrincipalClienteActivity extends AppCompatActivity{
 
     private FirebaseAuth mAuth = null;
+    private UsuarioRepository usuarioRepository;
+    private FirebaseUser user;
 
     @BindView(R.id.toolbar_layout_menu_cliente)
     Toolbar toolbar_layout_menu_cliente;
@@ -53,10 +52,30 @@ public class MenuPrincipalClienteActivity extends AppCompatActivity{
         setSupportActionBar(toolbar_layout_menu_cliente);
 
         mAuth = FirebaseAuth.getInstance();
+        user = mAuth.getCurrentUser();
+        usuarioRepository = new UsuarioRepository();
 
-        Intent intent = getIntent();
-        String nome = intent.getStringExtra("userName");
-        toolbar_layout_menu_cliente.setTitle(nome);
+        if(user != null){
+            String uid = user.getUid();
+            usuarioRepository.getUserByEmail(uid, new UsuarioRepository.OnGetUserById() {
+                @Override
+                public void onGetUserByIdSuccess(Voluntario voluntario) {
+                    Voluntario vol = new Voluntario();
+                    vol.setId(voluntario.getId());
+                    vol.setNome(voluntario.getNome());
+                    vol.setEmail(voluntario.getEmail());
+                    vol.setTelefone(voluntario.getTelefone());
+
+                    toolbar_layout_menu_cliente.setTitle(vol.getNome());
+                }
+
+                @Override
+                public void onGetUserByIdError(String error) {
+                    Log.d("onGetUserByIdError", error);
+                    Toast.makeText(getApplicationContext(), "User not exists", Toast.LENGTH_LONG).show();
+                }
+            });
+        }
 
         final String[] tabTitles = {
                 "ANÚNCIOS",

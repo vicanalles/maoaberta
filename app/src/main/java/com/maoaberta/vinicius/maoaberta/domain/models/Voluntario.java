@@ -6,10 +6,15 @@ package com.maoaberta.vinicius.maoaberta.domain.models;
 
 public class Voluntario {
 
+    private String id;
     private String nome;
     private String email;
     private String telefone;
     private String senha;
+
+    public String getId(){ return id; }
+
+    public void setId(String id) { this.id = id; }
 
     public String getNome() {
         return nome;

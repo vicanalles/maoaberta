@@ -2,7 +2,6 @@ package com.maoaberta.vinicius.maoaberta.domain.repository;
 
 import android.support.annotation.NonNull;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -27,11 +26,11 @@ public class UsuarioRepository {
     public UsuarioRepository(){
         firebaseAuth = FirebaseAuth.getInstance();
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        reference = database.getReference("usuarios/");
+        reference = database.getReference("user/");
     }
 
     public void cadastrarUsuario(final Voluntario voluntario){
-        reference.setValue(voluntario).addOnCompleteListener(new OnCompleteListener<Void>() {
+        reference.child(voluntario.getId()).setValue(voluntario).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if(task.isComplete()){
@@ -43,7 +42,29 @@ public class UsuarioRepository {
         });
     }
 
-    public void getUserByEmail(String email){
+    public void getUserByEmail(final String uid, final OnGetUserById onGetUserById ){
+        Query query = reference.child(uid);
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Voluntario voluntario = new Voluntario();
+                if(dataSnapshot.getKey().equals(uid)){
+                    voluntario = dataSnapshot.getValue(Voluntario.class);
+                    voluntario.setId(uid);
+                }
 
+                onGetUserById.onGetUserByIdSuccess(voluntario);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                onGetUserById.onGetUserByIdError(databaseError.getMessage());
+            }
+        });
+    }
+
+    public interface OnGetUserById{
+        void onGetUserByIdSuccess(Voluntario voluntario);
+        void onGetUserByIdError(String error);
     }
 }

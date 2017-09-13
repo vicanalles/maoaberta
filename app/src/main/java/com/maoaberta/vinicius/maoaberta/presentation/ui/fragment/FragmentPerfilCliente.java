@@ -1,22 +1,37 @@
 package com.maoaberta.vinicius.maoaberta.presentation.ui.fragment;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.EmailAuthCredential;
+import com.google.firebase.auth.EmailAuthProvider;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.maoaberta.vinicius.maoaberta.R;
+import com.maoaberta.vinicius.maoaberta.domain.models.Voluntario;
+import com.maoaberta.vinicius.maoaberta.domain.repository.UsuarioRepository;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -27,6 +42,21 @@ import butterknife.ButterKnife;
 
 public class FragmentPerfilCliente extends Fragment {
 
+    private FirebaseAuth mAuth;
+    private FirebaseUser user;
+    private UsuarioRepository usuarioRepository;
+    private Voluntario vol;
+
+    @BindView(R.id.edit_text_nome_perfil_cliente)
+    EditText edit_text_nome_perfil_cliente;
+    @BindView(R.id.edit_text_email_perfil_cliente)
+    EditText edit_text_email_perfil_cliente;
+    @BindView(R.id.edit_text_telefone_perfil_cliente)
+    EditText edit_text_telefone_perfil_cliente;
+    @BindView(R.id.edit_text_senha_perfil_cliente)
+    EditText edit_text_senha_perfil_cliente;
+    @BindView(R.id.edit_text_confirmar_senha_perfil_cliente)
+    EditText edit_text_confirmar_senha_perfil_cliente;
     @BindView(R.id.botao_salvar_perfil_cliente)
     Button botao_salvar_perfil_cliente;
 
@@ -37,13 +67,132 @@ public class FragmentPerfilCliente extends Fragment {
         View view = inflater.inflate(R.layout.fragment_perfil_cliente, container, false);
         ButterKnife.bind(this, view);
 
+        mAuth = FirebaseAuth.getInstance();
+        user = mAuth.getCurrentUser();
+        usuarioRepository = new UsuarioRepository();
+
+        if(user != null){
+            String uid = user.getUid();
+            usuarioRepository.getUserByUid(uid, new UsuarioRepository.OnGetUserById() {
+                @Override
+                public void onGetUserByIdSuccess(Voluntario voluntario) {
+                    edit_text_nome_perfil_cliente.setText(voluntario.getNome());
+                    edit_text_email_perfil_cliente.setText(voluntario.getEmail());
+                    edit_text_telefone_perfil_cliente.setText(voluntario.getTelefone());
+                    edit_text_senha_perfil_cliente.setText(voluntario.getSenha());
+                }
+
+                @Override
+                public void onGetUserByIdError(String error) {
+                    Log.d("onGetUserByIdError", error);
+                    Toast.makeText(getActivity(), "Usuário não existe", Toast.LENGTH_LONG).show();
+                }
+            });
+        }
+
         botao_salvar_perfil_cliente.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getContext(), "Salvar Dados do Voluntario", Toast.LENGTH_LONG).show();
+                if (String.valueOf(edit_text_nome_perfil_cliente.getText()).equals("") || String.valueOf(edit_text_telefone_perfil_cliente.getText()).equals("") ||
+                        String.valueOf(edit_text_email_perfil_cliente.getText()).equals("") || String.valueOf(edit_text_senha_perfil_cliente.getText()).equals("") ||
+                        String.valueOf(edit_text_confirmar_senha_perfil_cliente.getText()).equals("")) {
+                    alertaCamposNaoPreenchidos();
+                } else {
+                    if (String.valueOf(edit_text_senha_perfil_cliente.getText()).equals(String.valueOf(edit_text_confirmar_senha_perfil_cliente.getText()))) {
+                        if(edit_text_senha_perfil_cliente.getText().length() >= 6 && edit_text_confirmar_senha_perfil_cliente.getText().length() >= 6){
+                            user = mAuth.getCurrentUser();
+                            if(user != null){
+                                usuarioRepository.getUserByUid(user.getUid(), new UsuarioRepository.OnGetUserById() {
+                                    @Override
+                                    public void onGetUserByIdSuccess(Voluntario voluntario) {
+                                        vol = new Voluntario();
+                                        vol.setId(voluntario.getId());
+                                        vol.setNome(String.valueOf(edit_text_nome_perfil_cliente.getText()));
+                                        vol.setEmail(voluntario.getEmail());
+                                        vol.setTelefone(String.valueOf(edit_text_telefone_perfil_cliente.getText()));
+                                        vol.setSenha(String.valueOf(edit_text_senha_perfil_cliente.getText()));
+                                        AuthCredential credential = EmailAuthProvider.getCredential(voluntario.getEmail(),
+                                                voluntario.getSenha());
+                                        updatePasswordCredential(credential);
+                                        usuarioRepository.atualizarUser(vol);
+                                    }
+
+                                    @Override
+                                    public void onGetUserByIdError(String error) {
+                                        Log.d("onGetUserByIdError", error);
+                                        Toast.makeText(getActivity(), "Não foi possível atualizar o usuário!!", Toast.LENGTH_LONG).show();
+                                    }
+                                });
+                            }
+                        }else{
+                            alertaSenhaCurta();
+                        }
+                    } else {
+                        alertaSenhasDiferentes();
+                    }
+                }
             }
         });
 
         return view;
+    }
+
+    private void updatePasswordCredential(AuthCredential credential){
+        user.reauthenticate(credential).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if(task.isSuccessful()){
+                    user.updatePassword(String.valueOf(edit_text_senha_perfil_cliente.getText())).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if(task.isSuccessful()){
+                                Toast.makeText(getActivity(), "Senha de autenticação alterada", Toast.LENGTH_LONG).show();
+                            }else{
+                                Toast.makeText(getActivity(), "Não foi possível alterar a senha de autenticação", Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    });
+                }
+            }
+        });
+    }
+
+    private void alertaCamposNaoPreenchidos() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), R.style.AppTheme));
+        builder.setMessage(R.string.campos_nao_preenchidos);
+        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    private void alertaSenhaCurta() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), R.style.AppTheme));
+        builder.setMessage(R.string.senha_curta);
+        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    private void alertaSenhasDiferentes() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), R.style.AppTheme));
+        builder.setMessage(R.string.senhas_diferentes);
+        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 }

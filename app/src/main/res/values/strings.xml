@@ -41,6 +41,7 @@
     <string name="ok">OK</string>
     <string name="yes">YES</string>
     <string name="no">NO</string>
+    <string name="senha_curta">Senha curta. Digite pelo menos 6 caracteres para definir sua senha.</string>
     <string name="senhas_diferentes">Senha e Confirmação de Senha devem ser iguais. Digite novamente!</string>
     <string name="dados_incorretos">Email ou senha inválidos. Por favor, digite novamente!</string>
     <string name="preencher_campos">Por favor, preencha todos os campos para logar.</string>

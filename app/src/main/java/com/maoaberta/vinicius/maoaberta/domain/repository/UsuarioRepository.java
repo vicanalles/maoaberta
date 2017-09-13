@@ -42,7 +42,7 @@ public class UsuarioRepository {
         });
     }
 
-    public void getUserByEmail(final String uid, final OnGetUserById onGetUserById ){
+    public void getUserByUid(final String uid, final OnGetUserById onGetUserById ){
         Query query = reference.child(uid);
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -59,6 +59,19 @@ public class UsuarioRepository {
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 onGetUserById.onGetUserByIdError(databaseError.getMessage());
+            }
+        });
+    }
+
+    public void atualizarUser(Voluntario voluntario){
+        reference.child(voluntario.getId()).setValue(voluntario).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if(task.isComplete()){
+                    Log.i("CADASTRO", "Usuário cadastrado com sucesso");
+                }else{
+                    Log.i("CADASTRO", "Falha no cadastro");
+                }
             }
         });
     }

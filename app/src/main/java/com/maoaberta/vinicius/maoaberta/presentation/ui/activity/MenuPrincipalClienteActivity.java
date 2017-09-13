@@ -57,7 +57,7 @@ public class MenuPrincipalClienteActivity extends AppCompatActivity{
 
         if(user != null){
             String uid = user.getUid();
-            usuarioRepository.getUserByEmail(uid, new UsuarioRepository.OnGetUserById() {
+            usuarioRepository.getUserByUid(uid, new UsuarioRepository.OnGetUserById() {
                 @Override
                 public void onGetUserByIdSuccess(Voluntario voluntario) {
                     Voluntario vol = new Voluntario();
@@ -65,14 +65,13 @@ public class MenuPrincipalClienteActivity extends AppCompatActivity{
                     vol.setNome(voluntario.getNome());
                     vol.setEmail(voluntario.getEmail());
                     vol.setTelefone(voluntario.getTelefone());
-
                     toolbar_layout_menu_cliente.setTitle(vol.getNome());
                 }
 
                 @Override
                 public void onGetUserByIdError(String error) {
                     Log.d("onGetUserByIdError", error);
-                    Toast.makeText(getApplicationContext(), "User not exists", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "Usuário não existe", Toast.LENGTH_LONG).show();
                 }
             });
         }

@@ -12,6 +12,8 @@ import android.view.MenuItem;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.maoaberta.vinicius.maoaberta.R;
+import com.maoaberta.vinicius.maoaberta.domain.models.Voluntario;
+import com.maoaberta.vinicius.maoaberta.domain.repository.UsuarioRepository;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -24,6 +26,7 @@ public class ApresentacaoActivity extends AppCompatActivity{
 
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
+    private UsuarioRepository usuarioRepository;
 
     @BindView(R.id.toolbar_layout_sobre)
     Toolbar toolbar_layout_sobre;
@@ -43,7 +46,7 @@ public class ApresentacaoActivity extends AppCompatActivity{
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
                     // User is signed in
-                    abrirMenuPrincipalCliente(user);
+                    abrirMenuPrincipalCliente();
                 } else {
                     // User is signed out
                     abrirTelaLogin();
@@ -75,9 +78,8 @@ public class ApresentacaoActivity extends AppCompatActivity{
         finish();
     }
 
-    public void abrirMenuPrincipalCliente(FirebaseUser user){
+    public void abrirMenuPrincipalCliente(){
         Intent intent = new Intent(getApplicationContext(), MenuPrincipalClienteActivity.class);
-        intent.putExtra("userName", user.getUid());
         startActivity(intent);
         finish();
     }

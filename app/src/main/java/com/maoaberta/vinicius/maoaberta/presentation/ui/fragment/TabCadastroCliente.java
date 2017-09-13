@@ -94,8 +94,11 @@ public class TabCadastroCliente extends Fragment implements GoogleApiClient.OnCo
                     alertaCamposNaoPreenchidos();
                 } else {
                     if (String.valueOf(senhaCliente.getText()).equals(String.valueOf(confirmarSenha.getText()))) {
-
-                        createAccount(String.valueOf(emailCliente.getText()), String.valueOf(senhaCliente.getText()));
+                        if(senhaCliente.getText().length() >= 6 && confirmarSenha.getText().length() >= 6){
+                            createAccount(String.valueOf(emailCliente.getText()), String.valueOf(senhaCliente.getText()));
+                        }else{
+                            alertaSenhaCurta();
+                        }
                     } else {
                         alertaSenhasDiferentes();
                     }
@@ -122,9 +125,9 @@ public class TabCadastroCliente extends Fragment implements GoogleApiClient.OnCo
                             voluntario.setNome(String.valueOf(nomeCliente.getText()));
                             voluntario.setEmail(user.getEmail());
                             voluntario.setTelefone(String.valueOf(telefoneCliente.getText()));
+                            voluntario.setSenha(String.valueOf(senhaCliente.getText()));
                             UsuarioRepository usuarioRepository = new UsuarioRepository();
                             usuarioRepository.cadastrarUsuario(voluntario);
-                            Toast.makeText(getActivity(), "Voluntário cadastrado com sucesso!!", Toast.LENGTH_LONG).show();
                             abrirMenuPrincipalCliente(voluntario);
                         }
                     }
@@ -177,6 +180,19 @@ public class TabCadastroCliente extends Fragment implements GoogleApiClient.OnCo
     private void alertaSenhasDiferentes() {
         AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), R.style.AppTheme));
         builder.setMessage(R.string.senhas_diferentes);
+        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    private void alertaSenhaCurta() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), R.style.AppTheme));
+        builder.setMessage(R.string.senha_curta);
         builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {

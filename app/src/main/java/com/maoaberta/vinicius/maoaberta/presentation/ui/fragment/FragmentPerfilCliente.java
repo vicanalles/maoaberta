@@ -105,7 +105,6 @@ public class FragmentPerfilCliente extends Fragment {
                                     @Override
                                     public void onGetUserByIdSuccess(Voluntario voluntario) {
                                         vol = new Voluntario();
-                                        vol.setId(voluntario.getId());
                                         vol.setNome(String.valueOf(edit_text_nome_perfil_cliente.getText()));
                                         vol.setEmail(voluntario.getEmail());
                                         vol.setTelefone(String.valueOf(edit_text_telefone_perfil_cliente.getText()));
@@ -113,7 +112,8 @@ public class FragmentPerfilCliente extends Fragment {
                                         AuthCredential credential = EmailAuthProvider.getCredential(voluntario.getEmail(),
                                                 voluntario.getSenha());
                                         updatePasswordCredential(credential);
-                                        usuarioRepository.atualizarUser(vol);
+                                        usuarioRepository.atualizarUser(vol, user);
+                                        Toast.makeText(getActivity(), "Usuário Atualizado com Sucesso!", Toast.LENGTH_LONG).show();
                                     }
 
                                     @Override
@@ -147,7 +147,6 @@ public class FragmentPerfilCliente extends Fragment {
                             if(task.isSuccessful()){
                                 edit_text_senha_perfil_cliente.setText("");
                                 edit_text_confirmar_senha_perfil_cliente.setText("");
-                                Toast.makeText(getActivity(), "Senha de autenticação alterada", Toast.LENGTH_LONG).show();
                             }else{
                                 Toast.makeText(getActivity(), "Não foi possível alterar a senha de autenticação", Toast.LENGTH_LONG).show();
                             }

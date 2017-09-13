@@ -61,7 +61,6 @@ public class MenuPrincipalClienteActivity extends AppCompatActivity{
                 @Override
                 public void onGetUserByIdSuccess(Voluntario voluntario) {
                     Voluntario vol = new Voluntario();
-                    vol.setId(voluntario.getId());
                     vol.setNome(voluntario.getNome());
                     vol.setEmail(voluntario.getEmail());
                     vol.setTelefone(voluntario.getTelefone());

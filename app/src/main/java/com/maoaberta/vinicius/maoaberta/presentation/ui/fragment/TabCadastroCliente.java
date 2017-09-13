@@ -121,14 +121,13 @@ public class TabCadastroCliente extends Fragment implements GoogleApiClient.OnCo
                             AuthResult result = task.getResult();
                             FirebaseUser user = result.getUser();
                             Voluntario voluntario = new Voluntario();
-                            voluntario.setId(user.getUid());
                             voluntario.setNome(String.valueOf(nomeCliente.getText()));
                             voluntario.setEmail(user.getEmail());
                             voluntario.setTelefone(String.valueOf(telefoneCliente.getText()));
                             voluntario.setSenha(String.valueOf(senhaCliente.getText()));
                             UsuarioRepository usuarioRepository = new UsuarioRepository();
-                            usuarioRepository.cadastrarUsuario(voluntario);
-                            abrirMenuPrincipalCliente(voluntario);
+                            usuarioRepository.cadastrarUsuario(voluntario, user);
+                            abrirMenuPrincipalCliente();
                         }
                     }
                 });
@@ -203,7 +202,7 @@ public class TabCadastroCliente extends Fragment implements GoogleApiClient.OnCo
         dialog.show();
     }
 
-    private void abrirMenuPrincipalCliente(Voluntario voluntario) {
+    private void abrirMenuPrincipalCliente() {
         Intent intent = new Intent(getContext(), MenuPrincipalClienteActivity.class);
         startActivity(intent);
         getActivity().finish();

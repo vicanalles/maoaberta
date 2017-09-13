@@ -79,7 +79,6 @@ public class FragmentPerfilCliente extends Fragment {
                     edit_text_nome_perfil_cliente.setText(voluntario.getNome());
                     edit_text_email_perfil_cliente.setText(voluntario.getEmail());
                     edit_text_telefone_perfil_cliente.setText(voluntario.getTelefone());
-                    edit_text_senha_perfil_cliente.setText(voluntario.getSenha());
                 }
 
                 @Override
@@ -146,6 +145,8 @@ public class FragmentPerfilCliente extends Fragment {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if(task.isSuccessful()){
+                                edit_text_senha_perfil_cliente.setText("");
+                                edit_text_confirmar_senha_perfil_cliente.setText("");
                                 Toast.makeText(getActivity(), "Senha de autenticação alterada", Toast.LENGTH_LONG).show();
                             }else{
                                 Toast.makeText(getActivity(), "Não foi possível alterar a senha de autenticação", Toast.LENGTH_LONG).show();

@@ -67,9 +67,6 @@ public class MenuPrincipalOrganizacaoActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
 
-            case R.id.item_configuracoes_menu_principal:
-                abrirConfiguracoes();
-                break;
             case R.id.item_exit_menu_principal:
                 Toast.makeText(this, "Sair do Aplicativo", Toast.LENGTH_LONG).show();
         }

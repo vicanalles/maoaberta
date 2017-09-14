@@ -32,6 +32,9 @@ import com.google.firebase.auth.FirebaseUser;
 import com.maoaberta.vinicius.maoaberta.R;
 import com.maoaberta.vinicius.maoaberta.domain.models.Voluntario;
 import com.maoaberta.vinicius.maoaberta.domain.repository.UsuarioRepository;
+import com.maoaberta.vinicius.maoaberta.presentation.ui.activity.MenuPrincipalClienteActivity;
+
+import java.security.AuthProvider;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -108,18 +111,46 @@ public class FragmentPerfilCliente extends Fragment {
                                         vol.setNome(String.valueOf(edit_text_nome_perfil_cliente.getText()));
                                         vol.setEmail(voluntario.getEmail());
                                         vol.setTelefone(String.valueOf(edit_text_telefone_perfil_cliente.getText()));
-                                        vol.setSenha(String.valueOf(edit_text_senha_perfil_cliente.getText()));
-                                        AuthCredential credential = EmailAuthProvider.getCredential(voluntario.getEmail(),
-                                                voluntario.getSenha());
-                                        updatePasswordCredential(credential);
+
+                                        user.updatePassword(String.valueOf(edit_text_senha_perfil_cliente.getText())).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                if(task.isSuccessful()){
+                                                    edit_text_senha_perfil_cliente.setText("");
+                                                    edit_text_confirmar_senha_perfil_cliente.setText("");
+                                                }else{
+                                                    Toast.makeText(getActivity(), "Não foi possível alterar a senha de autenticação", Toast.LENGTH_LONG).show();
+                                                }
+                                            }
+                                        });
+
                                         usuarioRepository.atualizarUser(vol, user);
-                                        Toast.makeText(getActivity(), "Usuário Atualizado com Sucesso!", Toast.LENGTH_LONG).show();
+
+                                        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), R.style.AppTheme));
+                                        builder.setMessage("Usuário atualizado com sucesso!");
+                                        builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int i) {
+                                                abrirMenuPrincipal();
+                                            }
+                                        });
+                                        AlertDialog dialog = builder.create();
+                                        dialog.show();
                                     }
 
                                     @Override
                                     public void onGetUserByIdError(String error) {
                                         Log.d("onGetUserByIdError", error);
-                                        Toast.makeText(getActivity(), "Não foi possível atualizar o usuário!!", Toast.LENGTH_LONG).show();
+                                        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), R.style.AppTheme));
+                                        builder.setMessage("Não foi possível atualizar os dados do usuário. Por favor, tente novamente!");
+                                        builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int i) {
+                                                dialog.dismiss();
+                                            }
+                                        });
+                                        AlertDialog dialog = builder.create();
+                                        dialog.show();
                                     }
                                 });
                             }
@@ -134,27 +165,6 @@ public class FragmentPerfilCliente extends Fragment {
         });
 
         return view;
-    }
-
-    private void updatePasswordCredential(AuthCredential credential){
-        user.reauthenticate(credential).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if(task.isSuccessful()){
-                    user.updatePassword(String.valueOf(edit_text_senha_perfil_cliente.getText())).addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            if(task.isSuccessful()){
-                                edit_text_senha_perfil_cliente.setText("");
-                                edit_text_confirmar_senha_perfil_cliente.setText("");
-                            }else{
-                                Toast.makeText(getActivity(), "Não foi possível alterar a senha de autenticação", Toast.LENGTH_LONG).show();
-                            }
-                        }
-                    });
-                }
-            }
-        });
     }
 
     private void alertaCamposNaoPreenchidos() {
@@ -194,5 +204,11 @@ public class FragmentPerfilCliente extends Fragment {
         });
         AlertDialog dialog = builder.create();
         dialog.show();
+    }
+
+    private void abrirMenuPrincipal(){
+        Intent intent = new Intent(getContext(), MenuPrincipalClienteActivity.class);
+        startActivity(intent);
+        getActivity().finish();
     }
 }

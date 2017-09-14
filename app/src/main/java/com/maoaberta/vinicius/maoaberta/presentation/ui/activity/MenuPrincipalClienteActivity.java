@@ -76,10 +76,10 @@ public class MenuPrincipalClienteActivity extends AppCompatActivity{
         }
 
         final String[] tabTitles = {
+                "PERFIL",
                 "ANÚNCIOS",
                 "ENTIDADES",
-                "MEUS ANÚNCIOS",
-                "PERFIL"
+                "MEUS ANÚNCIOS"
         };
 
         pager_menu_principal_cliente.setPagingEnabled(false);
@@ -104,9 +104,6 @@ public class MenuPrincipalClienteActivity extends AppCompatActivity{
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
 
-            case R.id.item_configuracoes_menu_principal:
-                abrirConfiguracoes();
-                break;
             case R.id.item_exit_menu_principal:
                 sairDoApp();
                 break;

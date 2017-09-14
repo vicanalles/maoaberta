@@ -20,10 +20,10 @@ public class TabsPagerAdapterCliente extends FragmentPagerAdapter {
     private Context context;
 
     final String[] tabTitles = {
+            "PERFIL",
             "ANÚNCIOS",
             "ENTIDADES",
-            "MEUS ANÚNCIOS",
-            "PERFIL"
+            "MEUS ANÚNCIOS"
     };
 
     public TabsPagerAdapterCliente(FragmentManager fm, Context context) {
@@ -38,7 +38,7 @@ public class TabsPagerAdapterCliente extends FragmentPagerAdapter {
 
         switch (position) {
             case 0:
-                frag = new FragmentMenuAnunciosCliente();
+                frag = new FragmentPerfilCliente();
                 break;
             case 1:
                 frag = new FragmentMenuEntidadesCliente();
@@ -47,7 +47,7 @@ public class TabsPagerAdapterCliente extends FragmentPagerAdapter {
                 frag = new FragmentMenuMeusAnunciosCliente();
                 break;
             case 3:
-                frag = new FragmentPerfilCliente();
+                frag = new FragmentMenuAnunciosCliente();
                 break;
         }
 

@@ -49,7 +49,6 @@ public class ApresentacaoActivity extends AppCompatActivity{
                     abrirMenuPrincipalCliente();
                 } else {
                     // User is signed out
-                    abrirTelaLogin();
                 }
             }
         };

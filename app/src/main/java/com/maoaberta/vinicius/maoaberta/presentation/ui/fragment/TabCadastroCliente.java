@@ -29,6 +29,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.maoaberta.vinicius.maoaberta.R;
 import com.maoaberta.vinicius.maoaberta.domain.models.Voluntario;
+import com.maoaberta.vinicius.maoaberta.domain.repository.TipoRepository;
 import com.maoaberta.vinicius.maoaberta.domain.repository.UsuarioRepository;
 import com.maoaberta.vinicius.maoaberta.presentation.ui.activity.MenuPrincipalClienteActivity;
 
@@ -124,10 +125,21 @@ public class TabCadastroCliente extends Fragment implements GoogleApiClient.OnCo
                             voluntario.setNome(String.valueOf(nomeCliente.getText()));
                             voluntario.setEmail(user.getEmail());
                             voluntario.setTelefone(String.valueOf(telefoneCliente.getText()));
-                            voluntario.setSenha(String.valueOf(senhaCliente.getText()));
                             UsuarioRepository usuarioRepository = new UsuarioRepository();
                             usuarioRepository.cadastrarUsuario(voluntario, user);
-                            abrirMenuPrincipalCliente();
+                            TipoRepository tipoRepository = new TipoRepository();
+                            tipoRepository.cadastrarTipo(user, "tipo", "voluntario");
+
+                            AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), R.style.AppTheme));
+                            builder.setMessage("Usuário Cadastrado com sucesso!");
+                            builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int i) {
+                                    abrirMenuPrincipalCliente();
+                                }
+                            });
+                            AlertDialog dialog = builder.create();
+                            dialog.show();
                         }
                     }
                 });
@@ -158,8 +170,6 @@ public class TabCadastroCliente extends Fragment implements GoogleApiClient.OnCo
             GoogleSignInAccount account = result.getSignInAccount();
             nomeCliente.setText(account.getDisplayName());
             emailCliente.setText(account.getEmail());
-        } else {
-            Toast.makeText(getActivity(), "Falha na Autenticação!", Toast.LENGTH_SHORT).show();
         }
     }
 

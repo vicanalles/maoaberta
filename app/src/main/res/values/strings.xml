@@ -38,6 +38,8 @@
     <string name="salvar">Salvar</string>
     <string name="saida">Saída</string>
     <string name="campos_nao_preenchidos">Alguns campos não foram preenchidos. Por favor, preencher todos os campos</string>
+    <string name="falha_nos_dados">Erro na recuperação dos dados da conta. Por favor, tente novamente!</string>
+    <string name="falha_autenticacao">Não foi possível realizar a autenticação. Por favor, tente novamente!</string>
     <string name="ok">OK</string>
     <string name="yes">YES</string>
     <string name="no">NO</string>
@@ -48,4 +50,6 @@
     <string name="preencher_campos">Por favor, preencha todos os campos para logar.</string>
     <string name="sair_app">Deseja mesmo sair do aplicativo?</string>
     <string name="seja_bem_vindo">Seja bem vindo ao Mão Aberta!</string>
+    <string name="pre_cadastro">Seu cadastro está quase pronto. Deseja continuar o preenchimento dos dados?</string>
+    <string name="cadastrar_novo_usuario">Cadastrar Novo Usuário</string>
 </resources>

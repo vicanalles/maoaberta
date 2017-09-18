@@ -60,11 +60,15 @@ public class MenuPrincipalClienteActivity extends AppCompatActivity{
             usuarioRepository.getUserByUid(uid, new UsuarioRepository.OnGetUserById() {
                 @Override
                 public void onGetUserByIdSuccess(Voluntario voluntario) {
-                    Voluntario vol = new Voluntario();
-                    vol.setNome(voluntario.getNome());
-                    vol.setEmail(voluntario.getEmail());
-                    vol.setTelefone(voluntario.getTelefone());
-                    toolbar_layout_menu_cliente.setTitle(vol.getNome());
+                    if(voluntario != null){
+                        Voluntario vol = new Voluntario();
+                        vol.setNome(voluntario.getNome());
+                        vol.setEmail(voluntario.getEmail());
+                        vol.setTelefone(voluntario.getTelefone());
+                        toolbar_layout_menu_cliente.setTitle(vol.getNome());
+                    }else{
+                        toolbar_layout_menu_cliente.setTitle(user.getDisplayName());
+                    }
                 }
 
                 @Override
@@ -109,10 +113,6 @@ public class MenuPrincipalClienteActivity extends AppCompatActivity{
                 break;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    public void abrirConfiguracoes(){
-        startActivity(new Intent(Settings.ACTION_SETTINGS));
     }
 
     @Override

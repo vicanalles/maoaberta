@@ -31,6 +31,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.maoaberta.vinicius.maoaberta.R;
 import com.maoaberta.vinicius.maoaberta.domain.models.Voluntario;
+import com.maoaberta.vinicius.maoaberta.domain.repository.TipoRepository;
 import com.maoaberta.vinicius.maoaberta.domain.repository.UsuarioRepository;
 import com.maoaberta.vinicius.maoaberta.presentation.ui.activity.MenuPrincipalClienteActivity;
 
@@ -74,14 +75,20 @@ public class FragmentPerfilCliente extends Fragment {
         user = mAuth.getCurrentUser();
         usuarioRepository = new UsuarioRepository();
 
-        if(user != null){
+        if (user != null) {
             String uid = user.getUid();
             usuarioRepository.getUserByUid(uid, new UsuarioRepository.OnGetUserById() {
                 @Override
                 public void onGetUserByIdSuccess(Voluntario voluntario) {
-                    edit_text_nome_perfil_cliente.setText(voluntario.getNome());
-                    edit_text_email_perfil_cliente.setText(voluntario.getEmail());
-                    edit_text_telefone_perfil_cliente.setText(voluntario.getTelefone());
+                    if (voluntario != null) {
+                        edit_text_nome_perfil_cliente.setText(voluntario.getNome());
+                        edit_text_email_perfil_cliente.setText(voluntario.getEmail());
+                        edit_text_telefone_perfil_cliente.setText(voluntario.getTelefone());
+                    } else {
+                        edit_text_nome_perfil_cliente.setText(user.getDisplayName());
+                        edit_text_email_perfil_cliente.setText(user.getEmail());
+                        botao_salvar_perfil_cliente.setText(R.string.salvar);
+                    }
                 }
 
                 @Override
@@ -92,73 +99,133 @@ public class FragmentPerfilCliente extends Fragment {
             });
         }
 
+
         botao_salvar_perfil_cliente.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (String.valueOf(edit_text_nome_perfil_cliente.getText()).equals("") || String.valueOf(edit_text_telefone_perfil_cliente.getText()).equals("") ||
-                        String.valueOf(edit_text_email_perfil_cliente.getText()).equals("") || String.valueOf(edit_text_senha_perfil_cliente.getText()).equals("") ||
-                        String.valueOf(edit_text_confirmar_senha_perfil_cliente.getText()).equals("")) {
+                        String.valueOf(edit_text_email_perfil_cliente.getText()).equals("")) {
                     alertaCamposNaoPreenchidos();
                 } else {
-                    if (String.valueOf(edit_text_senha_perfil_cliente.getText()).equals(String.valueOf(edit_text_confirmar_senha_perfil_cliente.getText()))) {
-                        if(edit_text_senha_perfil_cliente.getText().length() >= 6 && edit_text_confirmar_senha_perfil_cliente.getText().length() >= 6){
-                            user = mAuth.getCurrentUser();
-                            if(user != null){
-                                usuarioRepository.getUserByUid(user.getUid(), new UsuarioRepository.OnGetUserById() {
-                                    @Override
-                                    public void onGetUserByIdSuccess(Voluntario voluntario) {
-                                        vol = new Voluntario();
-                                        vol.setNome(String.valueOf(edit_text_nome_perfil_cliente.getText()));
-                                        vol.setEmail(voluntario.getEmail());
-                                        vol.setTelefone(String.valueOf(edit_text_telefone_perfil_cliente.getText()));
+                    user = mAuth.getCurrentUser();
+                    if (user != null) {
+                        usuarioRepository.getUserByUid(user.getUid(), new UsuarioRepository.OnGetUserById() {
+                            @Override
+                            public void onGetUserByIdSuccess(Voluntario voluntario) {
+                                if (voluntario != null) {
+                                    vol = new Voluntario();
+                                    vol.setNome(String.valueOf(edit_text_nome_perfil_cliente.getText()));
+                                    vol.setEmail(voluntario.getEmail());
+                                    vol.setTelefone(String.valueOf(edit_text_telefone_perfil_cliente.getText()));
+                                    String senha = String.valueOf(edit_text_senha_perfil_cliente.getText());
 
-                                        user.updatePassword(String.valueOf(edit_text_senha_perfil_cliente.getText())).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                            @Override
-                                            public void onComplete(@NonNull Task<Void> task) {
-                                                if(task.isSuccessful()){
-                                                    edit_text_senha_perfil_cliente.setText("");
-                                                    edit_text_confirmar_senha_perfil_cliente.setText("");
-                                                }else{
-                                                    Toast.makeText(getActivity(), "Não foi possível alterar a senha de autenticação", Toast.LENGTH_LONG).show();
+                                    if (edit_text_senha_perfil_cliente.getText().equals(edit_text_confirmar_senha_perfil_cliente.getText())) {
+                                        if (edit_text_senha_perfil_cliente.getText().length() >= 6 && edit_text_confirmar_senha_perfil_cliente.getText().length() >= 6) {
+                                            user.updatePassword(String.valueOf(edit_text_senha_perfil_cliente.getText())).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<Void> task) {
+                                                    if (task.isSuccessful()) {
+                                                        edit_text_senha_perfil_cliente.setText("");
+                                                        edit_text_confirmar_senha_perfil_cliente.setText("");
+
+                                                        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), R.style.AppTheme));
+                                                        builder.setMessage("Senha Atualizada com Sucesso!");
+                                                        builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                                            @Override
+                                                            public void onClick(DialogInterface dialog, int i) {
+                                                                dialog.dismiss();
+                                                            }
+                                                        });
+                                                        AlertDialog dialog = builder.create();
+                                                        dialog.show();
+                                                    }
                                                 }
-                                            }
-                                        });
-
-                                        usuarioRepository.atualizarUser(vol, user);
-
-                                        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), R.style.AppTheme));
-                                        builder.setMessage("Usuário atualizado com sucesso!");
-                                        builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int i) {
-                                                abrirMenuPrincipal();
-                                            }
-                                        });
-                                        AlertDialog dialog = builder.create();
-                                        dialog.show();
+                                            });
+                                        } else {
+                                            alertaSenhaCurta();
+                                        }
                                     }
 
+
+                                    usuarioRepository.atualizarUser(vol, user);
+
+                                    AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), R.style.AppTheme));
+                                    builder.setMessage("Usuário atualizado com sucesso!");
+                                    builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int i) {
+                                            abrirMenuPrincipal();
+                                        }
+                                    });
+                                    AlertDialog dialog = builder.create();
+                                    dialog.show();
+                                } else {
+                                    vol = new Voluntario();
+                                    vol.setNome(user.getDisplayName());
+                                    vol.setEmail(user.getEmail());
+                                    vol.setTelefone(String.valueOf(edit_text_telefone_perfil_cliente.getText()));
+                                    String senha = String.valueOf(edit_text_senha_perfil_cliente.getText());
+
+                                    if (edit_text_senha_perfil_cliente.getText().equals(edit_text_confirmar_senha_perfil_cliente.getText())) {
+                                        if (edit_text_senha_perfil_cliente.getText().length() >= 6 && edit_text_confirmar_senha_perfil_cliente.getText().length() >= 6) {
+                                            user.updatePassword(String.valueOf(edit_text_senha_perfil_cliente.getText())).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<Void> task) {
+                                                    if (task.isSuccessful()) {
+                                                        edit_text_senha_perfil_cliente.setText("");
+                                                        edit_text_confirmar_senha_perfil_cliente.setText("");
+
+                                                        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), R.style.AppTheme));
+                                                        builder.setMessage("Senha Atualizada com Sucesso!");
+                                                        builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                                            @Override
+                                                            public void onClick(DialogInterface dialog, int i) {
+                                                                dialog.dismiss();
+                                                            }
+                                                        });
+                                                        AlertDialog dialog = builder.create();
+                                                        dialog.show();
+                                                    }
+                                                }
+                                            });
+                                        } else {
+                                            alertaSenhaCurta();
+                                        }
+                                    }
+
+
+                                    usuarioRepository.cadastrarUsuario(vol, user);
+                                    TipoRepository tipoRepository = new TipoRepository();
+                                    tipoRepository.cadastrarTipo(user, "tipo", "voluntario");
+
+                                    AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), R.style.AppTheme));
+                                    builder.setMessage("Usuário Cadastrado com sucesso!");
+                                    builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int i) {
+                                            dialog.dismiss();
+                                        }
+                                    });
+                                    AlertDialog dialog = builder.create();
+                                    dialog.show();
+                                }
+                            }
+
+                            @Override
+                            public void onGetUserByIdError(String error) {
+                                Log.d("onGetUserByIdError", error);
+                                AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), R.style.AppTheme));
+                                builder.setMessage("Não foi possível atualizar os dados do usuário. Por favor, tente novamente!");
+                                builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                                     @Override
-                                    public void onGetUserByIdError(String error) {
-                                        Log.d("onGetUserByIdError", error);
-                                        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), R.style.AppTheme));
-                                        builder.setMessage("Não foi possível atualizar os dados do usuário. Por favor, tente novamente!");
-                                        builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int i) {
-                                                dialog.dismiss();
-                                            }
-                                        });
-                                        AlertDialog dialog = builder.create();
-                                        dialog.show();
+                                    public void onClick(DialogInterface dialog, int i) {
+                                        dialog.dismiss();
                                     }
                                 });
+                                AlertDialog dialog = builder.create();
+                                dialog.show();
                             }
-                        }else{
-                            alertaSenhaCurta();
-                        }
-                    } else {
-                        alertaSenhasDiferentes();
+                        });
                     }
                 }
             }
@@ -206,7 +273,7 @@ public class FragmentPerfilCliente extends Fragment {
         dialog.show();
     }
 
-    private void abrirMenuPrincipal(){
+    private void abrirMenuPrincipal() {
         Intent intent = new Intent(getContext(), MenuPrincipalClienteActivity.class);
         startActivity(intent);
         getActivity().finish();

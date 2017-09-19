@@ -14,6 +14,9 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -44,6 +47,8 @@ public class MenuPrincipalClienteActivity extends AppCompatActivity{
     @BindView(R.id.pager_menu_principal_cliente)
     CustomViewPager pager_menu_principal_cliente;
 
+    LinearLayout tabStrip1;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,30 +59,6 @@ public class MenuPrincipalClienteActivity extends AppCompatActivity{
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
         usuarioRepository = new UsuarioRepository();
-
-        if(user != null){
-            String uid = user.getUid();
-            usuarioRepository.getUserByUid(uid, new UsuarioRepository.OnGetUserById() {
-                @Override
-                public void onGetUserByIdSuccess(Voluntario voluntario) {
-                    if(voluntario != null){
-                        Voluntario vol = new Voluntario();
-                        vol.setNome(voluntario.getNome());
-                        vol.setEmail(voluntario.getEmail());
-                        vol.setTelefone(voluntario.getTelefone());
-                        toolbar_layout_menu_cliente.setTitle(vol.getNome());
-                    }else{
-                        toolbar_layout_menu_cliente.setTitle(user.getDisplayName());
-                    }
-                }
-
-                @Override
-                public void onGetUserByIdError(String error) {
-                    Log.d("onGetUserByIdError", error);
-                    Toast.makeText(getApplicationContext(), "Usuário não existe", Toast.LENGTH_LONG).show();
-                }
-            });
-        }
 
         final String[] tabTitles = {
                 "PERFIL",
@@ -94,6 +75,40 @@ public class MenuPrincipalClienteActivity extends AppCompatActivity{
 
         for(int i = 0; i < tabTitles.length; i++){
             tab_layout_menu_principal_cliente.getTabAt(i).setText(tabTitles[i]);
+        }
+
+        if(user != null){
+            String uid = user.getUid();
+            usuarioRepository.getUserByUid(uid, new UsuarioRepository.OnGetUserById() {
+                @Override
+                public void onGetUserByIdSuccess(Voluntario voluntario) {
+                    if(voluntario != null){
+                        Voluntario vol = new Voluntario();
+                        vol.setNome(voluntario.getNome());
+                        vol.setEmail(voluntario.getEmail());
+                        vol.setTelefone(voluntario.getTelefone());
+                        toolbar_layout_menu_cliente.setTitle(vol.getNome());
+                    }else{
+                        toolbar_layout_menu_cliente.setTitle(user.getDisplayName());
+                        LinearLayout tabStrip = ((LinearLayout)tab_layout_menu_principal_cliente.getChildAt(0));
+                        for(int i = 0; i < tabStrip.getChildCount(); i++) {
+                            tabStrip.getChildAt(i).setOnTouchListener(new View.OnTouchListener() {
+                                @Override
+                                public boolean onTouch(View v, MotionEvent event) {
+                                    Toast.makeText(MenuPrincipalClienteActivity.this, "Preencha todos os dados para ter acesso ao sistema!", Toast.LENGTH_LONG).show();
+                                    return true;
+                                }
+                            });
+                        }
+                    }
+                }
+
+                @Override
+                public void onGetUserByIdError(String error) {
+                    Log.d("onGetUserByIdError", error);
+                    Toast.makeText(getApplicationContext(), "Usuário não existe", Toast.LENGTH_LONG).show();
+                }
+            });
         }
     }
 

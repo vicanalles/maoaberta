@@ -36,6 +36,7 @@ import com.maoaberta.vinicius.maoaberta.domain.repository.UsuarioRepository;
 import com.maoaberta.vinicius.maoaberta.presentation.ui.activity.MenuPrincipalClienteActivity;
 
 import java.security.AuthProvider;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -118,31 +119,23 @@ public class FragmentPerfilCliente extends Fragment {
                                     vol.setEmail(voluntario.getEmail());
                                     vol.setTelefone(String.valueOf(edit_text_telefone_perfil_cliente.getText()));
                                     String senha = String.valueOf(edit_text_senha_perfil_cliente.getText());
+                                    String confirmarSenha = String.valueOf(edit_text_confirmar_senha_perfil_cliente.getText());
 
-                                    if (edit_text_senha_perfil_cliente.getText().equals(edit_text_confirmar_senha_perfil_cliente.getText())) {
-                                        if (edit_text_senha_perfil_cliente.getText().length() >= 6 && edit_text_confirmar_senha_perfil_cliente.getText().length() >= 6) {
-                                            user.updatePassword(String.valueOf(edit_text_senha_perfil_cliente.getText())).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                @Override
-                                                public void onComplete(@NonNull Task<Void> task) {
-                                                    if (task.isSuccessful()) {
-                                                        edit_text_senha_perfil_cliente.setText("");
-                                                        edit_text_confirmar_senha_perfil_cliente.setText("");
-
-                                                        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), R.style.AppTheme));
-                                                        builder.setMessage("Senha Atualizada com Sucesso!");
-                                                        builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                                                            @Override
-                                                            public void onClick(DialogInterface dialog, int i) {
-                                                                dialog.dismiss();
-                                                            }
-                                                        });
-                                                        AlertDialog dialog = builder.create();
-                                                        dialog.show();
+                                    if(senha != null){
+                                        if (Objects.equals(senha, confirmarSenha)) {
+                                            if (senha.length() >= 6 && confirmarSenha.length() >= 6) {
+                                                user.updatePassword(String.valueOf(edit_text_senha_perfil_cliente.getText())).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                    @Override
+                                                    public void onComplete(@NonNull Task<Void> task) {
+                                                        if (task.isSuccessful()) {
+                                                            edit_text_senha_perfil_cliente.setText("");
+                                                            edit_text_confirmar_senha_perfil_cliente.setText("");
+                                                        }
                                                     }
-                                                }
-                                            });
-                                        } else {
-                                            alertaSenhaCurta();
+                                                });
+                                            }else {
+                                                alertaSenhaCurta();
+                                            }
                                         }
                                     }
 
@@ -165,34 +158,25 @@ public class FragmentPerfilCliente extends Fragment {
                                     vol.setEmail(user.getEmail());
                                     vol.setTelefone(String.valueOf(edit_text_telefone_perfil_cliente.getText()));
                                     String senha = String.valueOf(edit_text_senha_perfil_cliente.getText());
+                                    String confirmarSenha = String.valueOf(edit_text_confirmar_senha_perfil_cliente.getText());
 
-                                    if (edit_text_senha_perfil_cliente.getText().equals(edit_text_confirmar_senha_perfil_cliente.getText())) {
-                                        if (edit_text_senha_perfil_cliente.getText().length() >= 6 && edit_text_confirmar_senha_perfil_cliente.getText().length() >= 6) {
-                                            user.updatePassword(String.valueOf(edit_text_senha_perfil_cliente.getText())).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                @Override
-                                                public void onComplete(@NonNull Task<Void> task) {
-                                                    if (task.isSuccessful()) {
-                                                        edit_text_senha_perfil_cliente.setText("");
-                                                        edit_text_confirmar_senha_perfil_cliente.setText("");
-
-                                                        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), R.style.AppTheme));
-                                                        builder.setMessage("Senha Atualizada com Sucesso!");
-                                                        builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                                                            @Override
-                                                            public void onClick(DialogInterface dialog, int i) {
-                                                                dialog.dismiss();
-                                                            }
-                                                        });
-                                                        AlertDialog dialog = builder.create();
-                                                        dialog.show();
+                                    if(senha != null){
+                                        if (Objects.equals(senha, confirmarSenha)) {
+                                            if (senha.length() >= 6 && confirmarSenha.length() >= 6) {
+                                                user.updatePassword(String.valueOf(edit_text_senha_perfil_cliente.getText())).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                    @Override
+                                                    public void onComplete(@NonNull Task<Void> task) {
+                                                        if (task.isSuccessful()) {
+                                                            edit_text_senha_perfil_cliente.setText("");
+                                                            edit_text_confirmar_senha_perfil_cliente.setText("");
+                                                        }
                                                     }
-                                                }
-                                            });
-                                        } else {
-                                            alertaSenhaCurta();
+                                                });
+                                            }else {
+                                                alertaSenhaCurta();
+                                            }
                                         }
                                     }
-
 
                                     usuarioRepository.cadastrarUsuario(vol, user);
                                     TipoRepository tipoRepository = new TipoRepository();
@@ -203,7 +187,7 @@ public class FragmentPerfilCliente extends Fragment {
                                     builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int i) {
-                                            dialog.dismiss();
+                                            abrirMenuPrincipal();
                                         }
                                     });
                                     AlertDialog dialog = builder.create();

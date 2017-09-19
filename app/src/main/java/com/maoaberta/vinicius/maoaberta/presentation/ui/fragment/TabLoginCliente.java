@@ -128,6 +128,7 @@ public class TabLoginCliente extends Fragment {
         builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                edit_text_login_senha_cliente.setText("");
                 dialog.dismiss();
             }
         });

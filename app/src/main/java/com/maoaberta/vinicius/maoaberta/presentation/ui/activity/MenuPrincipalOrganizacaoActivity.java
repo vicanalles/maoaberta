@@ -1,17 +1,28 @@
 package com.maoaberta.vinicius.maoaberta.presentation.ui.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.design.widget.TabLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.maoaberta.vinicius.maoaberta.R;
+import com.maoaberta.vinicius.maoaberta.domain.models.Organizacao;
+import com.maoaberta.vinicius.maoaberta.domain.repository.OrganizacaoRepository;
 import com.maoaberta.vinicius.maoaberta.presentation.component.CustomViewPager;
 import com.maoaberta.vinicius.maoaberta.presentation.ui.adapter.TabsPagerAdapterOrganizacao;
 
@@ -23,6 +34,10 @@ import butterknife.ButterKnife;
  */
 
 public class MenuPrincipalOrganizacaoActivity extends AppCompatActivity {
+
+    private FirebaseAuth mAuth = null;
+    private OrganizacaoRepository organizacaoRepository;
+    private FirebaseUser user;
 
     @BindView(R.id.toolbar_layout_menu_organizacao)
     Toolbar toolbar_layout_menu_organizacao;
@@ -37,6 +52,10 @@ public class MenuPrincipalOrganizacaoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_menu_principal_organizacao);
         ButterKnife.bind(this);
         setSupportActionBar(toolbar_layout_menu_organizacao);
+
+        mAuth = FirebaseAuth.getInstance();
+        user = mAuth.getCurrentUser();
+        organizacaoRepository = new OrganizacaoRepository();
 
         final String[] tabTitles = {
                 "ANÚNCIOS",
@@ -53,6 +72,38 @@ public class MenuPrincipalOrganizacaoActivity extends AppCompatActivity {
 
         for(int i = 0; i < tabTitles.length; i++){
             tab_layout_menu_principal_organizacao.getTabAt(i).setText(tabTitles[i]);
+        }
+
+        if(user != null){
+            String uid = user.getUid();
+            organizacaoRepository.getOrganizacaoById(uid, new OrganizacaoRepository.OnGetOrganizacaoById() {
+                @Override
+                public void onGetOrganizacaoByIdSuccess(Organizacao organizacao) {
+                    if(organizacao != null){
+                        Organizacao ong = new Organizacao();
+                        ong.setNomeFantasia(organizacao.getNomeFantasia());
+                        toolbar_layout_menu_organizacao.setTitle(ong.getNomeFantasia());
+                    }else{
+                        toolbar_layout_menu_organizacao.setTitle(user.getDisplayName());
+                        LinearLayout tabStrip = ((LinearLayout)tab_layout_menu_principal_organizacao.getChildAt(0));
+                        for(int i = 0; i < tabStrip.getChildCount(); i++) {
+                            tabStrip.getChildAt(i).setOnTouchListener(new View.OnTouchListener() {
+                                @Override
+                                public boolean onTouch(View v, MotionEvent event) {
+                                    Toast.makeText(MenuPrincipalOrganizacaoActivity.this, "Preencha todos os dados para ter acesso ao sistema!", Toast.LENGTH_LONG).show();
+                                    return true;
+                                }
+                            });
+                        }
+                    }
+                }
+
+                @Override
+                public void onGetOrganizacaoByIdError(String error) {
+                    Log.d("onGetUserByIdError", error);
+                    Toast.makeText(getApplicationContext(), "Usuário não existe", Toast.LENGTH_LONG).show();
+                }
+            });
         }
     }
 
@@ -74,7 +125,34 @@ public class MenuPrincipalOrganizacaoActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void abrirConfiguracoes(){
-        startActivity(new Intent(Settings.ACTION_SETTINGS));
+    @Override
+    public void onBackPressed() {
+        sairDoApp();
+    }
+
+    private void sairDoApp() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.AppTheme));
+        builder.setMessage(R.string.sair_app);
+        builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                FirebaseAuth.getInstance().signOut();
+                abrirTelaLogin();
+            }
+        });
+        builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    private void abrirTelaLogin(){
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
+        finish();
     }
 }

@@ -47,8 +47,6 @@ public class MenuPrincipalClienteActivity extends AppCompatActivity{
     @BindView(R.id.pager_menu_principal_cliente)
     CustomViewPager pager_menu_principal_cliente;
 
-    LinearLayout tabStrip1;
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,8 +83,6 @@ public class MenuPrincipalClienteActivity extends AppCompatActivity{
                     if(voluntario != null){
                         Voluntario vol = new Voluntario();
                         vol.setNome(voluntario.getNome());
-                        vol.setEmail(voluntario.getEmail());
-                        vol.setTelefone(voluntario.getTelefone());
                         toolbar_layout_menu_cliente.setTitle(vol.getNome());
                     }else{
                         toolbar_layout_menu_cliente.setTitle(user.getDisplayName());

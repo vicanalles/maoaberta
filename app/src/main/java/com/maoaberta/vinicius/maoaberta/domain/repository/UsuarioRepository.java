@@ -35,9 +35,9 @@ public class UsuarioRepository {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if(task.isComplete()){
-                    Log.i("CADASTRO", "Usuário cadastrado com sucesso");
+                    Log.i("CADASTRO", "Voluntário cadastrado com sucesso");
                 }else{
-                    Log.i("CADASTRO", "Falha no cadastro");
+                    Log.i("CADASTRO", "Falha no cadastro do voluntário");
                 }
             }
         });

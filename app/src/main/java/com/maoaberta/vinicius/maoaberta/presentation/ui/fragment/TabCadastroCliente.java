@@ -117,8 +117,16 @@ public class TabCadastroCliente extends Fragment implements GoogleApiClient.OnCo
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (!task.isSuccessful()) {
-                            Toast.makeText(getActivity(), "Não foi possível salvar o usuário. Por favor, tente novamente!",
-                                    Toast.LENGTH_LONG).show();
+                            AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), R.style.AppTheme));
+                            builder.setMessage("Não foi possível salvar o voluntário. Por favor, tente novamente!");
+                            builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int i) {
+                                    dialog.dismiss();
+                                }
+                            });
+                            AlertDialog dialog = builder.create();
+                            dialog.show();
                         } else {
                             AuthResult result = task.getResult();
                             FirebaseUser user = result.getUser();
@@ -132,7 +140,7 @@ public class TabCadastroCliente extends Fragment implements GoogleApiClient.OnCo
                             tipoRepository.cadastrarTipo(user, "tipo", "voluntario");
 
                             AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), R.style.AppTheme));
-                            builder.setMessage("Usuário Cadastrado com sucesso!");
+                            builder.setMessage("Voluntário cadastrado com sucesso!");
                             builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int i) {

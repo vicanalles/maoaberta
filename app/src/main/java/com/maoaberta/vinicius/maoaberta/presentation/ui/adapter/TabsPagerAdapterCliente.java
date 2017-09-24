@@ -41,13 +41,13 @@ public class TabsPagerAdapterCliente extends FragmentPagerAdapter {
                 frag = new FragmentPerfilCliente();
                 break;
             case 1:
-                frag = new FragmentMenuEntidadesCliente();
+                frag = new FragmentMenuAnunciosCliente();
                 break;
             case 2:
-                frag = new FragmentMenuMeusAnunciosCliente();
+                frag = new FragmentMenuEntidadesCliente();
                 break;
             case 3:
-                frag = new FragmentMenuAnunciosCliente();
+                frag = new FragmentMenuMeusAnunciosCliente();
                 break;
         }
 

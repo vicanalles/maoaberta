@@ -13,6 +13,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.maoaberta.vinicius.maoaberta.R;
 import com.maoaberta.vinicius.maoaberta.domain.models.Voluntario;
+import com.maoaberta.vinicius.maoaberta.domain.repository.TipoRepository;
 import com.maoaberta.vinicius.maoaberta.domain.repository.UsuarioRepository;
 
 import butterknife.BindView;
@@ -26,7 +27,7 @@ public class ApresentacaoActivity extends AppCompatActivity{
 
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
-    private UsuarioRepository usuarioRepository;
+    private TipoRepository tipoRepository;
 
     @BindView(R.id.toolbar_layout_sobre)
     Toolbar toolbar_layout_sobre;
@@ -39,16 +40,35 @@ public class ApresentacaoActivity extends AppCompatActivity{
         setSupportActionBar(toolbar_layout_sobre);
 
         mAuth = FirebaseAuth.getInstance();
+        tipoRepository = new TipoRepository();
 
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
-                    // User is signed in
-                    abrirMenuPrincipalCliente();
+                    String uid = user.getUid();
+                    tipoRepository.getTipoById(uid, new TipoRepository.OnGetTipoById() {
+                        @Override
+                        public void onGetTipoByIdSuccess(String tipo) {
+                            if(tipo != null){
+                                if(tipo.equals("organizaçao")){
+                                    abrirMenuPrincipalOrganizacao();
+                                }else{
+                                    abrirMenuPrincipalCliente();
+                                }
+                            }else{
+
+                            }
+                        }
+
+                        @Override
+                        public void onGetTipoByIdError(String error) {
+
+                        }
+                    });
                 } else {
-                    // User is signed out
+
                 }
             }
         };
@@ -79,6 +99,12 @@ public class ApresentacaoActivity extends AppCompatActivity{
 
     public void abrirMenuPrincipalCliente(){
         Intent intent = new Intent(getApplicationContext(), MenuPrincipalClienteActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+    public void abrirMenuPrincipalOrganizacao(){
+        Intent intent = new Intent(getApplicationContext(), MenuPrincipalOrganizacaoActivity.class);
         startActivity(intent);
         finish();
     }

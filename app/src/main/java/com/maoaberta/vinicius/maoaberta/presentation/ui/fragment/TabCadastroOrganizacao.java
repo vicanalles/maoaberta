@@ -122,7 +122,7 @@ public class TabCadastroOrganizacao extends Fragment {
                             tipoRepository.cadastrarTipo(user, "tipo", "organizaçao");
 
                             AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), R.style.AppTheme));
-                            builder.setMessage("Voluntário cadastrado com sucesso!");
+                            builder.setMessage("Organização cadastrada com sucesso!");
                             builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int i) {

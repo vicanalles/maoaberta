@@ -77,9 +77,9 @@ public class TabLoginCliente extends Fragment {
             public void onClick(View view) {
                 String emailLogin = String.valueOf(edit_text_login_email_cliente.getText());
                 String senhaLogin = String.valueOf(edit_text_login_senha_cliente.getText());
-                if(!emailLogin.equals("") && !senhaLogin.equals("")){
+                if (!emailLogin.equals("") && !senhaLogin.equals("")) {
                     signIn(emailLogin, senhaLogin);
-                }else{
+                } else {
                     campoVazio();
                 }
 
@@ -99,7 +99,7 @@ public class TabLoginCliente extends Fragment {
         startActivity(intent);
     }
 
-    public void abrirMenuPrincipalCliente(FirebaseUser user){
+    public void abrirMenuPrincipalCliente(FirebaseUser user) {
         Intent intent = new Intent(getContext(), MenuPrincipalClienteActivity.class);
         intent.putExtra("userName", user.getUid());
         startActivity(intent);

@@ -58,10 +58,10 @@ public class MenuPrincipalOrganizacaoActivity extends AppCompatActivity {
         organizacaoRepository = new OrganizacaoRepository();
 
         final String[] tabTitles = {
+                "PERFIL",
                 "ANÚNCIOS",
                 "ENTIDADES",
-                "MEUS ANÚNCIOS",
-                "PERFIL"
+                "MEUS ANÚNCIOS"
         };
 
         pager_menu_principal_organizacao.setPagingEnabled(false);
@@ -119,7 +119,8 @@ public class MenuPrincipalOrganizacaoActivity extends AppCompatActivity {
         switch (item.getItemId()){
 
             case R.id.item_exit_menu_principal:
-                Toast.makeText(this, "Sair do Aplicativo", Toast.LENGTH_LONG).show();
+                sairDoApp();
+                break;
         }
 
         return super.onOptionsItemSelected(item);

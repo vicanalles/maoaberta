@@ -11,13 +11,13 @@ public class Organizacao {
     private String descricao;
     private String email;
     private String facebookAccount;
-    private String nome;
     private String nomeFantasia;
     private String nomeResponsavel;
     private String telefone;
     private String twitterAccount;
     private String webSite;
     private String razaoSocial;
+    private String endereco;
 
     public String getId() {
         return id;
@@ -57,14 +57,6 @@ public class Organizacao {
 
     public void setFacebookAccount(String facebookAccount) {
         this.facebookAccount = facebookAccount;
-    }
-
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
     }
 
     public String getNomeFantasia() {
@@ -113,5 +105,13 @@ public class Organizacao {
 
     public void setRazaoSocial(String razaoSocial) {
         this.razaoSocial = razaoSocial;
+    }
+
+    public String getEndereco() {
+        return endereco;
+    }
+
+    public void setEndereco(String endereco) {
+        this.endereco = endereco;
     }
 }

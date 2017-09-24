@@ -7,8 +7,12 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 /**
  * Created by vinicius on 14/09/17.
@@ -36,5 +40,31 @@ public class TipoRepository {
                 }
             }
         });
+    }
+
+    public void getTipoById(final String uid, final OnGetTipoById onGetTipoById){
+        Query query = reference.child(uid);
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                String tipoUser = null;
+                if(dataSnapshot.getKey().equals(uid)){
+                    tipoUser = dataSnapshot.child("tipo").getValue(String.class);
+                    Log.i("USER", tipoUser);
+                }
+
+                onGetTipoById.onGetTipoByIdSuccess(tipoUser);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                onGetTipoById.onGetTipoByIdError(databaseError.getMessage());
+            }
+        });
+    }
+
+    public interface OnGetTipoById{
+        void onGetTipoByIdSuccess(String tipo);
+        void onGetTipoByIdError(String error);
     }
 }

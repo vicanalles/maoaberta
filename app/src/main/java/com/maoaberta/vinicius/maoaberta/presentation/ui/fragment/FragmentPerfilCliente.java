@@ -19,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -52,6 +53,10 @@ public class FragmentPerfilCliente extends Fragment {
     private UsuarioRepository usuarioRepository;
     private Voluntario vol;
 
+    @BindView(R.id.relative_layout_image_logo_perfil_cliente)
+    RelativeLayout relative_layout_image_logo_perfil_cliente;
+    @BindView(R.id.image_view_logo_perfil_cliente)
+    ImageView image_view_logo_perfil_cliente;
     @BindView(R.id.edit_text_nome_perfil_cliente)
     EditText edit_text_nome_perfil_cliente;
     @BindView(R.id.edit_text_email_perfil_cliente)

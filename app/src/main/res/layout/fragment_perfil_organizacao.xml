@@ -135,6 +135,8 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="10dp"
                 android:background="@drawable/rounded_edittext"
+                android:clickable="false"
+                android:enabled="false"
                 android:fontFamily="sans-serif"
                 android:hint="@string/email"
                 android:inputType="textEmailAddress"

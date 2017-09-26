@@ -49,12 +49,14 @@ public class FragmentMenuAnunciosCliente extends Fragment {
             usuarioRepository.getUserByUid(uidUser, new UsuarioRepository.OnGetUserById() {
                 @Override
                 public void onGetUserByIdSuccess(Voluntario voluntario) {
-                    Voluntario vol = new Voluntario();
-                    vol.setId(voluntario.getId());
-                    vol.setNome(voluntario.getNome());
-                    vol.setEmail(voluntario.getEmail());
-                    vol.setTelefone(voluntario.getTelefone());
-                    text_view_anuncios_fragment_cliente.setText("Seja bem vindo " + vol.getNome());
+                    if(voluntario != null){
+                        Voluntario vol = new Voluntario();
+                        vol.setId(voluntario.getId());
+                        vol.setNome(voluntario.getNome());
+                        vol.setEmail(voluntario.getEmail());
+                        vol.setTelefone(voluntario.getTelefone());
+                        text_view_anuncios_fragment_cliente.setText("Seja bem vindo " + vol.getNome());
+                    }
                 }
 
                 @Override

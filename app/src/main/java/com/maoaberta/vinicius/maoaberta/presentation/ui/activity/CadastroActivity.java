@@ -113,20 +113,4 @@ public class CadastroActivity extends AppCompatActivity {
             }
         });
     }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-
-            case R.id.item_configuracoes:
-                abrirConfiguracoes();
-                break;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    public void abrirConfiguracoes(){
-        startActivity(new Intent(Settings.ACTION_SETTINGS));
-    }
 }

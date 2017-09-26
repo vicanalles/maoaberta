@@ -44,24 +44,8 @@ public class EsqueceuSenhaActivity extends AppCompatActivity {
         edit_text_nova_senha.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+
             }
         });
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        switch (item.getItemId()){
-            case R.id.item_configuracoes:
-                abrirConfiguracoes();
-                break;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    public void abrirConfiguracoes(){
-        startActivity(new Intent(Settings.ACTION_SETTINGS));
     }
 }

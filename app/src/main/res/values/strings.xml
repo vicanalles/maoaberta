@@ -7,9 +7,9 @@
     <string name="cadastrar_agora">Não tem cadastro? Cadastre-se agora!</string>
     <string name="nome_cliente">Nome</string>
     <string name="telefone">Telefone</string>
-    <string name="string_text_facebook">Cadastrar-se com Facebook</string>
+    <string name="string_text_facebook">Entrar com Facebook</string>
     <string name="cadastrar">Cadastrar</string>
-    <string name="string_text_gmail">Cadastre-se com Gmail</string>
+    <string name="string_text_gmail">Entrar com Gmail</string>
     <string name="confirmar_senha">Confirmar Senha</string>
     <string name="razao_social">Razão Social</string>
     <string name="nome_fantasia">Nome Fantasia</string>

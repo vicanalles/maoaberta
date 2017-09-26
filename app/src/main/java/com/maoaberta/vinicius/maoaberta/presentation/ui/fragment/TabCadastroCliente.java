@@ -41,9 +41,8 @@ import butterknife.ButterKnife;
  * Created by Vinicius Canalles on 16/08/2017.
  */
 
-public class TabCadastroCliente extends Fragment implements GoogleApiClient.OnConnectionFailedListener {
+public class TabCadastroCliente extends Fragment {
 
-    private static int RC_SIGN_IN = 1; //codigo retornado ao selecionar uma conta no google
     FirebaseAuth mAuth;
 
     @BindView(R.id.edit_text_nome_cadastro_cliente)
@@ -58,10 +57,6 @@ public class TabCadastroCliente extends Fragment implements GoogleApiClient.OnCo
     EditText confirmarSenha;
     @BindView(R.id.button_cadastrar_cliente)
     Button cadastrarCliente;
-    @BindView(R.id.linear_layout_gmail)
-    LinearLayout linear_layout_gmail;
-
-    GoogleApiClient mGoogleApiClient;
 
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -69,24 +64,7 @@ public class TabCadastroCliente extends Fragment implements GoogleApiClient.OnCo
         View v = inflater.inflate(R.layout.tab_cadastro_cliente, container, false);
         ButterKnife.bind(this, v);
 
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
-                .requestEmail()
-                .build();
-
-        mGoogleApiClient = new GoogleApiClient.Builder(getContext())
-                .enableAutoManage(getActivity(), this)
-                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                .build();
-
         mAuth = FirebaseAuth.getInstance();
-
-        linear_layout_gmail.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                signIn();
-            }
-        });
 
         cadastrarCliente.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -145,86 +123,6 @@ public class TabCadastroCliente extends Fragment implements GoogleApiClient.OnCo
                                 @Override
                                 public void onClick(DialogInterface dialog, int i) {
                                     abrirMenuPrincipalCliente();
-                                }
-                            });
-                            AlertDialog dialog = builder.create();
-                            dialog.show();
-                        }
-                    }
-                });
-    }
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
-    }
-
-    private void signIn() {
-        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
-        startActivityForResult(signInIntent, RC_SIGN_IN);
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == RC_SIGN_IN) {
-            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
-            if(result.isSuccess()){
-                GoogleSignInAccount account = result.getSignInAccount();
-                firebaseAuthWithGoogle(account);
-            }else{
-                AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), R.style.AppTheme));
-                builder.setMessage(R.string.falha_nos_dados);
-                builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        dialogInterface.dismiss();
-                    }
-                });
-                AlertDialog dialog = builder.create();
-                dialog.show();
-            }
-        }
-    }
-
-    public void firebaseAuthWithGoogle(GoogleSignInAccount acct){
-        AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
-        mAuth.signInWithCredential(credential)
-                .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if(task.isSuccessful()){
-                            AuthResult result = task.getResult();
-                            final FirebaseUser user = result.getUser();
-                            AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), R.style.AppTheme));
-                            builder.setMessage(R.string.pre_cadastro);
-                            builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    abrirMenuPrincipalCliente();
-                                }
-                            });
-                            builder.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    user.delete();
-                                    nomeCliente.setText("");
-                                    emailCliente.setText("");
-                                }
-                            });
-                            AlertDialog dialog = builder.create();
-                            dialog.show();
-                        }else{
-                            AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), R.style.AppTheme));
-                            builder.setMessage(R.string.falha_nos_dados);
-                            builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    dialogInterface.dismiss();
-                                    nomeCliente.setText("");
-                                    emailCliente.setText("");
-                                    telefoneCliente.setText("");
                                 }
                             });
                             AlertDialog dialog = builder.create();

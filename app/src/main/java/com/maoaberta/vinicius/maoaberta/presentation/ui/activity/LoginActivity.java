@@ -1,11 +1,9 @@
 package com.maoaberta.vinicius.maoaberta.presentation.ui.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -17,10 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.maoaberta.vinicius.maoaberta.R;
 import com.maoaberta.vinicius.maoaberta.presentation.component.CustomViewPager;
@@ -126,19 +121,26 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
 
-            case R.id.item_configuracoes:
-                abrirConfiguracoes();
+            case R.id.item_esqueceu_sua_senha:
+                abrirEsqueceuSuaSenha();
                 break;
         }
 
         return super.onOptionsItemSelected(item);
     }
 
-    public void abrirConfiguracoes(){
-        startActivity(new Intent(Settings.ACTION_SETTINGS));
+    public void abrirEsqueceuSuaSenha(){
+        Intent intent = new Intent(getApplicationContext(), EsqueceuSenhaActivity.class);
+        startActivity(intent);
     }
 
     public void hideKeyboard(View v){

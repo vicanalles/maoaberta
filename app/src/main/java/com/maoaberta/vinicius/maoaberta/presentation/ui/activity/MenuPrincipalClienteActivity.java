@@ -91,23 +91,8 @@ public class MenuPrincipalClienteActivity extends AppCompatActivity{
                             tabStrip.getChildAt(i).setOnTouchListener(new View.OnTouchListener() {
                                 @Override
                                 public boolean onTouch(View v, MotionEvent event) {
-                                    AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getApplicationContext(), R.style.AppTheme));
-                                    builder.setMessage("Preencha todos os dados para ter acesso ao sistema!");
-                                    builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            FirebaseAuth.getInstance().signOut();
-                                            abrirTelaLogin();
-                                        }
-                                    });
-                                    builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            dialog.dismiss();
-                                        }
-                                    });
-                                    AlertDialog dialog = builder.create();
-                                    dialog.show();
+                                    Toast.makeText(MenuPrincipalClienteActivity.this, "Preencha todos os campos para poder utilizar as " +
+                                            "funcionalidades do sistema!", Toast.LENGTH_SHORT).show();
                                     return true;
                                 }
                             });

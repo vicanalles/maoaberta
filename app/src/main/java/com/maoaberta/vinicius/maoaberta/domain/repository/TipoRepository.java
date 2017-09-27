@@ -50,7 +50,9 @@ public class TipoRepository {
                 String tipoUser = null;
                 if(dataSnapshot.getKey().equals(uid)){
                     tipoUser = dataSnapshot.child("tipo").getValue(String.class);
-                    Log.i("USER", tipoUser);
+                    Log.i("USER", "Usuário");
+                }else{
+
                 }
 
                 onGetTipoById.onGetTipoByIdSuccess(tipoUser);

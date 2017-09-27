@@ -52,6 +52,7 @@ public class FragmentPerfilCliente extends Fragment {
     private FirebaseUser user;
     private UsuarioRepository usuarioRepository;
     private Voluntario vol;
+    private String codigoAtivaCampos;
 
     @BindView(R.id.relative_layout_image_logo_perfil_cliente)
     RelativeLayout relative_layout_image_logo_perfil_cliente;
@@ -76,6 +77,25 @@ public class FragmentPerfilCliente extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_perfil_cliente, container, false);
         ButterKnife.bind(this, view);
+
+        Bundle extras = getActivity().getIntent().getExtras();
+        if(extras != null){
+            codigoAtivaCampos = extras.getString("codigo");
+        }else{
+            codigoAtivaCampos = "0";
+        }
+
+        if(codigoAtivaCampos.equals("2")){
+            edit_text_senha_perfil_cliente.setEnabled(false);
+            edit_text_senha_perfil_cliente.setVisibility(View.GONE);
+            edit_text_confirmar_senha_perfil_cliente.setEnabled(false);
+            edit_text_confirmar_senha_perfil_cliente.setVisibility(View.GONE);
+        }else if(codigoAtivaCampos.equals("0")){
+            edit_text_senha_perfil_cliente.setEnabled(true);
+            edit_text_senha_perfil_cliente.setVisibility(View.VISIBLE);
+            edit_text_confirmar_senha_perfil_cliente.setEnabled(true);
+            edit_text_confirmar_senha_perfil_cliente.setVisibility(View.VISIBLE);
+        }
 
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
@@ -152,7 +172,7 @@ public class FragmentPerfilCliente extends Fragment {
                                     builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int i) {
-                                            abrirMenuPrincipal();
+                                            abrirMenuPrincipal("1");
                                         }
                                     });
                                     AlertDialog dialog = builder.create();
@@ -192,7 +212,7 @@ public class FragmentPerfilCliente extends Fragment {
                                     builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int i) {
-                                            abrirMenuPrincipal();
+                                            abrirMenuPrincipal("2");
                                         }
                                     });
                                     AlertDialog dialog = builder.create();
@@ -249,8 +269,9 @@ public class FragmentPerfilCliente extends Fragment {
         dialog.show();
     }
 
-    private void abrirMenuPrincipal() {
+    private void abrirMenuPrincipal(String codigoAtivaCampos) {
         Intent intent = new Intent(getContext(), MenuPrincipalClienteActivity.class);
+        intent.putExtra("codigo", codigoAtivaCampos);
         startActivity(intent);
         getActivity().finish();
     }

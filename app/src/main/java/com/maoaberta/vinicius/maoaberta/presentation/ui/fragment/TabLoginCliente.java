@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.view.ContextThemeWrapper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +31,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.maoaberta.vinicius.maoaberta.R;
+import com.maoaberta.vinicius.maoaberta.domain.models.Voluntario;
+import com.maoaberta.vinicius.maoaberta.domain.repository.UsuarioRepository;
 import com.maoaberta.vinicius.maoaberta.presentation.ui.activity.CadastroActivity;
 import com.maoaberta.vinicius.maoaberta.presentation.ui.activity.EsqueceuSenhaActivity;
 import com.maoaberta.vinicius.maoaberta.presentation.ui.activity.MenuPrincipalClienteActivity;
@@ -41,7 +44,7 @@ import butterknife.ButterKnife;
  * Created by vinicius on 30/08/17.
  */
 
-public class TabLoginCliente extends Fragment implements GoogleApiClient.OnConnectionFailedListener  {
+public class TabLoginCliente extends Fragment implements GoogleApiClient.OnConnectionFailedListener {
 
     private static int RC_SIGN_IN = 1; //codigo retornado ao selecionar uma conta no google
     private FirebaseAuth mAuth;
@@ -109,6 +112,7 @@ public class TabLoginCliente extends Fragment implements GoogleApiClient.OnConne
 
     private void signIn() {
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
+        Auth.GoogleSignInApi.signOut(mGoogleApiClient);
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
@@ -118,10 +122,10 @@ public class TabLoginCliente extends Fragment implements GoogleApiClient.OnConne
 
         if (requestCode == RC_SIGN_IN) {
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
-            if(result.isSuccess()){
+            if (result.isSuccess()) {
                 GoogleSignInAccount account = result.getSignInAccount();
                 firebaseAuthWithGoogle(account);
-            }else{
+            } else {
                 AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), R.style.AppTheme));
                 builder.setMessage(R.string.falha_nos_dados);
                 builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
@@ -136,34 +140,51 @@ public class TabLoginCliente extends Fragment implements GoogleApiClient.OnConne
         }
     }
 
-    public void firebaseAuthWithGoogle(GoogleSignInAccount acct){
+    public void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
+        final UsuarioRepository usuarioRepository = new UsuarioRepository();
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        if(task.isSuccessful()){
+                        if (task.isSuccessful()) {
                             AuthResult result = task.getResult();
                             final FirebaseUser user = result.getUser();
-                            AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), R.style.AppTheme));
-                            builder.setMessage(R.string.pre_cadastro);
-                            builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            usuarioRepository.getUserByUid(user.getUid(), new UsuarioRepository.OnGetUserById() {
                                 @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    abrirMenuPrincipalCliente();
+                                public void onGetUserByIdSuccess(Voluntario voluntario) {
+                                    if (voluntario != null) {
+                                        if(voluntario.getEmail().equals(user.getEmail())){
+                                            abrirMenuPrincipalCliente("2");
+                                        }
+                                    } else {
+                                        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), R.style.AppTheme));
+                                        builder.setMessage(R.string.pre_cadastro);
+                                        builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialogInterface, int i) {
+                                                abrirMenuPrincipalCliente("2");
+                                            }
+                                        });
+                                        builder.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialogInterface, int i) {
+                                                user.delete();
+                                                edit_text_login_email_cliente.setText("");
+                                                edit_text_login_senha_cliente.setText("");
+                                            }
+                                        });
+                                        AlertDialog dialog = builder.create();
+                                        dialog.show();
+                                    }
+                                }
+
+                                @Override
+                                public void onGetUserByIdError(String error) {
+                                    Log.d("onGetUserByIdError", error);
                                 }
                             });
-                            builder.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    user.delete();
-                                    edit_text_login_email_cliente.setText("");
-                                    edit_text_login_senha_cliente.setText("");
-                                }
-                            });
-                            AlertDialog dialog = builder.create();
-                            dialog.show();
-                        }else{
+                        } else {
                             AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), R.style.AppTheme));
                             builder.setMessage(R.string.falha_nos_dados);
                             builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
@@ -181,18 +202,14 @@ public class TabLoginCliente extends Fragment implements GoogleApiClient.OnConne
                 });
     }
 
-    public void abrirRecuperarSenha() {
-        Intent intent = new Intent(getContext(), EsqueceuSenhaActivity.class);
-        startActivity(intent);
-    }
-
     public void abrirActivityCadastro() {
         Intent intent = new Intent(getContext(), CadastroActivity.class);
         startActivity(intent);
     }
 
-    public void abrirMenuPrincipalCliente() {
+    public void abrirMenuPrincipalCliente(String codigoAtivaCampos) {
         Intent intent = new Intent(getContext(), MenuPrincipalClienteActivity.class);
+        intent.putExtra("codigo", codigoAtivaCampos);
         startActivity(intent);
         getActivity().finish();
     }
@@ -205,7 +222,7 @@ public class TabLoginCliente extends Fragment implements GoogleApiClient.OnConne
                         if (!task.isSuccessful()) {
                             alertaDadosIncorretos();
                         } else {
-                            abrirMenuPrincipalCliente();
+                            abrirMenuPrincipalCliente("1");
                         }
                     }
                 });

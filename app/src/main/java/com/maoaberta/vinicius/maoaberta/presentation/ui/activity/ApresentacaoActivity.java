@@ -28,6 +28,7 @@ public class ApresentacaoActivity extends AppCompatActivity{
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
     private TipoRepository tipoRepository;
+    private String codigoAtivaCampos;
 
     @BindView(R.id.toolbar_layout_sobre)
     Toolbar toolbar_layout_sobre;
@@ -45,8 +46,9 @@ public class ApresentacaoActivity extends AppCompatActivity{
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
+                final FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
+                    final String provider = String.valueOf(user.getProviders());
                     String uid = user.getUid();
                     tipoRepository.getTipoById(uid, new TipoRepository.OnGetTipoById() {
                         @Override
@@ -55,7 +57,12 @@ public class ApresentacaoActivity extends AppCompatActivity{
                                 if(tipo.equals("organizaçao")){
                                     abrirMenuPrincipalOrganizacao();
                                 }else{
-                                    abrirMenuPrincipalCliente();
+                                    if(provider.equals("[google.com]")){
+                                        codigoAtivaCampos = "2";
+                                    }else{
+                                        codigoAtivaCampos = "1";
+                                    }
+                                    abrirMenuPrincipalCliente(codigoAtivaCampos);
                                 }
                             }else{
 
@@ -97,8 +104,9 @@ public class ApresentacaoActivity extends AppCompatActivity{
         finish();
     }
 
-    public void abrirMenuPrincipalCliente(){
+    public void abrirMenuPrincipalCliente(String codigoAtivaCampos){
         Intent intent = new Intent(getApplicationContext(), MenuPrincipalClienteActivity.class);
+        intent.putExtra("codigo", codigoAtivaCampos);
         startActivity(intent);
         finish();
     }

@@ -63,6 +63,19 @@ public class OrganizacaoRepository {
         });
     }
 
+    public void atualizarOrganizacao(Organizacao organizacao, FirebaseUser user){
+        reference.child(user.getUid()).setValue(organizacao).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if(task.isComplete()){
+                    Log.i("CADASTRO", "Organização cadastrada com sucesso");
+                }else{
+                    Log.i("CADASTRO", "Falha no cadastro");
+                }
+            }
+        });
+    }
+
     public interface OnGetOrganizacaoById{
         void onGetOrganizacaoByIdSuccess(Organizacao organizacao);
         void onGetOrganizacaoByIdError(String error);

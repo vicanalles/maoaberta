@@ -91,7 +91,7 @@ public class MenuPrincipalClienteActivity extends AppCompatActivity{
                             tabStrip.getChildAt(i).setOnTouchListener(new View.OnTouchListener() {
                                 @Override
                                 public boolean onTouch(View v, MotionEvent event) {
-                                    AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.AppTheme));
+                                    AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getApplicationContext(), R.style.AppTheme));
                                     builder.setMessage("Preencha todos os dados para ter acesso ao sistema!");
                                     builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                                         @Override

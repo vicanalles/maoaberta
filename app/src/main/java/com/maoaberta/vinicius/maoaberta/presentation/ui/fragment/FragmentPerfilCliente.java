@@ -249,19 +249,6 @@ public class FragmentPerfilCliente extends Fragment {
         dialog.show();
     }
 
-    private void alertaSenhasDiferentes() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), R.style.AppTheme));
-        builder.setMessage(R.string.senhas_diferentes);
-        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
-        AlertDialog dialog = builder.create();
-        dialog.show();
-    }
-
     private void abrirMenuPrincipal() {
         Intent intent = new Intent(getContext(), MenuPrincipalClienteActivity.class);
         startActivity(intent);

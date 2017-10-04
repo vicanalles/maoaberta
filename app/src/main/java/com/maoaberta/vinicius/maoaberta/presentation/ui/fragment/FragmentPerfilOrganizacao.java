@@ -31,6 +31,7 @@ import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Created by Vinicius on 23/08/2017.
@@ -46,7 +47,7 @@ public class FragmentPerfilOrganizacao extends Fragment {
     @BindView(R.id.relative_layout_image_logo_perfil_organizacao)
     RelativeLayout relative_layout_image_logo_perfil_organizacao;
     @BindView(R.id.image_view_logo_perfil_organizacao)
-    ImageView image_view_logo_perfil_organizacao;
+    CircleImageView image_view_logo_perfil_organizacao;
     @BindView(R.id.text_view_escolher_foto_perfil_organizacao)
     TextView text_view_escolher_foto_perfil_organizacao;
     @BindView(R.id.edit_text_razao_social_perfil_organizacao)

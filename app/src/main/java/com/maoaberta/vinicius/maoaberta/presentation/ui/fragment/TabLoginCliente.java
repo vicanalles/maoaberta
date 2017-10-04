@@ -35,6 +35,7 @@ import com.maoaberta.vinicius.maoaberta.domain.models.Voluntario;
 import com.maoaberta.vinicius.maoaberta.domain.repository.UsuarioRepository;
 import com.maoaberta.vinicius.maoaberta.presentation.ui.activity.CadastroActivity;
 import com.maoaberta.vinicius.maoaberta.presentation.ui.activity.EsqueceuSenhaActivity;
+import com.maoaberta.vinicius.maoaberta.presentation.ui.activity.LoginActivity;
 import com.maoaberta.vinicius.maoaberta.presentation.ui.activity.MenuPrincipalClienteActivity;
 
 import butterknife.BindView;
@@ -93,6 +94,7 @@ public class TabLoginCliente extends Fragment implements GoogleApiClient.OnConne
                 String senhaLogin = String.valueOf(edit_text_login_senha_cliente.getText());
                 if (!emailLogin.equals("") && !senhaLogin.equals("")) {
                     logarUsuario(emailLogin, senhaLogin);
+                    ((LoginActivity) getActivity()).showProgressDialog("Aguarde", "Obtendo informações do Usuário");
                 } else {
                     campoVazio();
                 }

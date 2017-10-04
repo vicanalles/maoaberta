@@ -33,12 +33,12 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="20dp">
 
-                <ImageView
+                <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/image_view_logo_perfil_organizacao"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_centerHorizontal="true"
-                    android:src="@drawable/logo_mao_aberta" />
+                    android:src="@drawable/logo_mao_aberta"/>
 
                 <TextView
                     android:id="@+id/text_view_escolher_foto_perfil_organizacao"

@@ -68,6 +68,12 @@ dependencies {
 
     //Firebase Database
     compile 'com.google.firebase:firebase-database:11.2.2'
+
+    //Mascara para CPF/CNPJ
+    compile 'br.com.concretesolutions:canarinho:1.2.0'
+
+    //Glide Libray
+    compile 'com.github.bumptech.glide:glide:3.7.0'
 }
 
 apply plugin: 'com.google.gms.google-services'

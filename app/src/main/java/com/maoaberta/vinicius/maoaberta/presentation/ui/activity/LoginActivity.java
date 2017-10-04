@@ -1,5 +1,6 @@
 package com.maoaberta.vinicius.maoaberta.presentation.ui.activity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -40,6 +41,7 @@ public class LoginActivity extends AppCompatActivity {
     ViewPagerAdapterLogin adapter;
     CharSequence titles[] = {"Voluntário", "Organização"};
     TextView tv;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,6 +120,8 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }
         });
+
+        progressDialog = new ProgressDialog(this);
     }
 
     @Override
@@ -146,6 +150,13 @@ public class LoginActivity extends AppCompatActivity {
     public void hideKeyboard(View v){
         InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(v.getWindowToken(), 0);
+    }
+
+    public void showProgressDialog(String title, String content){
+        progressDialog.setTitle(title);
+        progressDialog.setMessage(content);
+        progressDialog.setCancelable(false);
+        progressDialog.show();
     }
 
 }

@@ -36,7 +36,7 @@
     <string name="solicitar_nova_senha">Solicitar nova senha</string>
     <string name="recuperar_senha">Recuperar Senha</string>
     <string name="salvar">Salvar</string>
-    <string name="saida">Sair</string>
+    <string name="sair">Sair</string>
     <string name="campos_nao_preenchidos">Alguns campos não foram preenchidos. Por favor, preencher todos os campos</string>
     <string name="falha_nos_dados">Erro na recuperação dos dados da conta. Por favor, tente novamente!</string>
     <string name="falha_autenticacao">Não foi possível realizar a autenticação. Por favor, tente novamente!</string>
@@ -53,4 +53,13 @@
     <string name="pre_cadastro">Seu cadastro está quase pronto. Deseja continuar o preenchimento dos dados?</string>
     <string name="cadastrar_novo_usuario">Cadastrar Novo Usuário</string>
     <string name="perfil">Perfil</string>
+    <string name="atualizacao_usuario_sucesso">Usuário atualizado com sucesso!</string>
+    <string name="usuario_inexistente">Usuário não existe</string>
+    <string name="erro_atualizar_dados_usuario">Não foi possível atualizar os dados do usuário. Por favor, tente novamente!</string>
+    <string name="preencha_todos_campos">Preencha todos os campos para poder utilizar as funcionalidades do sistema!</string>
+    <string name="anuncios_tab_title">Anúncios</string>
+    <string name="entidades_tab_title">Entidades</string>
+    <string name="sobre_tab_title">Sobre</string>
+    <string name="meus_anuncios_tab_title">Meus Anúncios</string>
+    <string name="usuario_cadastrado_sucesso">Usuário Cadastrado com sucesso!</string>
 </resources>

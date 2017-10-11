@@ -52,8 +52,13 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".presentation.ui.fragment.ActivityPerfilOrganizacao"
-            android:screenOrientation="portrait">
+        <activity android:name=".presentation.ui.activity.ActivityPerfilCliente"
+            android:label="@string/perfil_organizacao"
+            android:parentActivityName=".presentation.ui.activity.MenuPrincipalClienteActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme">
+            <meta-data android:name="android.support.PARENT_ACTIVITY"
+                android:value=".presentation.ui.activity.MenuPrincipalClienteActivity"/>
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.DEFAULT"/>

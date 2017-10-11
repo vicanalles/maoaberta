@@ -59,10 +59,10 @@ public class MenuPrincipalOrganizacaoActivity extends AppCompatActivity {
         organizacaoRepository = new OrganizacaoRepository();
 
         final String[] tabTitles = {
-                "Meus Anúncios",
-                "Anúncios",
-                "Entidades",
-                "Sobre"
+                getString(R.string.meus_anuncios_tab_title),
+                getString(R.string.anuncios_tab_title),
+                getString(R.string.entidades_tab_title),
+                getString(R.string.sobre_tab_title)
         };
 
         pager_menu_principal_organizacao.setPagingEnabled(false);
@@ -83,7 +83,7 @@ public class MenuPrincipalOrganizacaoActivity extends AppCompatActivity {
                     if(organizacao != null){
                         Organizacao ong = new Organizacao();
                         ong.setNomeFantasia(organizacao.getNomeFantasia());
-                        toolbar_layout_menu_organizacao.setTitle(ong.getNomeFantasia());
+                        toolbar_layout_menu_organizacao.setTitle(R.string.app_name);
                     }else{
                         toolbar_layout_menu_organizacao.setTitle(user.getDisplayName());
                         LinearLayout tabStrip = ((LinearLayout)tab_layout_menu_principal_organizacao.getChildAt(0));
@@ -91,7 +91,7 @@ public class MenuPrincipalOrganizacaoActivity extends AppCompatActivity {
                             tabStrip.getChildAt(i).setOnTouchListener(new View.OnTouchListener() {
                                 @Override
                                 public boolean onTouch(View v, MotionEvent event) {
-                                    Toast.makeText(MenuPrincipalOrganizacaoActivity.this, "Preencha todos os dados para ter acesso ao sistema!", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(MenuPrincipalOrganizacaoActivity.this, R.string.preencha_todos_campos, Toast.LENGTH_LONG).show();
                                     return true;
                                 }
                             });
@@ -102,7 +102,7 @@ public class MenuPrincipalOrganizacaoActivity extends AppCompatActivity {
                 @Override
                 public void onGetOrganizacaoByIdError(String error) {
                     Log.d("onGetUserByIdError", error);
-                    Toast.makeText(getApplicationContext(), "Usuário não existe", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), R.string.usuario_inexistente, Toast.LENGTH_LONG).show();
                 }
             });
         }

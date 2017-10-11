@@ -4,7 +4,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AlertDialog;
@@ -59,10 +58,9 @@ public class MenuPrincipalClienteActivity extends AppCompatActivity{
         usuarioRepository = new UsuarioRepository();
 
         final String[] tabTitles = {
-                "Perfil",
-                "Anúncios",
-                "Entidades",
-                "Sobre"
+                getString(R.string.anuncios_tab_title),
+                getString(R.string.entidades_tab_title),
+                getString(R.string.sobre_tab_title)
         };
 
         pager_menu_principal_cliente.setPagingEnabled(false);
@@ -83,16 +81,15 @@ public class MenuPrincipalClienteActivity extends AppCompatActivity{
                     if(voluntario != null){
                         Voluntario vol = new Voluntario();
                         vol.setNome(voluntario.getNome());
-                        toolbar_layout_menu_cliente.setTitle(vol.getNome());
+                        toolbar_layout_menu_cliente.setTitle(R.string.app_name);
                     }else{
-                        toolbar_layout_menu_cliente.setTitle(user.getDisplayName());
+                        toolbar_layout_menu_cliente.setTitle(R.string.app_name);
                         LinearLayout tabStrip = ((LinearLayout)tab_layout_menu_principal_cliente.getChildAt(0));
                         for(int i = 0; i < tabStrip.getChildCount(); i++) {
                             tabStrip.getChildAt(i).setOnTouchListener(new View.OnTouchListener() {
                                 @Override
                                 public boolean onTouch(View v, MotionEvent event) {
-                                    Toast.makeText(MenuPrincipalClienteActivity.this, "Preencha todos os campos para poder utilizar as " +
-                                            "funcionalidades do sistema!", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(MenuPrincipalClienteActivity.this, R.string.preencha_todos_campos, Toast.LENGTH_SHORT).show();
                                     return true;
                                 }
                             });
@@ -103,7 +100,7 @@ public class MenuPrincipalClienteActivity extends AppCompatActivity{
                 @Override
                 public void onGetUserByIdError(String error) {
                     Log.d("onGetUserByIdError", error);
-                    Toast.makeText(getApplicationContext(), "Usuário não existe", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), R.string.usuario_inexistente, Toast.LENGTH_LONG).show();
                 }
             });
         }
@@ -123,8 +120,16 @@ public class MenuPrincipalClienteActivity extends AppCompatActivity{
             case R.id.item_exit_menu_principal:
                 sairDoApp();
                 break;
+            case R.id.item_perfil:
+                abrirTelaPerfilVoluntario();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void abrirTelaPerfilVoluntario() {
+        Intent intent = new Intent(MenuPrincipalClienteActivity.this, ActivityPerfilCliente.class);
+        startActivity(intent);
+        finish();
     }
 
     @Override

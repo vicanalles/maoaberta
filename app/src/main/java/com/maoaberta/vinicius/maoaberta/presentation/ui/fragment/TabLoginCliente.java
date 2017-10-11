@@ -94,7 +94,6 @@ public class TabLoginCliente extends Fragment implements GoogleApiClient.OnConne
                 String senhaLogin = String.valueOf(edit_text_login_senha_cliente.getText());
                 if (!emailLogin.equals("") && !senhaLogin.equals("")) {
                     logarUsuario(emailLogin, senhaLogin);
-                    ((LoginActivity) getActivity()).showProgressDialog("Aguarde", "Obtendo informações do Usuário");
                 } else {
                     campoVazio();
                 }
@@ -134,6 +133,7 @@ public class TabLoginCliente extends Fragment implements GoogleApiClient.OnConne
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         dialogInterface.dismiss();
+                        ((LoginActivity) getActivity()).hideProgressDialog();
                     }
                 });
                 AlertDialog dialog = builder.create();
@@ -143,6 +143,7 @@ public class TabLoginCliente extends Fragment implements GoogleApiClient.OnConne
     }
 
     public void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
+        ((LoginActivity) getActivity()).showProgressDialog("Aguarde", "Obtendo informações do Usuário");
         final UsuarioRepository usuarioRepository = new UsuarioRepository();
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
         mAuth.signInWithCredential(credential)
@@ -192,6 +193,7 @@ public class TabLoginCliente extends Fragment implements GoogleApiClient.OnConne
                             builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
+                                    ((LoginActivity) getActivity()).hideProgressDialog();
                                     dialogInterface.dismiss();
                                     edit_text_login_email_cliente.setText("");
                                     edit_text_login_senha_cliente.setText("");
@@ -210,6 +212,7 @@ public class TabLoginCliente extends Fragment implements GoogleApiClient.OnConne
     }
 
     public void abrirMenuPrincipalCliente(String codigoAtivaCampos) {
+        ((LoginActivity) getActivity()).hideProgressDialog();
         Intent intent = new Intent(getContext(), MenuPrincipalClienteActivity.class);
         intent.putExtra("codigo", codigoAtivaCampos);
         startActivity(intent);

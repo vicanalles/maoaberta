@@ -8,7 +8,6 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 import com.maoaberta.vinicius.maoaberta.presentation.ui.fragment.FragmentMenuAnunciosCliente;
 import com.maoaberta.vinicius.maoaberta.presentation.ui.fragment.FragmentMenuEntidadesCliente;
-import com.maoaberta.vinicius.maoaberta.presentation.ui.fragment.ActivityPerfilCliente;
 import com.maoaberta.vinicius.maoaberta.presentation.ui.fragment.TabSobre;
 
 /**
@@ -20,7 +19,6 @@ public class TabsPagerAdapterCliente extends FragmentPagerAdapter {
     private Context context;
 
     final String[] tabTitles = {
-            "Perfil",
             "Anúncios",
             "Entidades",
             "Sobre"
@@ -38,15 +36,12 @@ public class TabsPagerAdapterCliente extends FragmentPagerAdapter {
 
         switch (position) {
             case 0:
-                frag = new ActivityPerfilCliente();
-                break;
-            case 1:
                 frag = new FragmentMenuAnunciosCliente();
                 break;
-            case 2:
+            case 1:
                 frag = new FragmentMenuEntidadesCliente();
                 break;
-            case 3:
+            case 2:
                 frag = new TabSobre();
                 break;
         }

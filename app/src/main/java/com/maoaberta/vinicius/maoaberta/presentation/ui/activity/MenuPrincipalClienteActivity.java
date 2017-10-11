@@ -59,10 +59,10 @@ public class MenuPrincipalClienteActivity extends AppCompatActivity{
         usuarioRepository = new UsuarioRepository();
 
         final String[] tabTitles = {
-                "PERFIL",
-                "ANÚNCIOS",
-                "ENTIDADES",
-                "MEUS ANÚNCIOS"
+                "Perfil",
+                "Anúncios",
+                "Entidades",
+                "Sobre"
         };
 
         pager_menu_principal_cliente.setPagingEnabled(false);

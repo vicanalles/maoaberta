@@ -25,6 +25,7 @@ import com.maoaberta.vinicius.maoaberta.domain.models.Organizacao;
 import com.maoaberta.vinicius.maoaberta.domain.repository.OrganizacaoRepository;
 import com.maoaberta.vinicius.maoaberta.presentation.component.CustomViewPager;
 import com.maoaberta.vinicius.maoaberta.presentation.ui.adapter.TabsPagerAdapterOrganizacao;
+import com.maoaberta.vinicius.maoaberta.presentation.ui.fragment.ActivityPerfilOrganizacao;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -58,10 +59,10 @@ public class MenuPrincipalOrganizacaoActivity extends AppCompatActivity {
         organizacaoRepository = new OrganizacaoRepository();
 
         final String[] tabTitles = {
-                "PERFIL",
-                "ANÚNCIOS",
-                "ENTIDADES",
-                "MEUS ANÚNCIOS"
+                "Meus Anúncios",
+                "Anúncios",
+                "Entidades",
+                "Sobre"
         };
 
         pager_menu_principal_organizacao.setPagingEnabled(false);
@@ -121,9 +122,17 @@ public class MenuPrincipalOrganizacaoActivity extends AppCompatActivity {
             case R.id.item_exit_menu_principal:
                 sairDoApp();
                 break;
+            case R.id.item_perfil:
+                abrirPerfilOrganizacao();
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void abrirPerfilOrganizacao() {
+        Intent intent = new Intent(MenuPrincipalOrganizacaoActivity.this, ActivityPerfilOrganizacao.class);
+        startActivity(intent);
+        finish();
     }
 
     @Override

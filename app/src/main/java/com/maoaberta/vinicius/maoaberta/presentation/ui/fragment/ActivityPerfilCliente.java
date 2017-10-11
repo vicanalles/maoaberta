@@ -47,7 +47,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * Created by vinicius on 29/08/17.
  */
 
-public class FragmentPerfilCliente extends Fragment {
+public class ActivityPerfilCliente extends Fragment {
 
     private FirebaseAuth mAuth;
     private FirebaseUser user;

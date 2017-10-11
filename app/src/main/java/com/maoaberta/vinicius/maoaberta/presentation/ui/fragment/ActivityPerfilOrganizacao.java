@@ -4,16 +4,14 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ContextThemeWrapper;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -37,7 +35,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * Created by Vinicius on 23/08/2017.
  */
 
-public class FragmentPerfilOrganizacao extends Fragment {
+public class ActivityPerfilOrganizacao extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private FirebaseUser user;
@@ -80,12 +78,12 @@ public class FragmentPerfilOrganizacao extends Fragment {
     Button button_atualizar_dados_organizacao;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_perfil_organizacao);
+        ButterKnife.bind(this);
 
-        View view = inflater.inflate(R.layout.fragment_perfil_organizacao, container, false);
-        ButterKnife.bind(this, view);
-
-        mAuth = FirebaseAuth.getInstance();
+        /*mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
         organizacaoRepository = new OrganizacaoRepository();
 
@@ -114,7 +112,7 @@ public class FragmentPerfilOrganizacao extends Fragment {
                 @Override
                 public void onGetOrganizacaoByIdError(String error) {
                     Log.d("onGetUserByIdError", error);
-                    Toast.makeText(getActivity(), "Usuário não existe", Toast.LENGTH_LONG).show();
+                    Toast.makeText(ActivityPerfilOrganizacao.this, "Usuário não existe", Toast.LENGTH_LONG).show();
                 }
             });
         }
@@ -168,7 +166,7 @@ public class FragmentPerfilOrganizacao extends Fragment {
 
                                     organizacaoRepository.atualizarOrganizacao(ong, user);
 
-                                    AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), R.style.AppTheme));
+                                    AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(ActivityPerfilOrganizacao.this, R.style.AppTheme));
                                     builder.setMessage("Organização atualizada com sucesso!");
                                     builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                                         @Override
@@ -184,7 +182,7 @@ public class FragmentPerfilOrganizacao extends Fragment {
                             @Override
                             public void onGetOrganizacaoByIdError(String error) {
                                 Log.d("onGetUserByIdError", error);
-                                AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), R.style.AppTheme));
+                                AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(ActivityPerfilOrganizacao.this, R.style.AppTheme));
                                 builder.setMessage("Não foi possível atualizar os dados da organização. Por favor, tente novamente!");
                                 builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                                     @Override
@@ -199,13 +197,11 @@ public class FragmentPerfilOrganizacao extends Fragment {
                     }
                 }
             }
-        });
-
-        return view;
+        });*/
     }
 
     private void alertaCamposNaoPreenchidos() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), R.style.AppTheme));
+        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(ActivityPerfilOrganizacao.this, R.style.AppTheme));
         builder.setMessage(R.string.campos_nao_preenchidos);
         builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             @Override
@@ -218,7 +214,7 @@ public class FragmentPerfilOrganizacao extends Fragment {
     }
 
     private void alertaSenhaCurta() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), R.style.AppTheme));
+        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(ActivityPerfilOrganizacao.this, R.style.AppTheme));
         builder.setMessage(R.string.senha_curta);
         builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             @Override
@@ -231,8 +227,8 @@ public class FragmentPerfilOrganizacao extends Fragment {
     }
 
     private void abrirMenuPrincipal() {
-        Intent intent = new Intent(getContext(), MenuPrincipalOrganizacaoActivity.class);
+        Intent intent = new Intent(ActivityPerfilOrganizacao.this, MenuPrincipalOrganizacaoActivity.class);
         startActivity(intent);
-        getActivity().finish();
+        finish();
     }
 }

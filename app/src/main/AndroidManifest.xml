@@ -52,7 +52,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".presentation.ui.fragment.FragmentPerfilOrganizacao"
+        <activity android:name=".presentation.ui.fragment.ActivityPerfilOrganizacao"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>

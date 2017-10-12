@@ -37,13 +37,12 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * Created by vinicius on 29/08/17.
  */
 
-public class ActivityPerfilCliente extends AppCompatActivity {
+public class PerfilVoluntarioActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private FirebaseUser user;
     private UsuarioRepository usuarioRepository;
     private Voluntario vol;
-    private String codigoAtivaCampos;
 
     @BindView(R.id.relative_layout_image_logo_perfil_cliente)
     RelativeLayout relative_layout_image_logo_perfil_cliente;
@@ -100,7 +99,7 @@ public class ActivityPerfilCliente extends AppCompatActivity {
                 @Override
                 public void onGetUserByIdError(String error) {
                     Log.d("onGetUserByIdError", error);
-                    Toast.makeText(ActivityPerfilCliente.this, R.string.usuario_inexistente, Toast.LENGTH_LONG).show();
+                    Toast.makeText(PerfilVoluntarioActivity.this, R.string.usuario_inexistente, Toast.LENGTH_LONG).show();
                 }
             });
         }
@@ -147,7 +146,7 @@ public class ActivityPerfilCliente extends AppCompatActivity {
 
                                     usuarioRepository.atualizarUser(vol, user);
 
-                                    AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(ActivityPerfilCliente.this, R.style.AppTheme));
+                                    AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(PerfilVoluntarioActivity.this, R.style.AppTheme));
                                     builder.setMessage(R.string.atualizacao_usuario_sucesso);
                                     builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                                         @Override
@@ -187,7 +186,7 @@ public class ActivityPerfilCliente extends AppCompatActivity {
                                     TipoRepository tipoRepository = new TipoRepository();
                                     tipoRepository.cadastrarTipo(user, "tipo", "voluntario");
 
-                                    AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(ActivityPerfilCliente.this, R.style.AppTheme));
+                                    AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(PerfilVoluntarioActivity.this, R.style.AppTheme));
                                     builder.setMessage(R.string.usuario_cadastrado_sucesso);
                                     builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                                         @Override
@@ -203,7 +202,7 @@ public class ActivityPerfilCliente extends AppCompatActivity {
                             @Override
                             public void onGetUserByIdError(String error) {
                                 Log.d("onGetUserByIdError", error);
-                                AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(ActivityPerfilCliente.this, R.style.AppTheme));
+                                AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(PerfilVoluntarioActivity.this, R.style.AppTheme));
                                 builder.setMessage(R.string.erro_atualizar_dados_usuario);
                                 builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                                     @Override
@@ -274,7 +273,7 @@ public class ActivityPerfilCliente extends AppCompatActivity {
     }
 
     private void alertaCamposNaoPreenchidos() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(ActivityPerfilCliente.this, R.style.AppTheme));
+        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(PerfilVoluntarioActivity.this, R.style.AppTheme));
         builder.setMessage(R.string.campos_nao_preenchidos);
         builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             @Override
@@ -287,7 +286,7 @@ public class ActivityPerfilCliente extends AppCompatActivity {
     }
 
     private void alertaSenhaCurta() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(ActivityPerfilCliente.this, R.style.AppTheme));
+        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(PerfilVoluntarioActivity.this, R.style.AppTheme));
         builder.setMessage(R.string.senha_curta);
         builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             @Override
@@ -300,7 +299,7 @@ public class ActivityPerfilCliente extends AppCompatActivity {
     }
 
     private void abrirMenuPrincipal() {
-        Intent intent = new Intent(ActivityPerfilCliente.this, MenuPrincipalClienteActivity.class);
+        Intent intent = new Intent(PerfilVoluntarioActivity.this, MenuPrincipalClienteActivity.class);
         startActivity(intent);
         finish();
     }

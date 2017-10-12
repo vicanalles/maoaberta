@@ -52,7 +52,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".presentation.ui.activity.ActivityPerfilCliente"
+        <activity android:name=".presentation.ui.activity.PerfilVoluntarioActivity"
             android:label="@string/perfil_organizacao"
             android:parentActivityName=".presentation.ui.activity.MenuPrincipalClienteActivity"
             android:screenOrientation="portrait"

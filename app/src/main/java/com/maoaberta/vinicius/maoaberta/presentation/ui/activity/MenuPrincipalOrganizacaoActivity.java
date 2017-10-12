@@ -4,7 +4,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -25,7 +24,6 @@ import com.maoaberta.vinicius.maoaberta.domain.models.Organizacao;
 import com.maoaberta.vinicius.maoaberta.domain.repository.OrganizacaoRepository;
 import com.maoaberta.vinicius.maoaberta.presentation.component.CustomViewPager;
 import com.maoaberta.vinicius.maoaberta.presentation.ui.adapter.TabsPagerAdapterOrganizacao;
-import com.maoaberta.vinicius.maoaberta.presentation.ui.fragment.ActivityPerfilOrganizacao;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -130,7 +128,7 @@ public class MenuPrincipalOrganizacaoActivity extends AppCompatActivity {
     }
 
     private void abrirPerfilOrganizacao() {
-        Intent intent = new Intent(MenuPrincipalOrganizacaoActivity.this, ActivityPerfilOrganizacao.class);
+        Intent intent = new Intent(MenuPrincipalOrganizacaoActivity.this, PerfilOrganizacaoActivity.class);
         startActivity(intent);
         finish();
     }

@@ -32,6 +32,7 @@ import com.maoaberta.vinicius.maoaberta.R;
 import com.maoaberta.vinicius.maoaberta.domain.models.Voluntario;
 import com.maoaberta.vinicius.maoaberta.domain.repository.TipoRepository;
 import com.maoaberta.vinicius.maoaberta.domain.repository.UsuarioRepository;
+import com.maoaberta.vinicius.maoaberta.presentation.ui.activity.CadastroActivity;
 import com.maoaberta.vinicius.maoaberta.presentation.ui.activity.MenuPrincipalClienteActivity;
 
 import butterknife.BindView;
@@ -69,6 +70,7 @@ public class TabCadastroCliente extends Fragment {
         cadastrarCliente.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                ((CadastroActivity) getActivity()).showProgressDialog("Cadastro", "Cadastrando voluntário...");
                 if (String.valueOf(nomeCliente.getText()).equals("") || String.valueOf(telefoneCliente.getText()).equals("") ||
                         String.valueOf(emailCliente.getText()).equals("") || String.valueOf(senhaCliente.getText()).equals("") ||
                         String.valueOf(confirmarSenha.getText()).equals("")) {
@@ -100,6 +102,7 @@ public class TabCadastroCliente extends Fragment {
                             builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int i) {
+                                    ((CadastroActivity) getActivity()).hideProgressDialog();
                                     dialog.dismiss();
                                 }
                             });
@@ -122,6 +125,7 @@ public class TabCadastroCliente extends Fragment {
                             builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int i) {
+                                    ((CadastroActivity) getActivity()).hideProgressDialog();
                                     abrirMenuPrincipalCliente();
                                 }
                             });

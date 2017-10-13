@@ -1,5 +1,6 @@
 package com.maoaberta.vinicius.maoaberta.presentation.ui.activity;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -62,6 +63,7 @@ public class PerfilVoluntarioActivity extends AppCompatActivity {
     Button botao_salvar_perfil_cliente;
     @BindView(R.id.toolbar_layout_menu_perfil_cliente)
     Toolbar toolbar_layout_menu_perfil_cliente;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -70,21 +72,34 @@ public class PerfilVoluntarioActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         setSupportActionBar(toolbar_layout_menu_perfil_cliente);
 
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setTitle(R.string.app_name);
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setDisplayShowHomeEnabled(true);
-        }
+        progressDialog = new ProgressDialog(this);
 
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
         usuarioRepository = new UsuarioRepository();
 
+        if(String.valueOf(user.getProviders()).equals("[google.com]")){
+            edit_text_senha_perfil_cliente.setVisibility(View.GONE);
+            edit_text_confirmar_senha_perfil_cliente.setVisibility(View.GONE);
+        }else{
+            edit_text_senha_perfil_cliente.setVisibility(View.VISIBLE);
+            edit_text_confirmar_senha_perfil_cliente.setVisibility(View.VISIBLE);
+        }
+
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle(R.string.app_name);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+            getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_arrow_back);
+        }
+
+        showProgressDialog("Carregando informações", "Carregando dados do usuário");
         if (user != null) {
             String uid = user.getUid();
             usuarioRepository.getUserByUid(uid, new UsuarioRepository.OnGetUserById() {
                 @Override
                 public void onGetUserByIdSuccess(Voluntario voluntario) {
+                    hideProgressDialog();
                     if (voluntario != null) {
                         edit_text_nome_perfil_cliente.setText(voluntario.getNome());
                         edit_text_email_perfil_cliente.setText(voluntario.getEmail());
@@ -98,6 +113,7 @@ public class PerfilVoluntarioActivity extends AppCompatActivity {
 
                 @Override
                 public void onGetUserByIdError(String error) {
+                    hideProgressDialog();
                     Log.d("onGetUserByIdError", error);
                     Toast.makeText(PerfilVoluntarioActivity.this, R.string.usuario_inexistente, Toast.LENGTH_LONG).show();
                 }
@@ -108,6 +124,7 @@ public class PerfilVoluntarioActivity extends AppCompatActivity {
         botao_salvar_perfil_cliente.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                showProgressDialog("Atualizando Dados", "Aguarde enquanto os dados são atualizados.");
                 if (String.valueOf(edit_text_nome_perfil_cliente.getText()).equals("") || String.valueOf(edit_text_telefone_perfil_cliente.getText()).equals("") ||
                         String.valueOf(edit_text_email_perfil_cliente.getText()).equals("")) {
                     alertaCamposNaoPreenchidos();
@@ -132,8 +149,7 @@ public class PerfilVoluntarioActivity extends AppCompatActivity {
                                                     @Override
                                                     public void onComplete(@NonNull Task<Void> task) {
                                                         if (task.isSuccessful()) {
-                                                            edit_text_senha_perfil_cliente.setText("");
-                                                            edit_text_confirmar_senha_perfil_cliente.setText("");
+                                                            Log.d("Sucesso", "Atualizado com sucesso");
                                                         }
                                                     }
                                                 });
@@ -145,13 +161,13 @@ public class PerfilVoluntarioActivity extends AppCompatActivity {
 
 
                                     usuarioRepository.atualizarUser(vol, user);
-
                                     AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(PerfilVoluntarioActivity.this, R.style.AppTheme));
                                     builder.setMessage(R.string.atualizacao_usuario_sucesso);
                                     builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int i) {
-                                            abrirMenuPrincipal();
+                                            hideProgressDialog();
+                                            abrirMenuPerfilVoluntario();
                                         }
                                     });
                                     AlertDialog dialog = builder.create();
@@ -171,8 +187,7 @@ public class PerfilVoluntarioActivity extends AppCompatActivity {
                                                     @Override
                                                     public void onComplete(@NonNull Task<Void> task) {
                                                         if (task.isSuccessful()) {
-                                                            edit_text_senha_perfil_cliente.setText("");
-                                                            edit_text_confirmar_senha_perfil_cliente.setText("");
+                                                            Log.d("Sucesso", "Atualizado com sucesso");
                                                         }
                                                     }
                                                 });
@@ -191,7 +206,8 @@ public class PerfilVoluntarioActivity extends AppCompatActivity {
                                     builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int i) {
-                                            abrirMenuPrincipal();
+                                            hideProgressDialog();
+                                            abrirMenuPerfilVoluntario();
                                         }
                                     });
                                     AlertDialog dialog = builder.create();
@@ -207,6 +223,7 @@ public class PerfilVoluntarioActivity extends AppCompatActivity {
                                 builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int i) {
+                                        hideProgressDialog();
                                         dialog.dismiss();
                                     }
                                 });
@@ -239,6 +256,12 @@ public class PerfilVoluntarioActivity extends AppCompatActivity {
                 break;
         }
         return true;
+    }
+
+    private void abrirMenuPrincipal() {
+        Intent intent = new Intent(PerfilVoluntarioActivity.this, MenuPrincipalClienteActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     @Override
@@ -298,9 +321,20 @@ public class PerfilVoluntarioActivity extends AppCompatActivity {
         dialog.show();
     }
 
-    private void abrirMenuPrincipal() {
-        Intent intent = new Intent(PerfilVoluntarioActivity.this, MenuPrincipalClienteActivity.class);
+    private void abrirMenuPerfilVoluntario() {
+        Intent intent = new Intent(PerfilVoluntarioActivity.this, PerfilVoluntarioActivity.class);
         startActivity(intent);
         finish();
+    }
+
+    public void showProgressDialog(String title, String content){
+        progressDialog.setTitle(title);
+        progressDialog.setMessage(content);
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+    }
+
+    public void hideProgressDialog(){
+        progressDialog.dismiss();
     }
 }

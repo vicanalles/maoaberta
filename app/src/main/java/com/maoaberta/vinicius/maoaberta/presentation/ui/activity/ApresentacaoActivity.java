@@ -1,5 +1,6 @@
 package com.maoaberta.vinicius.maoaberta.presentation.ui.activity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -28,10 +29,11 @@ public class ApresentacaoActivity extends AppCompatActivity{
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
     private TipoRepository tipoRepository;
-    private String codigoAtivaCampos;
 
     @BindView(R.id.toolbar_layout_sobre)
     Toolbar toolbar_layout_sobre;
+
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -39,6 +41,8 @@ public class ApresentacaoActivity extends AppCompatActivity{
         setContentView(R.layout.activity_apresentacao);
         ButterKnife.bind(this);
         setSupportActionBar(toolbar_layout_sobre);
+
+        progressDialog = new ProgressDialog(this);
 
         mAuth = FirebaseAuth.getInstance();
         tipoRepository = new TipoRepository();
@@ -48,7 +52,7 @@ public class ApresentacaoActivity extends AppCompatActivity{
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 final FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
-                    final String provider = String.valueOf(user.getProviders());
+                    showProgressDialog("Aguarde", "Obtendo informações do Usuário");
                     String uid = user.getUid();
                     tipoRepository.getTipoById(uid, new TipoRepository.OnGetTipoById() {
                         @Override
@@ -57,12 +61,7 @@ public class ApresentacaoActivity extends AppCompatActivity{
                                 if(tipo.equals("organizaçao")){
                                     abrirMenuPrincipalOrganizacao();
                                 }else{
-                                    if(provider.equals("[google.com]")){
-                                        codigoAtivaCampos = "2";
-                                    }else{
-                                        codigoAtivaCampos = "1";
-                                    }
-                                    abrirMenuPrincipalCliente(codigoAtivaCampos);
+                                    abrirMenuPrincipalCliente();
                                 }
                             }else{
 
@@ -75,7 +74,7 @@ public class ApresentacaoActivity extends AppCompatActivity{
                         }
                     });
                 } else {
-
+                    hideProgressDialog();
                 }
             }
         };
@@ -104,9 +103,8 @@ public class ApresentacaoActivity extends AppCompatActivity{
         finish();
     }
 
-    public void abrirMenuPrincipalCliente(String codigoAtivaCampos){
+    public void abrirMenuPrincipalCliente(){
         Intent intent = new Intent(getApplicationContext(), MenuPrincipalClienteActivity.class);
-        intent.putExtra("codigo", codigoAtivaCampos);
         startActivity(intent);
         finish();
     }
@@ -129,5 +127,16 @@ public class ApresentacaoActivity extends AppCompatActivity{
         if (mAuthListener != null) {
             mAuth.removeAuthStateListener(mAuthListener);
         }
+    }
+
+    public void showProgressDialog(String title, String content){
+        progressDialog.setTitle(title);
+        progressDialog.setMessage(content);
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+    }
+
+    public void hideProgressDialog(){
+        progressDialog.dismiss();
     }
 }

@@ -63,6 +63,10 @@ public class MenuPrincipalOrganizacaoActivity extends AppCompatActivity {
                 getString(R.string.sobre_tab_title)
         };
 
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle(R.string.app_name);
+        }
+
         pager_menu_principal_organizacao.setPagingEnabled(false);
         pager_menu_principal_organizacao.setAdapter(new TabsPagerAdapterOrganizacao(getSupportFragmentManager(), this));
         tab_layout_menu_principal_organizacao.setTabTextColors(ColorStateList.valueOf(getResources().getColor(R.color.textColorWhite)));

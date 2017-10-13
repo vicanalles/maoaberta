@@ -1,5 +1,6 @@
 package com.maoaberta.vinicius.maoaberta.presentation.ui.activity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -39,6 +40,7 @@ public class CadastroActivity extends AppCompatActivity {
     ViewPagerAdapterCadastro adapter;
     CharSequence titles[] = {"Voluntário", "Organização"};
     TextView tv;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +48,15 @@ public class CadastroActivity extends AppCompatActivity {
         setContentView(R.layout.activity_cadastro);
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
+
+        progressDialog = new ProgressDialog(this);
+
+        if(getSupportActionBar() != null){
+            getSupportActionBar().setTitle(R.string.app_name);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+            getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_arrow_back);
+        }
 
         // Creating The ViewPagerAdapterCadastro and Passing Fragment Manager, Titles fot the Tabs and Number Of Tabs.
         adapter = new ViewPagerAdapterCadastro(getSupportFragmentManager(), titles);
@@ -112,5 +123,25 @@ public class CadastroActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case android.R.id.home:
+                finish();
+        }
+        return true;
+    }
+
+    public void showProgressDialog(String title, String content){
+        progressDialog.setTitle(title);
+        progressDialog.setMessage(content);
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+    }
+
+    public void hideProgressDialog(){
+        progressDialog.dismiss();
     }
 }

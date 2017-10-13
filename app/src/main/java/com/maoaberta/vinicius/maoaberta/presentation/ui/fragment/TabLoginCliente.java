@@ -158,7 +158,7 @@ public class TabLoginCliente extends Fragment implements GoogleApiClient.OnConne
                                 public void onGetUserByIdSuccess(Voluntario voluntario) {
                                     if (voluntario != null) {
                                         if(voluntario.getEmail().equals(user.getEmail())){
-                                            abrirMenuPrincipalCliente("2");
+                                            abrirMenuPrincipalCliente();
                                         }
                                     } else {
                                         AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), R.style.AppTheme));
@@ -166,7 +166,7 @@ public class TabLoginCliente extends Fragment implements GoogleApiClient.OnConne
                                         builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface dialogInterface, int i) {
-                                                abrirMenuPrincipalCliente("2");
+                                                abrirMenuPrincipalCliente();
                                             }
                                         });
                                         builder.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
@@ -211,15 +211,15 @@ public class TabLoginCliente extends Fragment implements GoogleApiClient.OnConne
         startActivity(intent);
     }
 
-    public void abrirMenuPrincipalCliente(String codigoAtivaCampos) {
+    public void abrirMenuPrincipalCliente() {
         ((LoginActivity) getActivity()).hideProgressDialog();
         Intent intent = new Intent(getContext(), MenuPrincipalClienteActivity.class);
-        intent.putExtra("codigo", codigoAtivaCampos);
         startActivity(intent);
         getActivity().finish();
     }
 
     public void logarUsuario(final String email, String senha) {
+        ((LoginActivity) getActivity()).showProgressDialog("Aguarde", "Obtendo informações do Usuário");
         mAuth.signInWithEmailAndPassword(email, senha)
                 .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
                     @Override
@@ -227,7 +227,7 @@ public class TabLoginCliente extends Fragment implements GoogleApiClient.OnConne
                         if (!task.isSuccessful()) {
                             alertaDadosIncorretos();
                         } else {
-                            abrirMenuPrincipalCliente("1");
+                            abrirMenuPrincipalCliente();
                         }
                     }
                 });
@@ -239,6 +239,7 @@ public class TabLoginCliente extends Fragment implements GoogleApiClient.OnConne
         builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                ((LoginActivity) getActivity()).hideProgressDialog();
                 edit_text_login_senha_cliente.setText("");
                 dialog.dismiss();
             }

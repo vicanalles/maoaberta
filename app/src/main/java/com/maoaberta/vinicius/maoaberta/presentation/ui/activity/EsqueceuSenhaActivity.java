@@ -41,11 +41,28 @@ public class EsqueceuSenhaActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         setSupportActionBar(toolbar_layout_esqueceu_senha);
 
+        if(getSupportActionBar() != null){
+            getSupportActionBar().setTitle(R.string.app_name);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+            getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_arrow_back);
+        }
+
         edit_text_nova_senha.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
             }
         });
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case android.R.id.home:
+                finish();
+        }
+
+        return true;
     }
 }

@@ -18,7 +18,6 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-        app:title="Menu Cliente"
         app:titleTextColor="@color/textColorWhite">
 
     </android.support.v7.widget.Toolbar>

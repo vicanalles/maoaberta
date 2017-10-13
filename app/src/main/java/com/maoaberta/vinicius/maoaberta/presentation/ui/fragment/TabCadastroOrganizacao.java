@@ -25,6 +25,7 @@ import com.maoaberta.vinicius.maoaberta.R;
 import com.maoaberta.vinicius.maoaberta.domain.models.Organizacao;
 import com.maoaberta.vinicius.maoaberta.domain.repository.OrganizacaoRepository;
 import com.maoaberta.vinicius.maoaberta.domain.repository.TipoRepository;
+import com.maoaberta.vinicius.maoaberta.presentation.ui.activity.CadastroActivity;
 import com.maoaberta.vinicius.maoaberta.presentation.ui.activity.MenuPrincipalClienteActivity;
 import com.maoaberta.vinicius.maoaberta.presentation.ui.activity.MenuPrincipalOrganizacaoActivity;
 
@@ -69,6 +70,7 @@ public class TabCadastroOrganizacao extends Fragment {
         cadastrarOrganizacao.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                ((CadastroActivity) getActivity()).showProgressDialog("Cadastro", "Cadastrando organização...");
                 if(String.valueOf(razaoSocial.getText()).equals("") || String.valueOf(nomeFantasia.getText()).equals("") || String.valueOf(cnpjOrganizacao.getText()).equals("") ||
                         String.valueOf(nomeResponsavel.getText()).equals("") || String.valueOf(emailOrganizacao.getText()).equals("") || String.valueOf(telefoneOrganizacao.getText()).equals("") ||
                         String.valueOf(senhaOrganizacao.getText()).equals("") || String.valueOf(confirmarSenhaOrganizacao.getText()).equals("")){
@@ -101,6 +103,7 @@ public class TabCadastroOrganizacao extends Fragment {
                             builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int i) {
+                                    ((CadastroActivity) getActivity()).hideProgressDialog();
                                     dialog.dismiss();
                                 }
                             });
@@ -126,6 +129,7 @@ public class TabCadastroOrganizacao extends Fragment {
                             builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int i) {
+                                    ((CadastroActivity) getActivity()).hideProgressDialog();
                                     abrirMenuPrincipalOrganizacao();
                                 }
                             });

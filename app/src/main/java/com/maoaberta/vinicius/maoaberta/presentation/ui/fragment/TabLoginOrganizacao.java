@@ -23,6 +23,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.maoaberta.vinicius.maoaberta.R;
 import com.maoaberta.vinicius.maoaberta.presentation.ui.activity.CadastroActivity;
 import com.maoaberta.vinicius.maoaberta.presentation.ui.activity.EsqueceuSenhaActivity;
+import com.maoaberta.vinicius.maoaberta.presentation.ui.activity.LoginActivity;
 import com.maoaberta.vinicius.maoaberta.presentation.ui.activity.MenuPrincipalClienteActivity;
 import com.maoaberta.vinicius.maoaberta.presentation.ui.activity.MenuPrincipalOrganizacaoActivity;
 
@@ -87,6 +88,7 @@ public class TabLoginOrganizacao extends Fragment {
     }
 
     private void signIn(String email, String senha){
+        ((LoginActivity) getActivity()).showProgressDialog("Aguarde", "Obtendo informações da Organização");
         mAuth.signInWithEmailAndPassword(email, senha)
                 .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
                     @Override
@@ -94,9 +96,7 @@ public class TabLoginOrganizacao extends Fragment {
                         if(!task.isSuccessful()){
                             alertaDadosIncorretos();
                         }else{
-                            AuthResult result = task.getResult();
-                            FirebaseUser user = result.getUser();
-                            abrirMenuPrincipalOrganizacao(user);
+                            abrirMenuPrincipalOrganizacao();
                         }
                     }
                 });
@@ -108,6 +108,7 @@ public class TabLoginOrganizacao extends Fragment {
         builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                ((LoginActivity) getActivity()).hideProgressDialog();
                 edit_text_login_senha_organizacao.setText("");
                 dialog.dismiss();
             }
@@ -116,9 +117,9 @@ public class TabLoginOrganizacao extends Fragment {
         dialog.show();
     }
 
-    private void abrirMenuPrincipalOrganizacao(FirebaseUser user){
+    private void abrirMenuPrincipalOrganizacao(){
+        ((LoginActivity) getActivity()).hideProgressDialog();
         Intent intent = new Intent(getContext(), MenuPrincipalOrganizacaoActivity.class);
-        intent.putExtra("userName", user.getUid());
         startActivity(intent);
         getActivity().finish();
     }

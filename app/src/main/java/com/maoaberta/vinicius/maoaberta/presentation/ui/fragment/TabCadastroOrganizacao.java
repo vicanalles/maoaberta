@@ -122,19 +122,37 @@ public class TabCadastroOrganizacao extends Fragment {
                             OrganizacaoRepository organizacaoRepository = new OrganizacaoRepository();
                             organizacaoRepository.cadastrarOrganizacao(organizacao, user);
                             TipoRepository tipoRepository = new TipoRepository();
-                            tipoRepository.cadastrarTipo(user, "tipo", "organizaçao");
-
-                            AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), R.style.AppTheme));
-                            builder.setMessage("Organização cadastrada com sucesso!");
-                            builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                            tipoRepository.cadastrarTipo(organizacao.getId(), "tipo", "organizaçao", new TipoRepository.OnCadastrarTipo() {
                                 @Override
-                                public void onClick(DialogInterface dialog, int i) {
-                                    ((CadastroActivity) getActivity()).hideProgressDialog();
-                                    abrirMenuPrincipalOrganizacao();
+                                public void onCadastrarTipoSuccess(String sucesso) {
+                                    AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), R.style.AppTheme));
+                                    builder.setMessage(sucesso);
+                                    builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int i) {
+                                            ((CadastroActivity) getActivity()).hideProgressDialog();
+                                            abrirMenuPrincipalOrganizacao();
+                                        }
+                                    });
+                                    AlertDialog dialog = builder.create();
+                                    dialog.show();
+                                }
+
+                                @Override
+                                public void onCadastrarTipoError(String error) {
+                                    AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), R.style.AppTheme));
+                                    builder.setMessage(error);
+                                    builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int i) {
+                                            ((CadastroActivity) getActivity()).hideProgressDialog();
+                                            abrirMenuPrincipalOrganizacao();
+                                        }
+                                    });
+                                    AlertDialog dialog = builder.create();
+                                    dialog.show();
                                 }
                             });
-                            AlertDialog dialog = builder.create();
-                            dialog.show();
                         }
                     }
                 });

@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -29,6 +30,7 @@ public class ApresentacaoActivity extends AppCompatActivity{
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
     private TipoRepository tipoRepository;
+    private UsuarioRepository usuarioRepository;
 
     @BindView(R.id.toolbar_layout_sobre)
     Toolbar toolbar_layout_sobre;
@@ -45,6 +47,7 @@ public class ApresentacaoActivity extends AppCompatActivity{
         progressDialog = new ProgressDialog(this);
 
         mAuth = FirebaseAuth.getInstance();
+        usuarioRepository = new UsuarioRepository();
         tipoRepository = new TipoRepository();
 
         mAuthListener = new FirebaseAuth.AuthStateListener() {
@@ -53,28 +56,35 @@ public class ApresentacaoActivity extends AppCompatActivity{
                 final FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
                     showProgressDialog("Aguarde", "Obtendo informações do Usuário");
-                    String uid = user.getUid();
-                    tipoRepository.getTipoById(uid, new TipoRepository.OnGetTipoById() {
+                    usuarioRepository.getUserByUid(user.getUid(), new UsuarioRepository.OnGetUserById() {
                         @Override
-                        public void onGetTipoByIdSuccess(String tipo) {
-                            if(tipo != null){
-                                if(tipo.equals("organizaçao")){
-                                    abrirMenuPrincipalOrganizacao();
-                                }else{
-                                    abrirMenuPrincipalCliente();
-                                }
-                            }else{
+                        public void onGetUserByIdSuccess(Voluntario voluntario) {
+                            if(voluntario != null){
+                                tipoRepository.getTipoById(user.getUid(), new TipoRepository.OnGetTipoById() {
+                                    @Override
+                                    public void onGetTipoByIdSuccess(String tipo) {
+                                        if(tipo != null){
+                                            if(tipo.equals("voluntario")){
+                                                abrirMenuPrincipalCliente();
+                                            }else{
+                                                abrirMenuPrincipalOrganizacao();
+                                            }
+                                        }
+                                    }
 
+                                    @Override
+                                    public void onGetTipoByIdError(String error) {
+                                        Toast.makeText(ApresentacaoActivity.this, "Erro na recuperação dos dados", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
                             }
                         }
 
                         @Override
-                        public void onGetTipoByIdError(String error) {
-
+                        public void onGetUserByIdError(String error) {
+                            Toast.makeText(ApresentacaoActivity.this, "Erro na recuperação dos dados", Toast.LENGTH_SHORT).show();
                         }
                     });
-                } else {
-                    hideProgressDialog();
                 }
             }
         };
@@ -104,12 +114,14 @@ public class ApresentacaoActivity extends AppCompatActivity{
     }
 
     public void abrirMenuPrincipalCliente(){
+        hideProgressDialog();
         Intent intent = new Intent(getApplicationContext(), MenuPrincipalClienteActivity.class);
         startActivity(intent);
         finish();
     }
 
     public void abrirMenuPrincipalOrganizacao(){
+        hideProgressDialog();
         Intent intent = new Intent(getApplicationContext(), MenuPrincipalOrganizacaoActivity.class);
         startActivity(intent);
         finish();

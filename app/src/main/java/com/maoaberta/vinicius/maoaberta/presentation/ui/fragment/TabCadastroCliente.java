@@ -33,7 +33,9 @@ import com.maoaberta.vinicius.maoaberta.domain.models.Voluntario;
 import com.maoaberta.vinicius.maoaberta.domain.repository.TipoRepository;
 import com.maoaberta.vinicius.maoaberta.domain.repository.UsuarioRepository;
 import com.maoaberta.vinicius.maoaberta.presentation.ui.activity.CadastroActivity;
+import com.maoaberta.vinicius.maoaberta.presentation.ui.activity.CompletarRegistroVoluntarioActivity;
 import com.maoaberta.vinicius.maoaberta.presentation.ui.activity.MenuPrincipalClienteActivity;
+import com.maoaberta.vinicius.maoaberta.presentation.ui.activity.PerfilVoluntarioActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -45,11 +47,8 @@ import butterknife.ButterKnife;
 public class TabCadastroCliente extends Fragment {
 
     FirebaseAuth mAuth;
+    private UsuarioRepository usuarioRepository;
 
-    @BindView(R.id.edit_text_nome_cadastro_cliente)
-    EditText nomeCliente;
-    @BindView(R.id.edit_text_telefone_cadastro_cliente)
-    EditText telefoneCliente;
     @BindView(R.id.edit_text_email_cadastro_cliente)
     EditText emailCliente;
     @BindView(R.id.edit_text_senha_cadastro_cliente)
@@ -66,13 +65,13 @@ public class TabCadastroCliente extends Fragment {
         ButterKnife.bind(this, v);
 
         mAuth = FirebaseAuth.getInstance();
+        usuarioRepository = new UsuarioRepository();
 
         cadastrarCliente.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 ((CadastroActivity) getActivity()).showProgressDialog("Cadastro", "Cadastrando voluntário...");
-                if (String.valueOf(nomeCliente.getText()).equals("") || String.valueOf(telefoneCliente.getText()).equals("") ||
-                        String.valueOf(emailCliente.getText()).equals("") || String.valueOf(senhaCliente.getText()).equals("") ||
+                if (String.valueOf(emailCliente.getText()).equals("") || String.valueOf(senhaCliente.getText()).equals("") ||
                         String.valueOf(confirmarSenha.getText()).equals("")) {
                     alertaCamposNaoPreenchidos();
                 } else {
@@ -111,29 +110,41 @@ public class TabCadastroCliente extends Fragment {
                         } else {
                             AuthResult result = task.getResult();
                             FirebaseUser user = result.getUser();
-                            Voluntario voluntario = new Voluntario();
-                            voluntario.setNome(String.valueOf(nomeCliente.getText()));
-                            voluntario.setEmail(user.getEmail());
-                            voluntario.setTelefone(String.valueOf(telefoneCliente.getText()));
-                            UsuarioRepository usuarioRepository = new UsuarioRepository();
-                            usuarioRepository.cadastrarUsuario(voluntario, user);
-                            TipoRepository tipoRepository = new TipoRepository();
-                            tipoRepository.cadastrarTipo(user, "tipo", "voluntario");
-
-                            AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), R.style.AppTheme));
-                            builder.setMessage("Voluntário cadastrado com sucesso!");
-                            builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                            usuarioRepository.getUserByUid(user.getUid(), new UsuarioRepository.OnGetUserById() {
                                 @Override
-                                public void onClick(DialogInterface dialog, int i) {
+                                public void onGetUserByIdSuccess(Voluntario voluntario) {
+                                    if(voluntario != null){
+                                        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), R.style.AppTheme));
+                                        builder.setMessage("Este endereço de e-mail já esta cadastrado em nosso banco de dados!");
+                                        builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int i) {
+                                                ((CadastroActivity) getActivity()).hideProgressDialog();
+                                                dialog.dismiss();
+                                            }
+                                        });
+                                        AlertDialog dialog = builder.create();
+                                        dialog.show();
+                                    }else{
+                                        abrirTelaRegistro();
+                                    }
+                                }
+
+                                @Override
+                                public void onGetUserByIdError(String error) {
                                     ((CadastroActivity) getActivity()).hideProgressDialog();
-                                    abrirMenuPrincipalCliente();
+                                    Toast.makeText(getActivity(), "Erro ao cadastrar os dados. Por favor tente novamente", Toast.LENGTH_SHORT).show();
                                 }
                             });
-                            AlertDialog dialog = builder.create();
-                            dialog.show();
                         }
                     }
                 });
+    }
+
+    private void abrirTelaRegistro() {
+        Intent intent = new Intent(getContext(), CompletarRegistroVoluntarioActivity.class);
+        startActivity(intent);
+        getActivity().finish();
     }
 
     private void alertaCamposNaoPreenchidos() {

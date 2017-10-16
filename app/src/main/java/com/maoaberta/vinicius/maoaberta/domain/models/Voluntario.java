@@ -11,6 +11,8 @@ public class Voluntario {
     private String email;
     private String telefone;
     private String senha;
+    private String uri;
+    private String photoUrl;
 
     public String getId(){ return id; }
 
@@ -46,5 +48,21 @@ public class Voluntario {
 
     public void setSenha(String senha) {
         this.senha = senha;
+    }
+
+    public String getUri() {
+        return uri;
+    }
+
+    public void setUri(String uri) {
+        this.uri = uri;
+    }
+
+    public String getPhotoUrl() {
+        return photoUrl;
+    }
+
+    public void setPhotoUrl(String photoUrl) {
+        this.photoUrl = photoUrl;
     }
 }

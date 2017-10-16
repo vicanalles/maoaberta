@@ -30,6 +30,15 @@ public class OrganizacaoRepository {
         reference = database.getReference("organizacoes/");
     }
 
+    public String getUidCurrentUser() {
+        FirebaseUser currentUser = firebaseAuth.getCurrentUser();
+        if (currentUser != null) {
+            return currentUser.getUid();
+        } else {
+            return "";
+        }
+    }
+
     public void cadastrarOrganizacao(Organizacao organizacao, FirebaseUser user){
         reference.child(user.getUid()).setValue(organizacao).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override

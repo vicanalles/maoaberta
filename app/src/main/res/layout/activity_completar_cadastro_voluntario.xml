@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/backgroundColorApp">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar_layout_menu_completar_registro_voluntario"
+        android:layout_width="0dp"
+        android:layout_height="56dp"
+        android:background="@color/tabLayoutBottomColor"
+        android:elevation="2dp"
+        android:textAlignment="center"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:title="@string/app_name"
+        app:titleTextColor="@color/textColorWhite" />
+
+    <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusableInTouchMode="true"
+        app:layout_constraintTop_toBottomOf="@id/toolbar_layout_menu_completar_registro_voluntario"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintVertical_bias="0.0">
+
+        <RelativeLayout
+            android:id="@+id/relative_layout_image_logo_completar_registro_voluntario"
+            android:layout_width="match_parent"
+            android:layout_height="180dp"
+            android:layout_alignParentTop="true"
+            android:background="@color/tabLayoutBottomColor">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/image_view_logo_completar_registro_voluntario"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:layout_centerInParent="true"
+                android:adjustViewBounds="false"
+                android:scaleType="centerCrop"
+                app:civ_border_color="@color/textColorWhite"
+                app:civ_border_width="2dp"/>
+
+            <TextView
+                android:id="@+id/text_view_escolher_foto_completar_registro_voluntario"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:focusable="false"
+                android:text="@string/escolher_foto"
+                android:textColor="@color/textColorWhite"
+                android:textSize="13sp"
+                android:textStyle="normal"
+                android:typeface="serif" />
+
+        </RelativeLayout>
+
+        <EditText
+            android:id="@+id/edit_text_nome_completar_registro_voluntario"
+            android:layout_width="320dp"
+            android:layout_height="30dp"
+            android:layout_below="@id/relative_layout_image_logo_completar_registro_voluntario"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="40dp"
+            android:background="@drawable/rounded_edittext"
+            android:fontFamily="sans-serif"
+            android:hint="@string/nome_cliente"
+            android:inputType="textPersonName"
+            android:paddingEnd="0dp"
+            android:paddingStart="10dp"
+            android:textAlignment="textStart"
+            android:textColor="@color/textColorBlack"
+            android:textSize="15sp"
+            android:textStyle="normal" />
+
+        <EditText
+            android:id="@+id/edit_text_email_completar_registro_voluntario"
+            android:layout_width="320dp"
+            android:layout_height="30dp"
+            android:layout_below="@id/edit_text_nome_completar_registro_voluntario"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/rounded_edittext"
+            android:clickable="false"
+            android:enabled="false"
+            android:fontFamily="sans-serif"
+            android:hint="@string/email"
+            android:inputType="textEmailAddress"
+            android:paddingEnd="0dp"
+            android:paddingStart="10dp"
+            android:textAlignment="textStart"
+            android:textColor="@color/textColorBlack"
+            android:textSize="15sp"
+            android:textStyle="normal" />
+
+        <EditText
+            android:id="@+id/edit_text_telefone_completar_registro_voluntario"
+            android:layout_width="320dp"
+            android:layout_height="30dp"
+            android:layout_below="@id/edit_text_email_completar_registro_voluntario"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/rounded_edittext"
+            android:fontFamily="sans-serif"
+            android:hint="@string/telefone"
+            android:inputType="phone"
+            android:paddingEnd="0dp"
+            android:paddingStart="10dp"
+            android:textAlignment="textStart"
+            android:textColor="@color/textColorBlack"
+            android:textSize="15sp"
+            android:textStyle="normal" />
+
+        <Button
+            android:id="@+id/botao_salvar_completar_registro_voluntario"
+            android:layout_width="320dp"
+            android:layout_height="40dp"
+            android:layout_below="@id/edit_text_telefone_completar_registro_voluntario"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/rounded_button"
+            android:fontFamily="sans-serif"
+            android:text="@string/cadastrar"
+            android:textAlignment="center"
+            android:textColor="@color/textColorWhite"
+            android:textSize="15sp"
+            android:textStyle="normal" />
+
+    </RelativeLayout>
+
+</android.support.constraint.ConstraintLayout>

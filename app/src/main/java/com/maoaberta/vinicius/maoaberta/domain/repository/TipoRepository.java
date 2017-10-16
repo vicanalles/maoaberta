@@ -13,6 +13,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.maoaberta.vinicius.maoaberta.domain.models.Voluntario;
 
 /**
  * Created by vinicius on 14/09/17.
@@ -29,14 +30,16 @@ public class TipoRepository {
         reference = database.getReference("tipo/");
     }
 
-    public void cadastrarTipo(FirebaseUser user, String tipo, String valor){
-        reference.child(user.getUid()).child(tipo).setValue(valor).addOnCompleteListener(new OnCompleteListener<Void>() {
+    public void cadastrarTipo(String uid, String tipo, String valor, final OnCadastrarTipo onCadastrarTipo){
+        reference.child(uid).child(tipo).setValue(valor).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if(task.isComplete()){
                     Log.i("CADASTRO", "Usuário cadastrado com sucesso");
+                    onCadastrarTipo.onCadastrarTipoSuccess("Cadastro realizado com sucesso!");
                 }else{
                     Log.i("CADASTRO", "Falha no cadastro");
+                    onCadastrarTipo.onCadastrarTipoError("Erro ao realizar o cadastro. Por favor, tente novamente!");
                 }
             }
         });
@@ -68,5 +71,10 @@ public class TipoRepository {
     public interface OnGetTipoById{
         void onGetTipoByIdSuccess(String tipo);
         void onGetTipoByIdError(String error);
+    }
+
+    public interface OnCadastrarTipo{
+        void onCadastrarTipoSuccess(String sucesso);
+        void onCadastrarTipoError(String error);
     }
 }

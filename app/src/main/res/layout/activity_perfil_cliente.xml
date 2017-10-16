@@ -47,7 +47,6 @@
                     android:layout_centerInParent="true"
                     android:adjustViewBounds="false"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/logo_mao_aberta"
                     app:civ_border_color="@color/textColorWhite"
                     app:civ_border_width="2dp"/>
 

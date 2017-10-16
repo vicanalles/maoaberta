@@ -3,6 +3,7 @@ package com.maoaberta.vinicius.maoaberta.presentation.ui.fragment;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
@@ -34,9 +35,11 @@ import com.maoaberta.vinicius.maoaberta.R;
 import com.maoaberta.vinicius.maoaberta.domain.models.Voluntario;
 import com.maoaberta.vinicius.maoaberta.domain.repository.UsuarioRepository;
 import com.maoaberta.vinicius.maoaberta.presentation.ui.activity.CadastroActivity;
+import com.maoaberta.vinicius.maoaberta.presentation.ui.activity.CompletarRegistroVoluntarioActivity;
 import com.maoaberta.vinicius.maoaberta.presentation.ui.activity.EsqueceuSenhaActivity;
 import com.maoaberta.vinicius.maoaberta.presentation.ui.activity.LoginActivity;
 import com.maoaberta.vinicius.maoaberta.presentation.ui.activity.MenuPrincipalClienteActivity;
+import com.maoaberta.vinicius.maoaberta.presentation.ui.activity.PerfilVoluntarioActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -156,35 +159,16 @@ public class TabLoginCliente extends Fragment implements GoogleApiClient.OnConne
                             usuarioRepository.getUserByUid(user.getUid(), new UsuarioRepository.OnGetUserById() {
                                 @Override
                                 public void onGetUserByIdSuccess(Voluntario voluntario) {
-                                    if (voluntario != null) {
-                                        if(voluntario.getEmail().equals(user.getEmail())){
-                                            abrirMenuPrincipalCliente();
-                                        }
-                                    } else {
-                                        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), R.style.AppTheme));
-                                        builder.setMessage(R.string.pre_cadastro);
-                                        builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialogInterface, int i) {
-                                                abrirMenuPrincipalCliente();
-                                            }
-                                        });
-                                        builder.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialogInterface, int i) {
-                                                user.delete();
-                                                edit_text_login_email_cliente.setText("");
-                                                edit_text_login_senha_cliente.setText("");
-                                            }
-                                        });
-                                        AlertDialog dialog = builder.create();
-                                        dialog.show();
+                                    if(voluntario != null){
+                                        abrirMenuPrincipalVoluntario();
+                                    }else{
+                                        abrirTelaRegistro();
                                     }
                                 }
 
                                 @Override
                                 public void onGetUserByIdError(String error) {
-                                    Log.d("onGetUserByIdError", error);
+                                    Toast.makeText(getActivity(), "Erro na recuperação dos dados", Toast.LENGTH_SHORT).show();
                                 }
                             });
                         } else {
@@ -206,14 +190,21 @@ public class TabLoginCliente extends Fragment implements GoogleApiClient.OnConne
                 });
     }
 
+    private void abrirMenuPrincipalVoluntario() {
+        ((LoginActivity) getActivity()).hideProgressDialog();
+        Intent intent = new Intent(getActivity(), MenuPrincipalClienteActivity.class);
+        startActivity(intent);
+        getActivity().finish();
+    }
+
     public void abrirActivityCadastro() {
         Intent intent = new Intent(getContext(), CadastroActivity.class);
         startActivity(intent);
     }
 
-    public void abrirMenuPrincipalCliente() {
+    public void abrirTelaRegistro() {
         ((LoginActivity) getActivity()).hideProgressDialog();
-        Intent intent = new Intent(getContext(), MenuPrincipalClienteActivity.class);
+        Intent intent = new Intent(getContext(), CompletarRegistroVoluntarioActivity.class);
         startActivity(intent);
         getActivity().finish();
     }
@@ -227,7 +218,34 @@ public class TabLoginCliente extends Fragment implements GoogleApiClient.OnConne
                         if (!task.isSuccessful()) {
                             alertaDadosIncorretos();
                         } else {
-                            abrirMenuPrincipalCliente();
+                            AuthResult result = task.getResult();
+                            UsuarioRepository usuarioRepository = new UsuarioRepository();
+                            usuarioRepository.getUserByUid(result.getUser().getUid(), new UsuarioRepository.OnGetUserById() {
+                                @Override
+                                public void onGetUserByIdSuccess(Voluntario voluntario) {
+                                    if(voluntario != null){
+                                        abrirMenuPrincipalVoluntario();
+                                    }else{
+                                        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), R.style.AppTheme));
+                                        builder.setMessage("Esse usuário não existe! Por favor, tente novamente!");
+                                        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                ((LoginActivity) getActivity()).hideProgressDialog();
+                                                edit_text_login_senha_cliente.setText("");
+                                                dialog.dismiss();
+                                            }
+                                        });
+                                        AlertDialog dialog = builder.create();
+                                        dialog.show();
+                                    }
+                                }
+
+                                @Override
+                                public void onGetUserByIdError(String error) {
+                                    Toast.makeText(getActivity(), "Erro ao recuperar dados do usuário", Toast.LENGTH_SHORT).show();
+                                }
+                            });
                         }
                     }
                 });

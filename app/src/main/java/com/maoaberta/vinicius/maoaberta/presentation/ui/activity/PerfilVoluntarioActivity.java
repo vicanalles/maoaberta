@@ -137,7 +137,6 @@ public class PerfilVoluntarioActivity extends AppCompatActivity {
         botao_salvar_perfil_cliente.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showProgressDialog("Atualizando Dados", "Aguarde enquanto os dados são atualizados.");
                 if (String.valueOf(edit_text_nome_perfil_cliente.getText()).equals("") || String.valueOf(edit_text_telefone_perfil_cliente.getText()).equals("") ||
                         String.valueOf(edit_text_email_perfil_cliente.getText()).equals("")) {
                     alertaCamposNaoPreenchidos();
@@ -147,31 +146,34 @@ public class PerfilVoluntarioActivity extends AppCompatActivity {
                         usuarioRepository.getUserByUid(user.getUid(), new UsuarioRepository.OnGetUserById() {
                             @Override
                             public void onGetUserByIdSuccess(Voluntario voluntario) {
+                                showProgressDialog("Atualizando Dados", "Aguarde enquanto os dados são atualizados.");
                                 if (voluntario != null) {
                                     vol = new Voluntario();
                                     vol.setNome(String.valueOf(edit_text_nome_perfil_cliente.getText()));
                                     vol.setEmail(voluntario.getEmail());
                                     vol.setTelefone(String.valueOf(edit_text_telefone_perfil_cliente.getText()));
-                                    String senha = String.valueOf(edit_text_senha_perfil_cliente.getText());
-                                    String confirmarSenha = String.valueOf(edit_text_confirmar_senha_perfil_cliente.getText());
 
-                                    if (senha != null) {
-                                        if (Objects.equals(senha, confirmarSenha)) {
-                                            if (senha.length() >= 6 && confirmarSenha.length() >= 6) {
-                                                user.updatePassword(String.valueOf(edit_text_senha_perfil_cliente.getText())).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                    @Override
-                                                    public void onComplete(@NonNull Task<Void> task) {
-                                                        if (task.isSuccessful()) {
-                                                            Log.d("Sucesso", "Atualizado com sucesso");
+                                    if(!String.valueOf(user.getProviders()).equals("[google.com]")){
+                                        String senha = String.valueOf(edit_text_senha_perfil_cliente.getText());
+                                        String confirmarSenha = String.valueOf(edit_text_confirmar_senha_perfil_cliente.getText());
+
+                                        if (senha != null) {
+                                            if (Objects.equals(senha, confirmarSenha)) {
+                                                if (senha.length() >= 6 && confirmarSenha.length() >= 6) {
+                                                    user.updatePassword(String.valueOf(edit_text_senha_perfil_cliente.getText())).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                        @Override
+                                                        public void onComplete(@NonNull Task<Void> task) {
+                                                            if (task.isSuccessful()) {
+                                                                Log.d("Sucesso", "Atualizado com sucesso");
+                                                            }
                                                         }
-                                                    }
-                                                });
-                                            } else {
-                                                alertaSenhaCurta();
+                                                    });
+                                                } else {
+                                                    alertaSenhaCurta();
+                                                }
                                             }
                                         }
                                     }
-
 
                                     usuarioRepository.atualizarUser(vol, user);
                                     AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(PerfilVoluntarioActivity.this, R.style.AppTheme));
@@ -186,45 +188,76 @@ public class PerfilVoluntarioActivity extends AppCompatActivity {
                                     AlertDialog dialog = builder.create();
                                     dialog.show();
                                 } else {
+                                    showProgressDialog("Cadastrando Dados", "Aguarde enquanto os dados são cadastrados.");
                                     vol = new Voluntario();
                                     vol.setNome(user.getDisplayName());
                                     vol.setEmail(user.getEmail());
                                     vol.setTelefone(String.valueOf(edit_text_telefone_perfil_cliente.getText()));
-                                    String senha = String.valueOf(edit_text_senha_perfil_cliente.getText());
-                                    String confirmarSenha = String.valueOf(edit_text_confirmar_senha_perfil_cliente.getText());
 
-                                    if (senha != null) {
-                                        if (Objects.equals(senha, confirmarSenha)) {
-                                            if (senha.length() >= 6 && confirmarSenha.length() >= 6) {
-                                                user.updatePassword(String.valueOf(edit_text_senha_perfil_cliente.getText())).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                    @Override
-                                                    public void onComplete(@NonNull Task<Void> task) {
-                                                        if (task.isSuccessful()) {
-                                                            Log.d("Sucesso", "Atualizado com sucesso");
+                                    if(!String.valueOf(user.getProviders()).equals("[google.com]")){
+                                        String senha = String.valueOf(edit_text_senha_perfil_cliente.getText());
+                                        String confirmarSenha = String.valueOf(edit_text_confirmar_senha_perfil_cliente.getText());
+
+                                        if (senha != null) {
+                                            if (Objects.equals(senha, confirmarSenha)) {
+                                                if (senha.length() >= 6 && confirmarSenha.length() >= 6) {
+                                                    user.updatePassword(String.valueOf(edit_text_senha_perfil_cliente.getText())).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                        @Override
+                                                        public void onComplete(@NonNull Task<Void> task) {
+                                                            if (task.isSuccessful()) {
+                                                                Log.d("Sucesso", "Atualizado com sucesso");
+                                                            }
                                                         }
-                                                    }
-                                                });
-                                            } else {
-                                                alertaSenhaCurta();
+                                                    });
+                                                } else {
+                                                    alertaSenhaCurta();
+                                                }
                                             }
                                         }
                                     }
 
-                                    usuarioRepository.cadastrarUsuario(vol, user);
-                                    TipoRepository tipoRepository = new TipoRepository();
-                                    tipoRepository.cadastrarTipo(user, "tipo", "voluntario");
-
-                                    AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(PerfilVoluntarioActivity.this, R.style.AppTheme));
-                                    builder.setMessage(R.string.usuario_cadastrado_sucesso);
-                                    builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                    usuarioRepository.cadastrarUsuario(vol, new UsuarioRepository.OnSaveVoluntario() {
                                         @Override
-                                        public void onClick(DialogInterface dialog, int i) {
-                                            hideProgressDialog();
-                                            abrirMenuPerfilVoluntario();
+                                        public void onSaveVoluntarioSuccess(Voluntario voluntario) {
+                                            TipoRepository tipoRepository = new TipoRepository();
+                                            tipoRepository.cadastrarTipo(voluntario.getId(), "tipo", "voluntario", new TipoRepository.OnCadastrarTipo() {
+                                                @Override
+                                                public void onCadastrarTipoSuccess(String sucesso) {
+                                                    AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(PerfilVoluntarioActivity.this, R.style.AppTheme));
+                                                    builder.setMessage(sucesso);
+                                                    builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                                        @Override
+                                                        public void onClick(DialogInterface dialog, int i) {
+                                                            hideProgressDialog();
+                                                            abrirMenuPerfilVoluntario();
+                                                        }
+                                                    });
+                                                    AlertDialog dialog = builder.create();
+                                                    dialog.show();
+                                                }
+
+                                                @Override
+                                                public void onCadastrarTipoError(String error) {
+                                                    AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(PerfilVoluntarioActivity.this, R.style.AppTheme));
+                                                    builder.setMessage(error);
+                                                    builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                                        @Override
+                                                        public void onClick(DialogInterface dialog, int i) {
+                                                            hideProgressDialog();
+                                                            abrirMenuPerfilVoluntario();
+                                                        }
+                                                    });
+                                                    AlertDialog dialog = builder.create();
+                                                    dialog.show();
+                                                }
+                                            });
+                                        }
+
+                                        @Override
+                                        public void onSaveVoluntarioError(String error) {
+                                            Toast.makeText(PerfilVoluntarioActivity.this, error, Toast.LENGTH_SHORT).show();
                                         }
                                     });
-                                    AlertDialog dialog = builder.create();
-                                    dialog.show();
                                 }
                             }
 

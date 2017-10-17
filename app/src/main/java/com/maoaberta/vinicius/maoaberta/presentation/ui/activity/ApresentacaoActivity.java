@@ -30,7 +30,6 @@ public class ApresentacaoActivity extends AppCompatActivity{
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
     private TipoRepository tipoRepository;
-    private UsuarioRepository usuarioRepository;
 
     @BindView(R.id.toolbar_layout_sobre)
     Toolbar toolbar_layout_sobre;
@@ -47,7 +46,6 @@ public class ApresentacaoActivity extends AppCompatActivity{
         progressDialog = new ProgressDialog(this);
 
         mAuth = FirebaseAuth.getInstance();
-        usuarioRepository = new UsuarioRepository();
         tipoRepository = new TipoRepository();
 
         mAuthListener = new FirebaseAuth.AuthStateListener() {
@@ -56,32 +54,20 @@ public class ApresentacaoActivity extends AppCompatActivity{
                 final FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
                     showProgressDialog("Aguarde", "Obtendo informações do Usuário");
-                    usuarioRepository.getUserByUid(user.getUid(), new UsuarioRepository.OnGetUserById() {
+                    tipoRepository.getTipoById(user.getUid(), new TipoRepository.OnGetTipoById() {
                         @Override
-                        public void onGetUserByIdSuccess(Voluntario voluntario) {
-                            if(voluntario != null){
-                                tipoRepository.getTipoById(user.getUid(), new TipoRepository.OnGetTipoById() {
-                                    @Override
-                                    public void onGetTipoByIdSuccess(String tipo) {
-                                        if(tipo != null){
-                                            if(tipo.equals("voluntario")){
-                                                abrirMenuPrincipalCliente();
-                                            }else{
-                                                abrirMenuPrincipalOrganizacao();
-                                            }
-                                        }
-                                    }
-
-                                    @Override
-                                    public void onGetTipoByIdError(String error) {
-                                        Toast.makeText(ApresentacaoActivity.this, "Erro na recuperação dos dados", Toast.LENGTH_SHORT).show();
-                                    }
-                                });
+                        public void onGetTipoByIdSuccess(String tipo) {
+                            if(tipo != null){
+                                if(tipo.equals("voluntario")){
+                                    abrirMenuPrincipalCliente();
+                                }else{
+                                    abrirMenuPrincipalOrganizacao();
+                                }
                             }
                         }
 
                         @Override
-                        public void onGetUserByIdError(String error) {
+                        public void onGetTipoByIdError(String error) {
                             Toast.makeText(ApresentacaoActivity.this, "Erro na recuperação dos dados", Toast.LENGTH_SHORT).show();
                         }
                     });

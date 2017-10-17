@@ -18,6 +18,24 @@ public class Organizacao {
     private String webSite;
     private String razaoSocial;
     private String endereco;
+    private String photoUrl;
+    private String uri;
+
+    public String getPhotoUrl() {
+        return photoUrl;
+    }
+
+    public void setPhotoUrl(String photoUrl) {
+        this.photoUrl = photoUrl;
+    }
+
+    public String getUri() {
+        return uri;
+    }
+
+    public void setUri(String uri) {
+        this.uri = uri;
+    }
 
     public String getId() {
         return id;

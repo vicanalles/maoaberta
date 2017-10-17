@@ -26,6 +26,7 @@ import com.maoaberta.vinicius.maoaberta.domain.models.Organizacao;
 import com.maoaberta.vinicius.maoaberta.domain.repository.OrganizacaoRepository;
 import com.maoaberta.vinicius.maoaberta.domain.repository.TipoRepository;
 import com.maoaberta.vinicius.maoaberta.presentation.ui.activity.CadastroActivity;
+import com.maoaberta.vinicius.maoaberta.presentation.ui.activity.CompletarRegistroOrganizacaoActivity;
 import com.maoaberta.vinicius.maoaberta.presentation.ui.activity.MenuPrincipalClienteActivity;
 import com.maoaberta.vinicius.maoaberta.presentation.ui.activity.MenuPrincipalOrganizacaoActivity;
 
@@ -39,19 +40,10 @@ import butterknife.ButterKnife;
 public class TabCadastroOrganizacao extends Fragment {
 
     FirebaseAuth mAuth;
+    private OrganizacaoRepository organizacaoRepository;
 
-    @BindView(R.id.edit_text_razao_social_organizacao)
-    EditText razaoSocial;
-    @BindView(R.id.edit_text_nome_fantasia_organizacao)
-    EditText nomeFantasia;
-    @BindView(R.id.edit_text_cnpj_organizacao)
-    EditText cnpjOrganizacao;
-    @BindView(R.id.edit_text_nome_responsavel_organizacao)
-    EditText nomeResponsavel;
     @BindView(R.id.edit_text_email_organizacao)
     EditText emailOrganizacao;
-    @BindView(R.id.edit_text_telefone_organizacao)
-    EditText telefoneOrganizacao;
     @BindView(R.id.edit_text_senha_organizacao)
     EditText senhaOrganizacao;
     @BindView(R.id.edit_text_confirmar_senha_organizacao)
@@ -65,15 +57,15 @@ public class TabCadastroOrganizacao extends Fragment {
         View v = inflater.inflate(R.layout.tab_cadastro_organizacao, container, false);
         ButterKnife.bind(this, v);
 
+        organizacaoRepository = new OrganizacaoRepository();
         mAuth = FirebaseAuth.getInstance();
 
         cadastrarOrganizacao.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 ((CadastroActivity) getActivity()).showProgressDialog("Cadastro", "Cadastrando organização...");
-                if(String.valueOf(razaoSocial.getText()).equals("") || String.valueOf(nomeFantasia.getText()).equals("") || String.valueOf(cnpjOrganizacao.getText()).equals("") ||
-                        String.valueOf(nomeResponsavel.getText()).equals("") || String.valueOf(emailOrganizacao.getText()).equals("") || String.valueOf(telefoneOrganizacao.getText()).equals("") ||
-                        String.valueOf(senhaOrganizacao.getText()).equals("") || String.valueOf(confirmarSenhaOrganizacao.getText()).equals("")){
+                if(String.valueOf(emailOrganizacao.getText()).equals("") || String.valueOf(senhaOrganizacao.getText()).equals("") ||
+                        String.valueOf(confirmarSenhaOrganizacao.getText()).equals("")){
                     alertaCamposNaoPreenchidos();
                 }else{
                     if(String.valueOf(senhaOrganizacao.getText()).equals(String.valueOf(confirmarSenhaOrganizacao.getText()))){
@@ -112,50 +104,41 @@ public class TabCadastroOrganizacao extends Fragment {
                         }else{
                             AuthResult result = task.getResult();
                             FirebaseUser user = result.getUser();
-                            Organizacao organizacao = new Organizacao();
-                            organizacao.setRazaoSocial(String.valueOf(razaoSocial.getText()));
-                            organizacao.setNomeFantasia(String.valueOf(nomeFantasia.getText()));
-                            organizacao.setCnpj(String.valueOf(cnpjOrganizacao.getText()));
-                            organizacao.setNomeResponsavel(String.valueOf(nomeResponsavel.getText()));
-                            organizacao.setEmail(String.valueOf(emailOrganizacao.getText()));
-                            organizacao.setTelefone(String.valueOf(telefoneOrganizacao.getText()));
-                            OrganizacaoRepository organizacaoRepository = new OrganizacaoRepository();
-                            organizacaoRepository.cadastrarOrganizacao(organizacao, user);
-                            TipoRepository tipoRepository = new TipoRepository();
-                            tipoRepository.cadastrarTipo(organizacao.getId(), "tipo", "organizaçao", new TipoRepository.OnCadastrarTipo() {
+                            organizacaoRepository.getOrganizacaoById(user.getUid(), new OrganizacaoRepository.OnGetOrganizacaoById() {
                                 @Override
-                                public void onCadastrarTipoSuccess(String sucesso) {
-                                    AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), R.style.AppTheme));
-                                    builder.setMessage(sucesso);
-                                    builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int i) {
-                                            ((CadastroActivity) getActivity()).hideProgressDialog();
-                                            abrirMenuPrincipalOrganizacao();
-                                        }
-                                    });
-                                    AlertDialog dialog = builder.create();
-                                    dialog.show();
+                                public void onGetOrganizacaoByIdSuccess(Organizacao organizacao) {
+                                    if(organizacao != null){
+                                        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), R.style.AppTheme));
+                                        builder.setMessage("Este endereço de e-mail já esta cadastrado em nosso banco de dados!");
+                                        builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int i) {
+                                                ((CadastroActivity) getActivity()).hideProgressDialog();
+                                                dialog.dismiss();
+                                            }
+                                        });
+                                        AlertDialog dialog = builder.create();
+                                        dialog.show();
+                                    }else{
+                                        abrirTelaRegistro();
+                                    }
                                 }
 
                                 @Override
-                                public void onCadastrarTipoError(String error) {
-                                    AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), R.style.AppTheme));
-                                    builder.setMessage(error);
-                                    builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int i) {
-                                            ((CadastroActivity) getActivity()).hideProgressDialog();
-                                            abrirMenuPrincipalOrganizacao();
-                                        }
-                                    });
-                                    AlertDialog dialog = builder.create();
-                                    dialog.show();
+                                public void onGetOrganizacaoByIdError(String error) {
+                                    ((CadastroActivity) getActivity()).hideProgressDialog();
+                                    Toast.makeText(getActivity(), "Erro ao cadastrar os dados. Por favor tente novamente", Toast.LENGTH_SHORT).show();
                                 }
                             });
                         }
                     }
                 });
+    }
+
+    private void abrirTelaRegistro() {
+        Intent intent = new Intent(getContext(), CompletarRegistroOrganizacaoActivity.class);
+        startActivity(intent);
+        getActivity().finish();
     }
 
     private void alertaCamposNaoPreenchidos(){
@@ -164,6 +147,7 @@ public class TabCadastroOrganizacao extends Fragment {
         builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                ((CadastroActivity) getActivity()).hideProgressDialog();
                 dialog.dismiss();
             }
         });
@@ -177,6 +161,9 @@ public class TabCadastroOrganizacao extends Fragment {
         builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                ((CadastroActivity) getActivity()).hideProgressDialog();
+                senhaOrganizacao.setText("");
+                confirmarSenhaOrganizacao.setText("");
                 dialog.dismiss();
             }
         });
@@ -190,16 +177,13 @@ public class TabCadastroOrganizacao extends Fragment {
         builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                ((CadastroActivity) getActivity()).hideProgressDialog();
+                senhaOrganizacao.setText("");
+                confirmarSenhaOrganizacao.setText("");
                 dialog.dismiss();
             }
         });
         AlertDialog dialog = builder.create();
         dialog.show();
-    }
-
-    private void abrirMenuPrincipalOrganizacao(){
-        Intent intent = new Intent(getContext(), MenuPrincipalOrganizacaoActivity.class);
-        startActivity(intent);
-        getActivity().finish();
     }
 }

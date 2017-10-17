@@ -62,4 +62,7 @@
     <string name="sobre_tab_title">Sobre</string>
     <string name="meus_anuncios_tab_title">Meus Anúncios</string>
     <string name="usuario_cadastrado_sucesso">Usuário Cadastrado com sucesso!</string>
+    <string name="erro_recuperacao_dados_usuario">Erro na recuperação dos dados do usuário. Por favor, tente novamente!</string>
+    <string name="organizacao_atualizada_sucesso">Organização atualizada com sucesso!</string>
+    <string name="erro_atualizacao_organizacao">Erro na atualização dos dados. Por favor, tente novamente!</string>
 </resources>

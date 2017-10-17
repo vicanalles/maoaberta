@@ -63,7 +63,7 @@ public class CompletarRegistroVoluntarioActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_completar_cadastro_voluntario);
+        setContentView(R.layout.activity_completar_registro_voluntario);
         ButterKnife.bind(this);
         setSupportActionBar(toolbar_layout_menu_completar_registro_voluntario);
 

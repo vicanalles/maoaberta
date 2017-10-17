@@ -153,6 +153,7 @@ public class TabCadastroCliente extends Fragment {
         builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                ((CadastroActivity) getActivity()).hideProgressDialog();
                 dialog.dismiss();
             }
         });
@@ -166,6 +167,9 @@ public class TabCadastroCliente extends Fragment {
         builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                ((CadastroActivity) getActivity()).hideProgressDialog();
+                senhaCliente.setText("");
+                confirmarSenha.setText("");
                 dialog.dismiss();
             }
         });
@@ -179,6 +183,9 @@ public class TabCadastroCliente extends Fragment {
         builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                ((CadastroActivity) getActivity()).hideProgressDialog();
+                senhaCliente.setText("");
+                confirmarSenha.setText("");
                 dialog.dismiss();
             }
         });

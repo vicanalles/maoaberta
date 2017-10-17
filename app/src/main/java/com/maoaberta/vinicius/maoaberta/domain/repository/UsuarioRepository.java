@@ -21,6 +21,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.maoaberta.vinicius.maoaberta.BuildConfig;
+import com.maoaberta.vinicius.maoaberta.R;
 import com.maoaberta.vinicius.maoaberta.domain.models.Voluntario;
 import com.maoaberta.vinicius.maoaberta.util.Constants;
 
@@ -131,14 +132,16 @@ public class UsuarioRepository {
         });
     }
 
-    public void atualizarUser(Voluntario voluntario, FirebaseUser user){
-        reference.child(user.getUid()).setValue(voluntario).addOnCompleteListener(new OnCompleteListener<Void>() {
+    public void atualizarUser(Voluntario voluntario, final OnUpdateUsuario onUpdateUsuario){
+        reference.child(getUidCurrentUser()).setValue(voluntario).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if(task.isComplete()){
                     Log.i("CADASTRO", "Usuário cadastrado com sucesso");
+                    onUpdateUsuario.onUpdateUsuarioSuccess(String.valueOf(R.string.atualizacao_usuario_sucesso));
                 }else{
                     Log.i("CADASTRO", "Falha no cadastro");
+                    onUpdateUsuario.onUpdateUsuarioError(String.valueOf(R.string.erro_atualizar_dados_usuario));
                 }
             }
         });
@@ -157,5 +160,10 @@ public class UsuarioRepository {
     public interface OnSaveVoluntario{
         void onSaveVoluntarioSuccess(Voluntario voluntario);
         void onSaveVoluntarioError(String error);
+    }
+
+    public interface OnUpdateUsuario{
+        void onUpdateUsuarioSuccess(String sucesso);
+        void onUpdateUsuarioError(String error);
     }
 }

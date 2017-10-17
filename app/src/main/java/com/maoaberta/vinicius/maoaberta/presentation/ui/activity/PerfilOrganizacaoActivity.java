@@ -128,7 +128,7 @@ public class PerfilOrganizacaoActivity extends AppCompatActivity {
                 @Override
                 public void onGetOrganizacaoByIdError(String error) {
                     Log.d("onGetUserByIdError", error);
-                    Toast.makeText(PerfilOrganizacaoActivity.this, "Usuário não existe", Toast.LENGTH_LONG).show();
+                    Toast.makeText(PerfilOrganizacaoActivity.this, "Organização não existe", Toast.LENGTH_LONG).show();
                 }
             });
         }
@@ -136,7 +136,6 @@ public class PerfilOrganizacaoActivity extends AppCompatActivity {
         button_atualizar_dados_organizacao.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showProgressDialog("Atualizando dados", "Aguarde enquanto os dados são atualizados");
                 if(String.valueOf(edit_text_razao_social_perfil_organizacao.getText()).equals("") || String.valueOf(edit_text_nome_fantasia_perfil_organizacao.getText()).equals("") ||
                         String.valueOf(edit_text_cnpj_perfil_organizacao.getText()).equals("") || String.valueOf(edit_text_nome_responsavel_perfil_organizacao.getText()).equals("") ||
                         String.valueOf(edit_text_email_perfil_organizacao.getText()).equals("") || String.valueOf(edit_text_telefone_perfil_organizacao.getText()).equals("")){
@@ -147,6 +146,7 @@ public class PerfilOrganizacaoActivity extends AppCompatActivity {
                         organizacaoRepository.getOrganizacaoById(user.getUid(), new OrganizacaoRepository.OnGetOrganizacaoById() {
                             @Override
                             public void onGetOrganizacaoByIdSuccess(Organizacao organizacao) {
+                                showProgressDialog("Atualizando dados", "Aguarde enquanto os dados são atualizados");
                                 if(organizacao != null){
                                     ong = new Organizacao();
                                     ong.setCnpj(String.valueOf(edit_text_cnpj_perfil_organizacao.getText()));
@@ -160,40 +160,90 @@ public class PerfilOrganizacaoActivity extends AppCompatActivity {
                                     ong.setWebSite(String.valueOf(edit_text_site_perfil_organizacao.getText()));
                                     ong.setRazaoSocial(String.valueOf(edit_text_razao_social_perfil_organizacao.getText()));
                                     ong.setEndereco(String.valueOf(edit_text_endereco_perfil_organizacao.getText()));
-                                    String senha = String.valueOf(edit_text_senha_perfil_organizacao.getText());
-                                    String confirmarSenha = String.valueOf(edit_text_confirmar_senha_perfil_organizacao.getText());
 
-                                    if(senha != null){
-                                        if(Objects.equals(senha, confirmarSenha)){
-                                            if(senha.length() >= 6 && confirmarSenha.length() >= 6){
-                                                user.updatePassword(senha).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    if(!String.valueOf(edit_text_senha_perfil_organizacao.getText()).equals("")){
+                                        if(String.valueOf(edit_text_senha_perfil_organizacao.getText()).equals(String.valueOf(edit_text_confirmar_senha_perfil_organizacao.getText()))){
+                                            if(edit_text_senha_perfil_organizacao.getText().length() >= 6 && edit_text_confirmar_senha_perfil_organizacao.getText().length() >= 6){
+                                                user.updatePassword(String.valueOf(edit_text_senha_perfil_organizacao.getText())).addOnCompleteListener(new OnCompleteListener<Void>() {
                                                     @Override
                                                     public void onComplete(@NonNull Task<Void> task) {
                                                         if(task.isSuccessful()){
-                                                            edit_text_senha_perfil_organizacao.setText("");
-                                                            edit_text_confirmar_senha_perfil_organizacao.setText("");
+                                                            organizacaoRepository.atualizarOrganizacao(ong, new OrganizacaoRepository.OnUpdateOrganizacao() {
+                                                                @Override
+                                                                public void onUpdateOrganizacaoSuccess(String sucesso) {
+                                                                    AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(PerfilOrganizacaoActivity.this, R.style.AppTheme));
+                                                                    builder.setMessage(R.string.organizacao_atualizada_sucesso);
+                                                                    builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                                                        @Override
+                                                                        public void onClick(DialogInterface dialog, int i) {
+                                                                            hideProgressDialog();
+                                                                            abrirMenuPerfilOrganizacao();
+                                                                        }
+                                                                    });
+                                                                    AlertDialog dialog = builder.create();
+                                                                    dialog.show();
+                                                                }
+
+                                                                @Override
+                                                                public void onUpdateOrganizacaoError(String error) {
+                                                                    AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(PerfilOrganizacaoActivity.this, R.style.AppTheme));
+                                                                    builder.setMessage(R.string.erro_atualizacao_organizacao);
+                                                                    builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                                                        @Override
+                                                                        public void onClick(DialogInterface dialog, int i) {
+                                                                            hideProgressDialog();
+                                                                            abrirMenuPerfilOrganizacao();
+                                                                        }
+                                                                    });
+                                                                    AlertDialog dialog = builder.create();
+                                                                    dialog.show();
+                                                                }
+                                                            });
+                                                        }else{
+                                                            hideProgressDialog();
+                                                            Toast.makeText(PerfilOrganizacaoActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                                                         }
                                                     }
                                                 });
                                             }else{
                                                 alertaSenhaCurta();
                                             }
+                                        }else{
+                                            alertaSenhasDiferentes();
                                         }
+                                    }else{
+                                        organizacaoRepository.atualizarOrganizacao(ong, new OrganizacaoRepository.OnUpdateOrganizacao() {
+                                            @Override
+                                            public void onUpdateOrganizacaoSuccess(String sucesso) {
+                                                AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(PerfilOrganizacaoActivity.this, R.style.AppTheme));
+                                                builder.setMessage(R.string.organizacao_atualizada_sucesso);
+                                                builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(DialogInterface dialog, int i) {
+                                                        hideProgressDialog();
+                                                        abrirMenuPerfilOrganizacao();
+                                                    }
+                                                });
+                                                AlertDialog dialog = builder.create();
+                                                dialog.show();
+                                            }
+
+                                            @Override
+                                            public void onUpdateOrganizacaoError(String error) {
+                                                AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(PerfilOrganizacaoActivity.this, R.style.AppTheme));
+                                                builder.setMessage(R.string.erro_atualizacao_organizacao);
+                                                builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(DialogInterface dialog, int i) {
+                                                        hideProgressDialog();
+                                                        abrirMenuPerfilOrganizacao();
+                                                    }
+                                                });
+                                                AlertDialog dialog = builder.create();
+                                                dialog.show();
+                                            }
+                                        });
                                     }
-
-                                    organizacaoRepository.atualizarOrganizacao(ong, user);
-
-                                    AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(PerfilOrganizacaoActivity.this, R.style.AppTheme));
-                                    builder.setMessage("Organização atualizada com sucesso!");
-                                    builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int i) {
-                                            hideProgressDialog();
-                                            abrirMenuPerfilOrganizacao();
-                                        }
-                                    });
-                                    AlertDialog dialog = builder.create();
-                                    dialog.show();
                                 }
                             }
 
@@ -219,12 +269,29 @@ public class PerfilOrganizacaoActivity extends AppCompatActivity {
         });
     }
 
+    private void alertaSenhasDiferentes() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(PerfilOrganizacaoActivity.this, R.style.AppTheme));
+        builder.setMessage(R.string.senhas_diferentes);
+        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                edit_text_senha_perfil_organizacao.setText("");
+                edit_text_confirmar_senha_perfil_organizacao.setText("");
+                hideProgressDialog();
+                dialog.dismiss();
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
     private void alertaCamposNaoPreenchidos() {
         AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(PerfilOrganizacaoActivity.this, R.style.AppTheme));
         builder.setMessage(R.string.campos_nao_preenchidos);
         builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                hideProgressDialog();
                 dialog.dismiss();
             }
         });
@@ -238,6 +305,9 @@ public class PerfilOrganizacaoActivity extends AppCompatActivity {
         builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                hideProgressDialog();
+                edit_text_senha_perfil_organizacao.setText("");
+                edit_text_confirmar_senha_perfil_organizacao.setText("");
                 dialog.dismiss();
             }
         });

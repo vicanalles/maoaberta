@@ -65,4 +65,6 @@
     <string name="erro_recuperacao_dados_usuario">Erro na recuperação dos dados do usuário. Por favor, tente novamente!</string>
     <string name="organizacao_atualizada_sucesso">Organização atualizada com sucesso!</string>
     <string name="erro_atualizacao_organizacao">Erro na atualização dos dados. Por favor, tente novamente!</string>
+    <string name="galeria">Galeria</string>
+    <string name="camera">Câmera</string>
 </resources>

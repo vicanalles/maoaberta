@@ -1,11 +1,20 @@
 package com.maoaberta.vinicius.maoaberta.presentation.ui.activity;
 
+import android.Manifest;
 import android.app.ProgressDialog;
+import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ContextThemeWrapper;
@@ -16,6 +25,7 @@ import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
@@ -25,6 +35,11 @@ import com.maoaberta.vinicius.maoaberta.R;
 import com.maoaberta.vinicius.maoaberta.domain.models.Voluntario;
 import com.maoaberta.vinicius.maoaberta.domain.repository.TipoRepository;
 import com.maoaberta.vinicius.maoaberta.domain.repository.UsuarioRepository;
+import com.maoaberta.vinicius.maoaberta.util.CustomPhotoPickerDialog;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -36,12 +51,16 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class CompletarRegistroVoluntarioActivity extends AppCompatActivity {
 
-    private static final int SELECT_IMAGE = 1598;
+    private static final int PERMISSION_WRITE_EXTERNAL = 1594;
+    private static final int SELECT_PICTURE = 1596;
+    private static final int REQUEST_IMAGE_CAPTURE = 1595;
     private FirebaseAuth mAuth;
     private FirebaseUser user;
     private UsuarioRepository usuarioRepository;
     private Voluntario voluntario;
     private ProgressDialog progressDialog;
+    private CustomPhotoPickerDialog photoDialog;
+    private Uri imageUri;
 
     @BindView(R.id.relative_layout_image_logo_completar_registro_voluntario)
     RelativeLayout relative_layout_image_logo_completar_registro_voluntario;
@@ -76,11 +95,49 @@ public class CompletarRegistroVoluntarioActivity extends AppCompatActivity {
             getSupportActionBar().setTitle(R.string.pre_cadastro);
         }
 
-        if(user != null){
+        if (user != null) {
             edit_text_nome_completar_registro_voluntario.setText(user.getDisplayName());
             edit_text_email_completar_registro_voluntario.setText(user.getEmail());
             edit_text_telefone_completar_registro_voluntario.setText(user.getPhoneNumber());
         }
+
+        image_view_logo_completar_registro_voluntario.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                photoDialog = new CustomPhotoPickerDialog(CompletarRegistroVoluntarioActivity.this, new CustomPhotoPickerDialog.OnOptionPhotoSelected() {
+                    @Override
+                    public void onGallery() {
+                        Intent intent = new Intent();
+                        intent.setType("image/*");
+                        intent.setAction(Intent.ACTION_GET_CONTENT);
+                        startActivityForResult(Intent.createChooser(intent, "Selecione uma imagem"), SELECT_PICTURE);
+                        photoDialog.dismiss();
+                    }
+
+                    @Override
+                    public void onCamera() {
+                        if (ContextCompat.checkSelfPermission(CompletarRegistroVoluntarioActivity.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED
+                                || ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+
+                            photoDialog.dismiss();
+                            ActivityCompat.requestPermissions(CompletarRegistroVoluntarioActivity.this,
+                                    new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSION_WRITE_EXTERNAL);
+                        } else {
+                            ContentValues values = new ContentValues();
+                            values.put(MediaStore.Images.Media.TITLE, "New Picture");
+                            values.put(MediaStore.Images.Media.DESCRIPTION, "From your camera");
+                            imageUri = getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+                            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                            Uri uri  = Uri.parse(Environment.getExternalStorageDirectory().getPath().concat("/photo.jpg"));
+                            intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+                            startActivityForResult(intent, REQUEST_IMAGE_CAPTURE);
+                            photoDialog.dismiss();
+                        }
+                    }
+                });
+                photoDialog.show();
+            }
+        });
 
         botao_salvar_completar_registro_voluntario.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -144,6 +201,24 @@ public class CompletarRegistroVoluntarioActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            File file = new File(Environment.getExternalStorageDirectory().getPath(), "photo.jpg");
+            Uri uri = Uri.fromFile(file);
+            Bitmap bitmap;
+            try{
+                bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
+                image_view_logo_completar_registro_voluntario.setImageBitmap(bitmap);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     private void abrirMenuPrincipalCliente() {
         hideProgressDialog();
         Intent intent = new Intent(CompletarRegistroVoluntarioActivity.this, MenuPrincipalClienteActivity.class);
@@ -200,14 +275,14 @@ public class CompletarRegistroVoluntarioActivity extends AppCompatActivity {
         finish();
     }
 
-    public void showProgressDialog(String title, String content){
+    public void showProgressDialog(String title, String content) {
         progressDialog.setTitle(title);
         progressDialog.setMessage(content);
         progressDialog.setCancelable(false);
         progressDialog.show();
     }
 
-    public void hideProgressDialog(){
+    public void hideProgressDialog() {
         progressDialog.dismiss();
     }
 }

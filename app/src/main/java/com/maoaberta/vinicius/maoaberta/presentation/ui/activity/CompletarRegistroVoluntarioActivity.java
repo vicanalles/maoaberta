@@ -19,6 +19,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -26,6 +27,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
@@ -40,6 +42,8 @@ import com.maoaberta.vinicius.maoaberta.util.CustomPhotoPickerDialog;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -78,6 +82,8 @@ public class CompletarRegistroVoluntarioActivity extends AppCompatActivity {
     Button botao_salvar_completar_registro_voluntario;
     @BindView(R.id.toolbar_layout_menu_completar_registro_voluntario)
     Toolbar toolbar_layout_menu_completar_registro_voluntario;
+    private String mCurrentPhotoPath;
+    private Bitmap mImageBitmap;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -123,15 +129,21 @@ public class CompletarRegistroVoluntarioActivity extends AppCompatActivity {
                             ActivityCompat.requestPermissions(CompletarRegistroVoluntarioActivity.this,
                                     new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSION_WRITE_EXTERNAL);
                         } else {
-                            ContentValues values = new ContentValues();
-                            values.put(MediaStore.Images.Media.TITLE, "New Picture");
-                            values.put(MediaStore.Images.Media.DESCRIPTION, "From your camera");
-                            imageUri = getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
                             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                            Uri uri  = Uri.parse(Environment.getExternalStorageDirectory().getPath().concat("/photo.jpg"));
-                            intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
-                            startActivityForResult(intent, REQUEST_IMAGE_CAPTURE);
-                            photoDialog.dismiss();
+                            if(intent.resolveActivity(getPackageManager()) != null){
+                                File photoFile = null;
+                                try{
+                                    photoFile = createImageFile();
+                                }catch(IOException e){
+                                    Log.i("TAG", e.getMessage());
+                                }
+
+                                if(photoFile != null){
+                                    intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
+                                    startActivityForResult(intent, REQUEST_IMAGE_CAPTURE);
+                                    photoDialog.dismiss();
+                                }
+                            }
                         }
                     }
                 });
@@ -201,20 +213,36 @@ public class CompletarRegistroVoluntarioActivity extends AppCompatActivity {
         });
     }
 
+    private File createImageFile() throws IOException{
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,
+                ".jpg",
+                storageDir
+        );
+        mCurrentPhotoPath = "file:" + image.getAbsolutePath();
+        return image;
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            File file = new File(Environment.getExternalStorageDirectory().getPath(), "photo.jpg");
-            Uri uri = Uri.fromFile(file);
-            Bitmap bitmap;
             try{
-                bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
-                image_view_logo_completar_registro_voluntario.setImageBitmap(bitmap);
+                mImageBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), Uri.parse(mCurrentPhotoPath));
+                image_view_logo_completar_registro_voluntario.setImageBitmap(mImageBitmap);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             } catch (IOException e) {
                 e.printStackTrace();
+            }
+        }else if(requestCode == SELECT_PICTURE && resultCode == RESULT_OK){
+            if(data != null){
+                Uri uri = data.getData();
+                Glide.with(this).load(uri).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true)
+                        .into(image_view_logo_completar_registro_voluntario);
             }
         }
     }

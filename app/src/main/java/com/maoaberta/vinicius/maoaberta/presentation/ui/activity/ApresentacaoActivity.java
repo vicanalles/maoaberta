@@ -25,7 +25,7 @@ import butterknife.ButterKnife;
  * Created by vinicius on 29/08/17.
  */
 
-public class ApresentacaoActivity extends AppCompatActivity{
+public class ApresentacaoActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
@@ -57,18 +57,22 @@ public class ApresentacaoActivity extends AppCompatActivity{
                     tipoRepository.getTipoById(user.getUid(), new TipoRepository.OnGetTipoById() {
                         @Override
                         public void onGetTipoByIdSuccess(String tipo) {
-                            if(tipo != null){
-                                if(tipo.equals("voluntario")){
+                            if (tipo != null) {
+                                if (tipo.equals("voluntario")) {
                                     abrirMenuPrincipalCliente();
-                                }else{
+                                } else {
                                     abrirMenuPrincipalOrganizacao();
                                 }
+                            } else {
+                                hideProgressDialog();
+                                abrirTelaLogin();
                             }
                         }
 
                         @Override
                         public void onGetTipoByIdError(String error) {
-                            Toast.makeText(ApresentacaoActivity.this, "Erro na recuperação dos dados", Toast.LENGTH_SHORT).show();
+                            hideProgressDialog();
+                            abrirTelaLogin();
                         }
                     });
                 }
@@ -84,7 +88,7 @@ public class ApresentacaoActivity extends AppCompatActivity{
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
 
             case R.id.item_login:
                 abrirTelaLogin();
@@ -93,20 +97,20 @@ public class ApresentacaoActivity extends AppCompatActivity{
         return super.onOptionsItemSelected(item);
     }
 
-    public void abrirTelaLogin(){
+    public void abrirTelaLogin() {
         Intent intent = new Intent(ApresentacaoActivity.this, LoginActivity.class);
         startActivity(intent);
         finish();
     }
 
-    public void abrirMenuPrincipalCliente(){
+    public void abrirMenuPrincipalCliente() {
         hideProgressDialog();
         Intent intent = new Intent(getApplicationContext(), MenuPrincipalClienteActivity.class);
         startActivity(intent);
         finish();
     }
 
-    public void abrirMenuPrincipalOrganizacao(){
+    public void abrirMenuPrincipalOrganizacao() {
         hideProgressDialog();
         Intent intent = new Intent(getApplicationContext(), MenuPrincipalOrganizacaoActivity.class);
         startActivity(intent);
@@ -127,14 +131,14 @@ public class ApresentacaoActivity extends AppCompatActivity{
         }
     }
 
-    public void showProgressDialog(String title, String content){
+    public void showProgressDialog(String title, String content) {
         progressDialog.setTitle(title);
         progressDialog.setMessage(content);
         progressDialog.setCancelable(false);
         progressDialog.show();
     }
 
-    public void hideProgressDialog(){
+    public void hideProgressDialog() {
         progressDialog.dismiss();
     }
 }

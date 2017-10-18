@@ -112,24 +112,23 @@ public class UsuarioRepository {
         });
     }
 
-    public void getUserByUid(final String uid, final OnGetUserById onGetUserById ){
-        Query query = reference.child(uid);
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Voluntario voluntario = new Voluntario();
-                if(dataSnapshot.getKey().equals(uid)){
-                    voluntario = dataSnapshot.getValue(Voluntario.class);
+    public void atualizarDadosVoluntario(final Voluntario voluntario, Bitmap imagemVoluntario, final OnUpdateUsuario onUpdateUsuario){
+        if(imagemVoluntario != null){
+            salvarImagemUsuario(imagemVoluntario, getUidCurrentUser(), new OnImageUpload() {
+                @Override
+                public void onImageUploadSuccess(Uri imageUrl) {
+                    voluntario.setPhotoUrl(imageUrl.toString());
+                    atualizarUser(voluntario, onUpdateUsuario);
                 }
 
-                onGetUserById.onGetUserByIdSuccess(voluntario);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                onGetUserById.onGetUserByIdError(databaseError.getMessage());
-            }
-        });
+                @Override
+                public void onImageUploadError(String error) {
+                    onUpdateUsuario.onUpdateUsuarioError(error);
+                }
+            });
+        }else{
+            atualizarUser(voluntario, onUpdateUsuario);
+        }
     }
 
     public void atualizarUser(Voluntario voluntario, final OnUpdateUsuario onUpdateUsuario){
@@ -143,6 +142,25 @@ public class UsuarioRepository {
                     Log.i("CADASTRO", "Falha no cadastro");
                     onUpdateUsuario.onUpdateUsuarioError(String.valueOf(R.string.erro_atualizar_dados_usuario));
                 }
+            }
+        });
+    }
+
+    public void getUserByUid(final String uid, final OnGetUserById onGetUserById ){
+        Query query = reference.child(uid);
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Voluntario voluntario = new Voluntario();
+                if(dataSnapshot.getKey().equals(uid)){
+                    voluntario = dataSnapshot.getValue(Voluntario.class);
+                }
+                onGetUserById.onGetUserByIdSuccess(voluntario);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                onGetUserById.onGetUserByIdError(databaseError.getMessage());
             }
         });
     }

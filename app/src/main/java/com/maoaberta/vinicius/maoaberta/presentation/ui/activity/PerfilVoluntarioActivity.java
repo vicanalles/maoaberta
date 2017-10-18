@@ -1,12 +1,19 @@
 package com.maoaberta.vinicius.maoaberta.presentation.ui.activity;
 
+import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ContextThemeWrapper;
@@ -31,7 +38,13 @@ import com.maoaberta.vinicius.maoaberta.R;
 import com.maoaberta.vinicius.maoaberta.domain.models.Voluntario;
 import com.maoaberta.vinicius.maoaberta.domain.repository.TipoRepository;
 import com.maoaberta.vinicius.maoaberta.domain.repository.UsuarioRepository;
+import com.maoaberta.vinicius.maoaberta.util.CustomPhotoPickerDialog;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Objects;
 
 import butterknife.BindView;
@@ -47,11 +60,15 @@ import static com.maoaberta.vinicius.maoaberta.R.string.senha;
 
 public class PerfilVoluntarioActivity extends AppCompatActivity {
 
-    private static final int SELECT_IMAGE = 1598;
+    private static final int PERMISSION_WRITE_EXTERNAL = 1594;
+    private static final int SELECT_PICTURE = 1598;
+    private static final int REQUEST_IMAGE_CAPTURE = 1595;
     private FirebaseAuth mAuth;
     private FirebaseUser user;
     private UsuarioRepository usuarioRepository;
     private Voluntario vol;
+    private String mCurrentPhotoPath;
+    private Bitmap mImageBitmap;
 
     @BindView(R.id.relative_layout_image_logo_perfil_cliente)
     RelativeLayout relative_layout_image_logo_perfil_cliente;
@@ -74,6 +91,7 @@ public class PerfilVoluntarioActivity extends AppCompatActivity {
     @BindView(R.id.toolbar_layout_menu_perfil_cliente)
     Toolbar toolbar_layout_menu_perfil_cliente;
     private ProgressDialog progressDialog;
+    private CustomPhotoPickerDialog photoDialog;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -141,7 +159,44 @@ public class PerfilVoluntarioActivity extends AppCompatActivity {
         image_view_logo_perfil_cliente.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                abrirImagemDialog();
+                photoDialog = new CustomPhotoPickerDialog(PerfilVoluntarioActivity.this, new CustomPhotoPickerDialog.OnOptionPhotoSelected() {
+                    @Override
+                    public void onGallery() {
+                        Intent intent = new Intent();
+                        intent.setType("image/*");
+                        intent.setAction(Intent.ACTION_GET_CONTENT);
+                        startActivityForResult(Intent.createChooser(intent, "Selecione uma imagem"), SELECT_PICTURE);
+                        photoDialog.dismiss();
+                    }
+
+                    @Override
+                    public void onCamera() {
+                        if (ContextCompat.checkSelfPermission(PerfilVoluntarioActivity.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED
+                                || ContextCompat.checkSelfPermission(PerfilVoluntarioActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+
+                            photoDialog.dismiss();
+                            ActivityCompat.requestPermissions(PerfilVoluntarioActivity.this,
+                                    new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSION_WRITE_EXTERNAL);
+                        }else{
+                            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                            if(intent.resolveActivity(getPackageManager()) != null){
+                                File photoFile = null;
+                                try{
+                                    photoFile = createImageFile();
+                                }catch (IOException e){
+                                    Log.i("TAG", e.getMessage());
+                                }
+
+                                if(photoFile != null){
+                                    intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
+                                    startActivityForResult(intent, REQUEST_IMAGE_CAPTURE);
+                                    photoDialog.dismiss();
+                                }
+                            }
+                        }
+                    }
+                });
+                photoDialog.show();
             }
         });
 
@@ -152,12 +207,14 @@ public class PerfilVoluntarioActivity extends AppCompatActivity {
                         String.valueOf(edit_text_email_perfil_cliente.getText()).equals("")) {
                     alertaCamposNaoPreenchidos();
                 } else {
+                    image_view_logo_perfil_cliente.setDrawingCacheEnabled(true);
+                    final Bitmap bmap = image_view_logo_perfil_cliente.getDrawingCache();
                     user = mAuth.getCurrentUser();
                     if (user != null) {
                         usuarioRepository.getUserByUid(user.getUid(), new UsuarioRepository.OnGetUserById() {
                             @Override
                             public void onGetUserByIdSuccess(Voluntario voluntario) {
-                                showProgressDialog("Atualizando Dados", "Aguarde enquanto os dados são atualizados.");
+                                showProgressDialog("Atualizando Dados", "Aguarde enquanto os dados são atualizados");
                                 if (voluntario != null) {
                                     vol = new Voluntario();
                                     vol.setNome(String.valueOf(edit_text_nome_perfil_cliente.getText()));
@@ -172,7 +229,7 @@ public class PerfilVoluntarioActivity extends AppCompatActivity {
                                                         @Override
                                                         public void onComplete(@NonNull Task<Void> task) {
                                                             if (task.isSuccessful()) {
-                                                                usuarioRepository.atualizarUser(vol, new UsuarioRepository.OnUpdateUsuario() {
+                                                                usuarioRepository.atualizarDadosVoluntario(vol, bmap, new UsuarioRepository.OnUpdateUsuario() {
                                                                     @Override
                                                                     public void onUpdateUsuarioSuccess(String sucesso) {
                                                                         AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(PerfilVoluntarioActivity.this, R.style.AppTheme));
@@ -215,39 +272,39 @@ public class PerfilVoluntarioActivity extends AppCompatActivity {
                                             }else{
                                                 alertaSenhasDiferentes();
                                             }
-                                        } else {
-                                            usuarioRepository.atualizarUser(vol, new UsuarioRepository.OnUpdateUsuario() {
-                                                @Override
-                                                public void onUpdateUsuarioSuccess(String sucesso) {
-                                                    AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(PerfilVoluntarioActivity.this, R.style.AppTheme));
-                                                    builder.setMessage(R.string.atualizacao_usuario_sucesso);
-                                                    builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                                                        @Override
-                                                        public void onClick(DialogInterface dialog, int i) {
-                                                            hideProgressDialog();
-                                                            abrirMenuPerfilVoluntario();
-                                                        }
-                                                    });
-                                                    AlertDialog dialog = builder.create();
-                                                    dialog.show();
-                                                }
-
-                                                @Override
-                                                public void onUpdateUsuarioError(String error) {
-                                                    AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(PerfilVoluntarioActivity.this, R.style.AppTheme));
-                                                    builder.setMessage(R.string.atualizacao_usuario_sucesso);
-                                                    builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                                                        @Override
-                                                        public void onClick(DialogInterface dialog, int i) {
-                                                            hideProgressDialog();
-                                                            abrirMenuPerfilVoluntario();
-                                                        }
-                                                    });
-                                                    AlertDialog dialog = builder.create();
-                                                    dialog.show();
-                                                }
-                                            });
                                         }
+                                    }else {
+                                        usuarioRepository.atualizarDadosVoluntario(vol, bmap, new UsuarioRepository.OnUpdateUsuario() {
+                                            @Override
+                                            public void onUpdateUsuarioSuccess(String sucesso) {
+                                                AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(PerfilVoluntarioActivity.this, R.style.AppTheme));
+                                                builder.setMessage(R.string.atualizacao_usuario_sucesso);
+                                                builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(DialogInterface dialog, int i) {
+                                                        hideProgressDialog();
+                                                        abrirMenuPerfilVoluntario();
+                                                    }
+                                                });
+                                                AlertDialog dialog = builder.create();
+                                                dialog.show();
+                                            }
+
+                                            @Override
+                                            public void onUpdateUsuarioError(String error) {
+                                                AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(PerfilVoluntarioActivity.this, R.style.AppTheme));
+                                                builder.setMessage(R.string.atualizacao_usuario_sucesso);
+                                                builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(DialogInterface dialog, int i) {
+                                                        hideProgressDialog();
+                                                        abrirMenuPerfilVoluntario();
+                                                    }
+                                                });
+                                                AlertDialog dialog = builder.create();
+                                                dialog.show();
+                                            }
+                                        });
                                     }
                                 }
                             }
@@ -272,6 +329,43 @@ public class PerfilVoluntarioActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private File createImageFile() throws IOException{
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,
+                ".jpg",
+                storageDir
+        );
+        mCurrentPhotoPath = "file:" + image.getAbsolutePath();
+        return image;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK){
+            try{
+                mImageBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), Uri.parse(mCurrentPhotoPath));
+                image_view_logo_perfil_cliente.setImageBitmap(mImageBitmap);
+                text_view_escolher_foto.setVisibility(View.GONE);
+                text_view_escolher_foto.setEnabled(false);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }else if(requestCode == SELECT_PICTURE && resultCode == RESULT_OK){
+            if(data != null){
+                Uri uri = data.getData();
+                Glide.with(this).load(uri).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(image_view_logo_perfil_cliente);
+                text_view_escolher_foto.setVisibility(View.GONE);
+                text_view_escolher_foto.setEnabled(false);
+            }
+        }
     }
 
     private void alertaSenhasDiferentes() {
@@ -304,28 +398,6 @@ public class PerfilVoluntarioActivity extends AppCompatActivity {
         });
         AlertDialog dialog = builder.create();
         dialog.show();
-    }
-
-    private void abrirImagemDialog() {
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(intent.createChooser(intent, "Selecione uma imagem"), SELECT_IMAGE);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == SELECT_IMAGE) {
-            if (resultCode == RESULT_OK) {
-                if (data != null) {
-                    text_view_escolher_foto.setVisibility(View.GONE);
-                    Uri uri = data.getData();
-                    Glide.with(this).load(uri).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true)
-                            .into(image_view_logo_perfil_cliente);
-                }
-            }
-        }
     }
 
     @Override

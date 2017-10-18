@@ -38,6 +38,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 
+import static com.maoaberta.vinicius.maoaberta.R.string.escolher_foto;
 import static com.maoaberta.vinicius.maoaberta.R.string.senha;
 
 /**
@@ -108,8 +109,15 @@ public class PerfilVoluntarioActivity extends AppCompatActivity {
             usuarioRepository.getUserByUid(uid, new UsuarioRepository.OnGetUserById() {
                 @Override
                 public void onGetUserByIdSuccess(Voluntario voluntario) {
-                    hideProgressDialog();
                     if (voluntario != null) {
+                        if(voluntario.getPhotoUrl() != null){
+                            Glide.with(PerfilVoluntarioActivity.this).load(voluntario.getPhotoUrl()).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(image_view_logo_perfil_cliente);
+                            text_view_escolher_foto.setEnabled(false);
+                            text_view_escolher_foto.setVisibility(View.GONE);
+                        }else{
+                            text_view_escolher_foto.setEnabled(true);
+                            text_view_escolher_foto.setVisibility(View.VISIBLE);
+                        }
                         edit_text_nome_perfil_cliente.setText(voluntario.getNome());
                         edit_text_email_perfil_cliente.setText(voluntario.getEmail());
                         edit_text_telefone_perfil_cliente.setText(voluntario.getTelefone());
@@ -118,6 +126,7 @@ public class PerfilVoluntarioActivity extends AppCompatActivity {
                         edit_text_email_perfil_cliente.setText(user.getEmail());
                         botao_salvar_perfil_cliente.setText(R.string.salvar);
                     }
+                    hideProgressDialog();
                 }
 
                 @Override

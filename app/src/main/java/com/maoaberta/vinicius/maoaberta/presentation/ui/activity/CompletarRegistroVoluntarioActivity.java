@@ -154,12 +154,14 @@ public class CompletarRegistroVoluntarioActivity extends AppCompatActivity {
         botao_salvar_completar_registro_voluntario.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                image_view_logo_completar_registro_voluntario.setDrawingCacheEnabled(true);
+                Bitmap bmap = image_view_logo_completar_registro_voluntario.getDrawingCache();
                 showProgressDialog("Cadastrando Voluntário", "Aguarde enquanto finalizamos o cadastro");
                 voluntario = new Voluntario();
                 voluntario.setNome(edit_text_nome_completar_registro_voluntario.getText().toString());
                 voluntario.setEmail(edit_text_email_completar_registro_voluntario.getText().toString());
                 voluntario.setTelefone(edit_text_telefone_completar_registro_voluntario.getText().toString());
-                usuarioRepository.salvarDadosVoluntario(voluntario, null, new UsuarioRepository.OnSaveVoluntario() {
+                usuarioRepository.salvarDadosVoluntario(voluntario, bmap, new UsuarioRepository.OnSaveVoluntario() {
                     @Override
                     public void onSaveVoluntarioSuccess(Voluntario voluntario) {
                         TipoRepository tipoRepository = new TipoRepository();
@@ -233,6 +235,8 @@ public class CompletarRegistroVoluntarioActivity extends AppCompatActivity {
             try{
                 mImageBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), Uri.parse(mCurrentPhotoPath));
                 image_view_logo_completar_registro_voluntario.setImageBitmap(mImageBitmap);
+                text_view_escolher_foto_completar_registro_voluntario.setVisibility(View.GONE);
+                text_view_escolher_foto_completar_registro_voluntario.setEnabled(false);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             } catch (IOException e) {
@@ -243,6 +247,8 @@ public class CompletarRegistroVoluntarioActivity extends AppCompatActivity {
                 Uri uri = data.getData();
                 Glide.with(this).load(uri).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true)
                         .into(image_view_logo_completar_registro_voluntario);
+                text_view_escolher_foto_completar_registro_voluntario.setVisibility(View.GONE);
+                text_view_escolher_foto_completar_registro_voluntario.setEnabled(false);
             }
         }
     }

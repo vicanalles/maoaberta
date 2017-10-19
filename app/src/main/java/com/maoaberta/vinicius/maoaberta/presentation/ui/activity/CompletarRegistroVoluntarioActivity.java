@@ -64,7 +64,6 @@ public class CompletarRegistroVoluntarioActivity extends AppCompatActivity {
     private Voluntario voluntario;
     private ProgressDialog progressDialog;
     private CustomPhotoPickerDialog photoDialog;
-    private Uri imageUri;
 
     @BindView(R.id.relative_layout_image_logo_completar_registro_voluntario)
     RelativeLayout relative_layout_image_logo_completar_registro_voluntario;
@@ -123,11 +122,11 @@ public class CompletarRegistroVoluntarioActivity extends AppCompatActivity {
                     @Override
                     public void onCamera() {
                         if (ContextCompat.checkSelfPermission(CompletarRegistroVoluntarioActivity.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED
-                                || ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                                || ContextCompat.checkSelfPermission(CompletarRegistroVoluntarioActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
 
-                            photoDialog.dismiss();
                             ActivityCompat.requestPermissions(CompletarRegistroVoluntarioActivity.this,
                                     new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSION_WRITE_EXTERNAL);
+                            photoDialog.dismiss();
                         } else {
                             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                             if(intent.resolveActivity(getPackageManager()) != null){

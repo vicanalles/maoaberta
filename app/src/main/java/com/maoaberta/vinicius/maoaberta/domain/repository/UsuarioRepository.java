@@ -76,7 +76,7 @@ public class UsuarioRepository {
 
     public void salvarImagemUsuario(Bitmap userImage, String userId, final OnImageUpload onImageUpload){
 
-        StorageReference profileImageRef = storageReference.child("images/" + userId + ".jpg");
+        StorageReference profileImageRef = storageReference.child("images/" + "voluntarios/" + userId + ".jpg");
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         userImage.compress(Bitmap.CompressFormat.JPEG, 100, baos);

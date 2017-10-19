@@ -75,7 +75,7 @@ public class OrganizacaoRepository {
 
     public void salvarImagemOrganizacao(Bitmap organizacaoImage, String organizacaoId, final OnImageUpload onImageUpload){
 
-        StorageReference storageRef = storageReference.child("images/" + organizacaoId + ".jpg");
+        StorageReference storageRef = storageReference.child("images/" + "organizacoes/" + organizacaoId + ".jpg");
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         organizacaoImage.compress(Bitmap.CompressFormat.JPEG, 100, baos);
@@ -129,6 +129,25 @@ public class OrganizacaoRepository {
                 onGetOrganizacaoById.onGetOrganizacaoByIdError(databaseError.getMessage());
             }
         });
+    }
+
+    public void atualizarDadosOrganizacao(final Organizacao organizacao, Bitmap imagemOrganizacao, final OnUpdateOrganizacao onUpdateOrganizacao){
+        if(imagemOrganizacao != null){
+            salvarImagemOrganizacao(imagemOrganizacao, getUidCurrentUser(), new OnImageUpload() {
+                @Override
+                public void onImageUploadSuccess(Uri imageUrl) {
+                    organizacao.setPhotoUrl(imageUrl.toString());
+                    atualizarOrganizacao(organizacao, onUpdateOrganizacao);
+                }
+
+                @Override
+                public void onImageUploadError(String error) {
+                    onUpdateOrganizacao.onUpdateOrganizacaoError(error);
+                }
+            });
+        }else{
+            atualizarOrganizacao(organizacao, onUpdateOrganizacao);
+        }
     }
 
     public void atualizarOrganizacao(Organizacao organizacao, final OnUpdateOrganizacao onUpdateOrganizacao){

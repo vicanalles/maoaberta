@@ -5,7 +5,8 @@
     android:layout_height="wrap_content"
     android:gravity="center"
     android:orientation="horizontal"
-    android:padding="16dp">
+    android:padding="16dp"
+    android:background="@color/colorPrimary">
 
     <RelativeLayout
         android:id="@+id/relative_gallery"
@@ -18,7 +19,7 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_centerHorizontal="true"
-            android:tint="@color/textColorBlack"
+            android:tint="@color/textColorWhite"
             app:srcCompat="@drawable/ic_insert_photo"/>
 
         <TextView
@@ -28,7 +29,8 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="8dp"
             android:text="@string/galeria"
-            android:textStyle="bold"/>
+            android:textStyle="bold"
+            android:textColor="@color/textColorWhite"/>
 
     </RelativeLayout>
 
@@ -43,7 +45,7 @@
             android:layout_height="48dp"
             android:layout_centerHorizontal="true"
             android:layout_marginStart="8dp"
-            android:tint="@color/textColorBlack"
+            android:tint="@color/textColorWhite"
             app:srcCompat="@drawable/ic_photo_camera"/>
 
         <TextView
@@ -53,7 +55,8 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="8dp"
             android:text="@string/camera"
-            android:textStyle="bold"/>
+            android:textStyle="bold"
+            android:textColor="@color/textColorWhite"/>
 
     </RelativeLayout>
 

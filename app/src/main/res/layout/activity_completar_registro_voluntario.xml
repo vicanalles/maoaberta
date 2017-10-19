@@ -26,11 +26,11 @@
         android:layout_height="wrap_content"
         android:clickable="true"
         android:focusableInTouchMode="true"
-        app:layout_constraintTop_toBottomOf="@id/toolbar_layout_menu_completar_registro_voluntario"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintTop_toBottomOf="@id/toolbar_layout_menu_completar_registro_voluntario"
         app:layout_constraintVertical_bias="0.0">
 
         <RelativeLayout
@@ -38,6 +38,8 @@
             android:layout_width="match_parent"
             android:layout_height="180dp"
             android:layout_alignParentTop="true"
+            android:clickable="true"
+            android:focusableInTouchMode="true"
             android:background="@color/tabLayoutBottomColor">
 
             <de.hdodenhof.circleimageview.CircleImageView
@@ -48,7 +50,7 @@
                 android:adjustViewBounds="false"
                 android:scaleType="centerCrop"
                 app:civ_border_color="@color/textColorWhite"
-                app:civ_border_width="2dp"/>
+                app:civ_border_width="2dp" />
 
             <TextView
                 android:id="@+id/text_view_escolher_foto_completar_registro_voluntario"

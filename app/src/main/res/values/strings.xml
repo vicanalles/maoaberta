@@ -67,4 +67,6 @@
     <string name="erro_atualizacao_organizacao">Erro na atualização dos dados. Por favor, tente novamente!</string>
     <string name="galeria">Galeria</string>
     <string name="camera">Câmera</string>
+    <string name="novo_anuncio">Novo Anúncio</string>
+    <string name="postar">Postar</string>
 </resources>

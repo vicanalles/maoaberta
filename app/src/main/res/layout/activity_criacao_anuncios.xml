@@ -55,12 +55,12 @@
         android:id="@+id/spinner_novo_ad"
         android:layout_width="320dp"
         android:layout_height="30dp"
-        app:layout_constraintTop_toBottomOf="@id/edit_text_titulo_ad"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginTop="15dp"
         android:background="@drawable/rounded_edittext"
         android:spinnerMode="dropdown"
-        android:layout_marginTop="15dp" />
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/edit_text_titulo_ad" />
 
     <EditText
         android:id="@+id/edit_text_descricao_criacao_anuncio"
@@ -84,12 +84,83 @@
         android:textSize="15sp"
         android:typeface="normal"/>
 
+    <LinearLayout
+        android:id="@+id/linear_layout_select_start_date"
+        android:layout_width="320dp"
+        android:layout_height="30dp"
+        app:layout_constraintTop_toBottomOf="@id/edit_text_descricao_criacao_anuncio"
+        app:layout_constraintLeft_toLeftOf="@id/edit_text_descricao_criacao_anuncio"
+        app:layout_constraintRight_toRightOf="@id/edit_text_descricao_criacao_anuncio"
+        android:layout_marginTop="15dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/text_view_start_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/data_de_inicio"
+            android:textColor="@color/textColorBlack"
+            android:textSize="15sp"
+            android:fontFamily="sans-serif"
+            android:textStyle="normal"
+            android:layout_gravity="center"/>
+
+        <EditText
+            android:id="@+id/edit_text_start_date"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/rounded_edittext"
+            android:layout_marginStart="5dp"
+            android:textStyle="normal"
+            android:textColor="@color/textColorBlack"
+            android:fontFamily="sans-serif"
+            android:textSize="15sp"
+            android:paddingStart="10dp"
+            android:focusable="false"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linear_layout_select_end_date"
+        android:layout_width="320dp"
+        android:layout_height="30dp"
+        app:layout_constraintTop_toBottomOf="@id/linear_layout_select_start_date"
+        app:layout_constraintLeft_toLeftOf="@id/linear_layout_select_start_date"
+        app:layout_constraintRight_toRightOf="@id/linear_layout_select_start_date"
+        android:layout_marginTop="15dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/text_view_end_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/data_limite"
+            android:textSize="15sp"
+            android:fontFamily="sans-serif"
+            android:textStyle="normal"
+            android:textColor="@color/textColorBlack"
+            android:layout_gravity="center"/>
+
+        <EditText
+            android:id="@+id/edit_text_end_date"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/rounded_edittext"
+            android:layout_marginStart="5dp"
+            android:textStyle="normal"
+            android:textColor="@color/textColorBlack"
+            android:fontFamily="sans-serif"
+            android:textSize="15sp"
+            android:paddingStart="10dp"
+            android:focusable="false"/>
+
+    </LinearLayout>
+
     <Button
         android:id="@+id/botao_criar_novo_anuncio"
         android:layout_width="320dp"
         android:layout_height="30dp"
-        android:layout_marginTop="15dp"
-        app:layout_constraintTop_toBottomOf="@id/edit_text_descricao_criacao_anuncio"
+        android:layout_marginTop="20dp"
+        app:layout_constraintTop_toBottomOf="@id/linear_layout_select_end_date"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         android:background="@drawable/rounded_button"

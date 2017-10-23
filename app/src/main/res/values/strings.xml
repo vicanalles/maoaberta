@@ -69,4 +69,6 @@
     <string name="camera">Câmera</string>
     <string name="novo_anuncio">Novo Anúncio</string>
     <string name="postar">Postar</string>
+    <string name="data_de_inicio">Data de Início</string>
+    <string name="data_limite">Data de Fim</string>
 </resources>

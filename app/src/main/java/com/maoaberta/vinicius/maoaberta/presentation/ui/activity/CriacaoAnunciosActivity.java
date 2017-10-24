@@ -9,14 +9,21 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.maoaberta.vinicius.maoaberta.R;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -43,8 +50,12 @@ public class CriacaoAnunciosActivity extends AppCompatActivity {
     EditText edit_text_end_date;
     @BindView(R.id.spinner_novo_ad)
     Spinner spinner_novo_ad;
+    @BindView(R.id.botao_criar_novo_anuncio)
+    Button botao_criar_novo_anuncio;
 
     private int mes, dia, ano;
+    private int startDate = 0;
+    private int endDate = 0;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -97,6 +108,19 @@ public class CriacaoAnunciosActivity extends AppCompatActivity {
                     }
                 }, ano, mes, dia);
                 datePickerDialog.show();
+            }
+        });
+
+        botao_criar_novo_anuncio.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startDate = Integer.parseInt(edit_text_start_date.getText().toString().replace("/", ""));
+                endDate = Integer.parseInt(edit_text_end_date.getText().toString().replace("/", ""));
+                if(startDate > endDate){
+                    Toast.makeText(CriacaoAnunciosActivity.this, "Data de início maior que a de término", Toast.LENGTH_SHORT).show();
+                }else{
+                    Toast.makeText(CriacaoAnunciosActivity.this, "Data de início menor que a de término", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }

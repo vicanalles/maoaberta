@@ -71,4 +71,7 @@
     <string name="postar">Postar</string>
     <string name="data_de_inicio">Data de Início</string>
     <string name="data_limite">Data de Fim</string>
+    <string name="criacao_anuncio_sucesso">Anúncio criado com sucesso!</string>
+    <string name="falha_criacao_anuncio">Falha ao criar o anúncio!</string>
+    <string name="alerta_selecao_data">Atenção! Data de início do anúncio deve ser anterior à data de encerramento!</string>
 </resources>

@@ -1,10 +1,14 @@
 package com.maoaberta.vinicius.maoaberta.presentation.ui.activity;
 
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,16 +18,14 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.maoaberta.vinicius.maoaberta.R;
+import com.maoaberta.vinicius.maoaberta.domain.models.Anuncio;
+import com.maoaberta.vinicius.maoaberta.domain.repository.AnuncioRepository;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -44,6 +46,8 @@ public class CriacaoAnunciosActivity extends AppCompatActivity {
     TextView text_view_start_date;
     @BindView(R.id.edit_text_start_date)
     EditText edit_text_start_date;
+    @BindView(R.id.edit_text_descricao_criacao_anuncio)
+    EditText edit_text_descricao_criacao_anuncio;
     @BindView(R.id.text_view_end_date)
     TextView text_view_end_date;
     @BindView(R.id.edit_text_end_date)
@@ -56,6 +60,11 @@ public class CriacaoAnunciosActivity extends AppCompatActivity {
     private int mes, dia, ano;
     private int startDate = 0;
     private int endDate = 0;
+    private Anuncio anuncio;
+    private AnuncioRepository anuncioRepository;
+    private ProgressDialog progressDialog;
+    private FirebaseUser user;
+    private FirebaseAuth auth;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -64,7 +73,11 @@ public class CriacaoAnunciosActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         setSupportActionBar(toolbar_layout_menu_novo_ad);
 
-        if(getSupportActionBar() != null){
+        progressDialog = new ProgressDialog(this);
+        auth = FirebaseAuth.getInstance();
+        user = auth.getCurrentUser();
+
+        if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle(R.string.app_name);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -114,20 +127,114 @@ public class CriacaoAnunciosActivity extends AppCompatActivity {
         botao_criar_novo_anuncio.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startDate = Integer.parseInt(edit_text_start_date.getText().toString().replace("/", ""));
-                endDate = Integer.parseInt(edit_text_end_date.getText().toString().replace("/", ""));
-                if(startDate > endDate){
-                    Toast.makeText(CriacaoAnunciosActivity.this, "Data de início maior que a de término", Toast.LENGTH_SHORT).show();
-                }else{
-                    Toast.makeText(CriacaoAnunciosActivity.this, "Data de início menor que a de término", Toast.LENGTH_SHORT).show();
+                if (!edit_text_titulo_ad.getText().toString().equals("") && !edit_text_start_date.getText().toString().equals("") &&
+                        !edit_text_end_date.getText().toString().equals("")) {
+                    startDate = Integer.parseInt(edit_text_start_date.getText().toString().replace("/", ""));
+                    endDate = Integer.parseInt(edit_text_end_date.getText().toString().replace("/", ""));
+                    if (startDate > endDate || startDate == endDate) {
+                        alertaDataInicioMaiorFim();
+                    } else {
+                        showProgressDialog("Aguarde", "Criando anúncio...");
+                        anuncio = new Anuncio();
+                        anuncio.setTitulo(edit_text_titulo_ad.getText().toString());
+                        anuncio.setTipo(spinner_novo_ad.getSelectedItem().toString());
+                        anuncio.setDescricao(edit_text_descricao_criacao_anuncio.getText().toString());
+                        anuncio.setDataInicio(edit_text_start_date.getText().toString());
+                        anuncio.setDataFim(edit_text_end_date.getText().toString());
+                        anuncio.setIdProprietario(user.getUid());
+                        anuncioRepository = new AnuncioRepository();
+                        anuncioRepository.salvarDadosAnuncio(anuncio, new AnuncioRepository.OnSaveAnuncio() {
+                            @Override
+                            public void onSaveAnuncioSuccess(String sucesso) {
+                                alertaCriacaoAnuncioSucesso(sucesso);
+                            }
+
+                            @Override
+                            public void onSaveAnuncioError(String error) {
+                                alertaCriacaoAnuncioErro(error);
+                            }
+                        });
+                    }
+                } else {
+                    alertaCamposNaoPreenchidos();
                 }
             }
         });
     }
 
+    private void alertaCamposNaoPreenchidos() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(CriacaoAnunciosActivity.this, R.style.AppTheme));
+        builder.setMessage(R.string.campos_nao_preenchidos);
+        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                hideProgressDialog();
+                dialog.dismiss();
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    public void alertaCriacaoAnuncioSucesso(String mensagem) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(CriacaoAnunciosActivity.this, R.style.AppTheme));
+        builder.setMessage(mensagem);
+        builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                hideProgressDialog();
+                dialog.dismiss();
+                Intent intent = new Intent(CriacaoAnunciosActivity.this, MenuPrincipalOrganizacaoActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    public void alertaCriacaoAnuncioErro(String mensagem) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(CriacaoAnunciosActivity.this, R.style.AppTheme));
+        builder.setMessage(mensagem);
+        builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                hideProgressDialog();
+                dialog.dismiss();
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    public void alertaDataInicioMaiorFim() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(CriacaoAnunciosActivity.this, R.style.AppTheme));
+        builder.setMessage(R.string.alerta_selecao_data);
+        builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                hideProgressDialog();
+                dialog.dismiss();
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    public void showProgressDialog(String title, String message) {
+        progressDialog.setTitle(title);
+        progressDialog.setMessage(message);
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+    }
+
+    public void hideProgressDialog() {
+        progressDialog.dismiss();
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case android.R.id.home:
                 abrirMenuPrincipal();
         }

@@ -25,7 +25,11 @@ import com.maoaberta.vinicius.maoaberta.R;
 import com.maoaberta.vinicius.maoaberta.domain.models.Anuncio;
 import com.maoaberta.vinicius.maoaberta.domain.repository.AnuncioRepository;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -58,13 +62,14 @@ public class CriacaoAnunciosActivity extends AppCompatActivity {
     Button botao_criar_novo_anuncio;
 
     private int mes, dia, ano;
-    private int startDate = 0;
-    private int endDate = 0;
+    private Date startDate;
+    private Date endDate;
     private Anuncio anuncio;
     private AnuncioRepository anuncioRepository;
     private ProgressDialog progressDialog;
     private FirebaseUser user;
     private FirebaseAuth auth;
+    private Date currentTime;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -129,11 +134,19 @@ public class CriacaoAnunciosActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if (!edit_text_titulo_ad.getText().toString().equals("") && !edit_text_start_date.getText().toString().equals("") &&
                         !edit_text_end_date.getText().toString().equals("")) {
-                    startDate = Integer.parseInt(edit_text_start_date.getText().toString().replace("/", ""));
-                    endDate = Integer.parseInt(edit_text_end_date.getText().toString().replace("/", ""));
-                    if (startDate > endDate || startDate == endDate) {
+                    DateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+                    try {
+                        startDate = format.parse(edit_text_start_date.getText().toString());
+                        endDate = format.parse(edit_text_end_date.getText().toString());
+                        currentTime = format.parse(format.format(new Date()));
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    if (startDate.after(endDate)) {
                         alertaDataInicioMaiorFim();
-                    } else {
+                    }else if(startDate.before(currentTime)){
+                        alertaDataInicioUltrapassada();
+                    }else {
                         showProgressDialog("Aguarde", "Criando anúncio...");
                         anuncio = new Anuncio();
                         anuncio.setTitulo(edit_text_titulo_ad.getText().toString());
@@ -160,6 +173,20 @@ public class CriacaoAnunciosActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private void alertaDataInicioUltrapassada() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(CriacaoAnunciosActivity.this, R.style.AppTheme));
+        builder.setMessage("Atenção! Data de início deve ser igual ou depois a data atual!");
+        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                hideProgressDialog();
+                dialog.dismiss();
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     private void alertaCamposNaoPreenchidos() {

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="72dp"
+    android:background="@color/textColorWhite">
+
+    <LinearLayout
+        android:id="@+id/linear_layout_meu_anuncio_organizacao"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:weightSum="2">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.1"
+            android:layout_gravity="center">
+
+            <TextView
+                android:id="@+id/text_view_title_anuncio"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Título do Anúncio"
+                android:textSize="15sp"
+                android:textColor="@color/textColorBlack"
+                android:fontFamily="sans-serif"
+                android:layout_marginStart="5dp"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.9"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Data de Início:"
+                    android:textSize="13sp"
+                    android:textStyle="normal"
+                    android:fontFamily="sans-serif"
+                    android:layout_marginTop="15dp"/>
+
+                <TextView
+                    android:id="@+id/text_view_data_inicio_anuncio"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="15/10/2017"
+                    android:textSize="13sp"
+                    android:textStyle="normal"
+                    android:fontFamily="sans-serif"
+                    android:textColor="@color/textColorBlack"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginStart="5dp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Data de término:"
+                    android:textSize="13sp"
+                    android:textStyle="normal"
+                    android:fontFamily="sans-serif"
+                    android:layout_marginTop="5dp"/>
+
+                <TextView
+                    android:id="@+id/text_view_data_termino_anuncio"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="25/10/2017"
+                    android:textSize="13sp"
+                    android:textStyle="normal"
+                    android:fontFamily="sans-serif"
+                    android:textColor="@color/textColorBlack"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginStart="5dp"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>

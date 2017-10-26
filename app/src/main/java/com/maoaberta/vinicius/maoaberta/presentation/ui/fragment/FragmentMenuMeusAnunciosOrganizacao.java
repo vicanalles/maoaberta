@@ -14,9 +14,17 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseError;
 import com.maoaberta.vinicius.maoaberta.R;
+import com.maoaberta.vinicius.maoaberta.domain.models.Anuncio;
+import com.maoaberta.vinicius.maoaberta.domain.repository.AnuncioRepository;
 import com.maoaberta.vinicius.maoaberta.presentation.ui.activity.CriacaoAnunciosActivity;
 import com.maoaberta.vinicius.maoaberta.presentation.ui.adapter.OrganizacaoMeusAnunciosAdapter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -30,9 +38,12 @@ public class FragmentMenuMeusAnunciosOrganizacao extends Fragment {
     @BindView(R.id.fab)
     FloatingActionButton fab;
     @BindView(R.id.recycler_ad_list)
-    RecyclerView recyclerAdList;
+    RecyclerView mRecyclerview;
 
-    private OrganizacaoMeusAnunciosAdapter organizacaoMeusAnunciosAdapter;
+    private FirebaseUser currentUser;
+    private OrganizacaoMeusAnunciosAdapter mAdapter;
+    private AnuncioRepository anuncioRepository;
+    private List<Anuncio> mAnuncios;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -40,17 +51,28 @@ public class FragmentMenuMeusAnunciosOrganizacao extends Fragment {
         View view = inflater.inflate(R.layout.fragment_menu_meus_anuncios_organizacao, container, false);
         ButterKnife.bind(this, view);
 
-        organizacaoMeusAnunciosAdapter = new OrganizacaoMeusAnunciosAdapter(getActivity());
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
-        recyclerAdList.setLayoutManager(layoutManager);
-        recyclerAdList.setItemAnimator(new DefaultItemAnimator());
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerAdList.getContext(), DividerItemDecoration.VERTICAL);
-        recyclerAdList.addItemDecoration(dividerItemDecoration);
-        recyclerAdList.setAdapter(organizacaoMeusAnunciosAdapter);
+        mAnuncios = new ArrayList<>();
 
+        currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        mRecyclerview.setLayoutManager(new LinearLayoutManager(getContext()));
+        mAdapter = new OrganizacaoMeusAnunciosAdapter(getContext());
+        mRecyclerview.setAdapter(mAdapter);
 
+        anuncioRepository = new AnuncioRepository();
+        anuncioRepository.getAllAnunciosOrganizacao(currentUser.getUid(), new AnuncioRepository.OnGetAllAnunciosOrganizacao() {
+                    @Override
+                    public void onGetAllAnunciosOrganizacaoSuccess(List<Anuncio> anuncios) {
+                        mAdapter.notifyDataSetChanged();
+                        mAdapter.setItems(anuncios);
+                    }
 
-        fab.setImageResource(R.drawable.ic_action_add);
+                    @Override
+                    public void onGetAllAnunciosOrganizacaoError(DatabaseError databaseError) {
+
+                    }
+                });
+
+                fab.setImageResource(R.drawable.ic_action_add);
         
         fab.setOnClickListener(new View.OnClickListener() {
             @Override

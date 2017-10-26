@@ -7,10 +7,16 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.maoaberta.vinicius.maoaberta.R;
 import com.maoaberta.vinicius.maoaberta.domain.models.Anuncio;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Vinicius on 24/10/2017.
@@ -36,7 +42,6 @@ public class AnuncioRepository {
         }
     }
 
-
     public void salvarDadosAnuncio(Anuncio anuncio, final OnSaveAnuncio onSaveAnuncio) {
         DatabaseReference push = reference.push();
         push.setValue(anuncio).addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -53,8 +58,37 @@ public class AnuncioRepository {
         });
     }
 
+    public void getAllAnunciosOrganizacao(String uid, final OnGetAllAnunciosOrganizacao onGetAllAnunciosOrganizacao){
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                List<Anuncio> anuncios = new ArrayList<>();
+                for(DataSnapshot data : dataSnapshot.getChildren()){
+                    Anuncio anuncio = data.getValue(Anuncio.class);
+                    if(anuncio != null){
+                        if(anuncio.getIdProprietario().equals(getUidCurrentUser())){
+                            anuncio.setId(data.getKey());
+                            anuncios.add(anuncio);
+                        }
+                    }
+                }
+                onGetAllAnunciosOrganizacao.onGetAllAnunciosOrganizacaoSuccess(anuncios);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                onGetAllAnunciosOrganizacao.onGetAllAnunciosOrganizacaoError(databaseError);
+            }
+        });
+    }
+
     public interface OnSaveAnuncio{
         void onSaveAnuncioSuccess(String sucesso);
         void onSaveAnuncioError(String error);
+    }
+
+    public interface OnGetAllAnunciosOrganizacao{
+        void onGetAllAnunciosOrganizacaoSuccess(List<Anuncio> anuncios);
+        void onGetAllAnunciosOrganizacaoError(DatabaseError databaseError);
     }
 }

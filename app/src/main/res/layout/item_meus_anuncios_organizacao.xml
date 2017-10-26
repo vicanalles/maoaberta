@@ -8,7 +8,10 @@
         android:id="@+id/linear_layout_meu_anuncio_organizacao"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:weightSum="2">
+        android:weightSum="2"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:background="@drawable/rounded_edittext">
 
         <LinearLayout
             android:layout_width="0dp"
@@ -24,7 +27,7 @@
                 android:textSize="15sp"
                 android:textColor="@color/textColorBlack"
                 android:fontFamily="sans-serif"
-                android:layout_marginStart="5dp"/>
+                android:layout_marginStart="20dp"/>
         </LinearLayout>
 
         <LinearLayout
@@ -52,7 +55,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="15/10/2017"
-                    android:textSize="13sp"
+                    android:textSize="12sp"
                     android:textStyle="normal"
                     android:fontFamily="sans-serif"
                     android:textColor="@color/textColorBlack"
@@ -79,7 +82,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="25/10/2017"
-                    android:textSize="13sp"
+                    android:textSize="12sp"
                     android:textStyle="normal"
                     android:fontFamily="sans-serif"
                     android:textColor="@color/textColorBlack"

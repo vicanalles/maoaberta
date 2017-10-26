@@ -55,6 +55,12 @@ public class OrganizacaoMeusAnunciosAdapter extends RecyclerView.Adapter<Organiz
         return anuncios.size();
     }
 
+    public void setItems(List<Anuncio> anuncios) {
+        this.anuncios.clear();
+        this.anuncios.addAll(anuncios);
+        notifyDataSetChanged();
+    }
+
 
     public class MyViewHolder extends RecyclerView.ViewHolder{
 

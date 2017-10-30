@@ -139,7 +139,41 @@ public class CriacaoAnunciosActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if(anuncio != null){
+                    if(!edit_text_titulo_ad.getText().toString().equals("") && !edit_text_start_date.getText().toString().equals("") &&
+                            !edit_text_end_date.getText().toString().equals("")){
+                        DateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+                        try{
+                            startDate = format.parse(edit_text_start_date.getText().toString());
+                            endDate = format.parse(edit_text_end_date.getText().toString());
+                            currentTime = format.parse(format.format(new Date()));
+                        }catch(ParseException e){
+                            e.printStackTrace();
+                        }
+                        if(startDate.after(endDate)){
+                            alertaDataInicioMaiorFim();
+                        }else if(startDate.before(currentTime)){
+                            alertaDataInicioUltrapassada();
+                        }else{
+                            showProgressDialog("Aguarde", "Atualizando Anúncio...");
+                            anuncio.setTitulo(edit_text_titulo_ad.getText().toString());
+                            anuncio.setTipo(spinner_novo_ad.getSelectedItem().toString());
+                            anuncio.setDescricao(edit_text_descricao_criacao_anuncio.getText().toString());
+                            anuncio.setDataInicio(edit_text_start_date.getText().toString());
+                            anuncio.setDataFim(edit_text_end_date.getText().toString());
+                            anuncioRepository = new AnuncioRepository();
+                            anuncioRepository.atualizarAnuncio(anuncio, anuncio.getId(), new AnuncioRepository.OnUpdateAnuncio() {
+                                @Override
+                                public void onUpdateAnuncioSuccess(String sucesso) {
+                                    alertaAtualizacaoAnuncioSucesso(sucesso);
+                                }
 
+                                @Override
+                                public void onUpdateAnuncioError(String erro) {
+                                    alertaAtualizacaoAnuncioErro(erro);
+                                }
+                            });
+                        }
+                    }
                 }else{
                     if (!edit_text_titulo_ad.getText().toString().equals("") && !edit_text_start_date.getText().toString().equals("") &&
                             !edit_text_end_date.getText().toString().equals("")) {
@@ -252,6 +286,23 @@ public class CriacaoAnunciosActivity extends AppCompatActivity {
         dialog.show();
     }
 
+    private void alertaAtualizacaoAnuncioSucesso(String sucesso) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(CriacaoAnunciosActivity.this, R.style.AppTheme));
+        builder.setMessage(sucesso);
+        builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                hideProgressDialog();
+                dialog.dismiss();
+                Intent intent = new Intent(CriacaoAnunciosActivity.this, MenuPrincipalOrganizacaoActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
     public void alertaCriacaoAnuncioErro(String mensagem) {
         AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(CriacaoAnunciosActivity.this, R.style.AppTheme));
         builder.setMessage(mensagem);
@@ -260,6 +311,23 @@ public class CriacaoAnunciosActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 hideProgressDialog();
                 dialog.dismiss();
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    private void alertaAtualizacaoAnuncioErro(String erro) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(CriacaoAnunciosActivity.this, R.style.AppTheme));
+        builder.setMessage(erro);
+        builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                hideProgressDialog();
+                dialog.dismiss();
+                Intent intent = new Intent(CriacaoAnunciosActivity.this, MenuPrincipalOrganizacaoActivity.class);
+                startActivity(intent);
+                finish();
             }
         });
         AlertDialog dialog = builder.create();

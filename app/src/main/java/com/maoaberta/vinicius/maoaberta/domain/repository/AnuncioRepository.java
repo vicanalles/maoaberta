@@ -82,6 +82,19 @@ public class AnuncioRepository {
         });
     }
 
+    public void atualizarAnuncio(Anuncio anuncio, String id, final OnUpdateAnuncio onUpdateAnuncio){
+        reference.child(id).setValue(anuncio).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if(task.isSuccessful()){
+                    onUpdateAnuncio.onUpdateAnuncioSuccess("Anúncio atualizado com sucesso!");
+                }else{
+                    onUpdateAnuncio.onUpdateAnuncioError("Falha na atualização do anúncio! Por favor, tente novamente!");
+                }
+            }
+        });
+    }
+
     public interface OnSaveAnuncio{
         void onSaveAnuncioSuccess(String sucesso);
         void onSaveAnuncioError(String error);
@@ -90,5 +103,10 @@ public class AnuncioRepository {
     public interface OnGetAllAnunciosOrganizacao{
         void onGetAllAnunciosOrganizacaoSuccess(List<Anuncio> anuncios);
         void onGetAllAnunciosOrganizacaoError(DatabaseError databaseError);
+    }
+
+    public interface OnUpdateAnuncio{
+        void onUpdateAnuncioSuccess(String sucesso);
+        void onUpdateAnuncioError(String erro);
     }
 }

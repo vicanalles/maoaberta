@@ -89,9 +89,15 @@ public class CriacaoAnunciosActivity extends AppCompatActivity {
             getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_arrow_back);
         }
 
-        String[] items = new String[]{"Produto", "Serviço"};
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, items);
-        spinner_novo_ad.setAdapter(adapter);
+        Intent extra = getIntent();
+        if(extra != null){
+            anuncio = (Anuncio)extra.getSerializableExtra("anuncio");
+            popularCampos(anuncio);
+        }else{
+            String[] items = new String[]{"Produto", "Serviço"};
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, items);
+            spinner_novo_ad.setAdapter(adapter);
+        }
 
         edit_text_start_date.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -132,47 +138,73 @@ public class CriacaoAnunciosActivity extends AppCompatActivity {
         botao_criar_novo_anuncio.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!edit_text_titulo_ad.getText().toString().equals("") && !edit_text_start_date.getText().toString().equals("") &&
-                        !edit_text_end_date.getText().toString().equals("")) {
-                    DateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-                    try {
-                        startDate = format.parse(edit_text_start_date.getText().toString());
-                        endDate = format.parse(edit_text_end_date.getText().toString());
-                        currentTime = format.parse(format.format(new Date()));
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
-                    if (startDate.after(endDate)) {
-                        alertaDataInicioMaiorFim();
-                    }else if(startDate.before(currentTime)){
-                        alertaDataInicioUltrapassada();
-                    }else {
-                        showProgressDialog("Aguarde", "Criando anúncio...");
-                        anuncio = new Anuncio();
-                        anuncio.setTitulo(edit_text_titulo_ad.getText().toString());
-                        anuncio.setTipo(spinner_novo_ad.getSelectedItem().toString());
-                        anuncio.setDescricao(edit_text_descricao_criacao_anuncio.getText().toString());
-                        anuncio.setDataInicio(edit_text_start_date.getText().toString());
-                        anuncio.setDataFim(edit_text_end_date.getText().toString());
-                        anuncio.setIdProprietario(user.getUid());
-                        anuncioRepository = new AnuncioRepository();
-                        anuncioRepository.salvarDadosAnuncio(anuncio, new AnuncioRepository.OnSaveAnuncio() {
-                            @Override
-                            public void onSaveAnuncioSuccess(String sucesso) {
-                                alertaCriacaoAnuncioSucesso(sucesso);
-                            }
+                if(anuncio != null){
 
-                            @Override
-                            public void onSaveAnuncioError(String error) {
-                                alertaCriacaoAnuncioErro(error);
-                            }
-                        });
+                }else{
+                    if (!edit_text_titulo_ad.getText().toString().equals("") && !edit_text_start_date.getText().toString().equals("") &&
+                            !edit_text_end_date.getText().toString().equals("")) {
+                        DateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+                        try {
+                            startDate = format.parse(edit_text_start_date.getText().toString());
+                            endDate = format.parse(edit_text_end_date.getText().toString());
+                            currentTime = format.parse(format.format(new Date()));
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                        if (startDate.after(endDate)) {
+                            alertaDataInicioMaiorFim();
+                        }else if(startDate.before(currentTime)){
+                            alertaDataInicioUltrapassada();
+                        }else {
+                            showProgressDialog("Aguarde", "Criando anúncio...");
+                            anuncio = new Anuncio();
+                            anuncio.setTitulo(edit_text_titulo_ad.getText().toString());
+                            anuncio.setTipo(spinner_novo_ad.getSelectedItem().toString());
+                            anuncio.setDescricao(edit_text_descricao_criacao_anuncio.getText().toString());
+                            anuncio.setDataInicio(edit_text_start_date.getText().toString());
+                            anuncio.setDataFim(edit_text_end_date.getText().toString());
+                            anuncio.setIdProprietario(user.getUid());
+                            anuncioRepository = new AnuncioRepository();
+                            anuncioRepository.salvarDadosAnuncio(anuncio, new AnuncioRepository.OnSaveAnuncio() {
+                                @Override
+                                public void onSaveAnuncioSuccess(String sucesso) {
+                                    alertaCriacaoAnuncioSucesso(sucesso);
+                                }
+
+                                @Override
+                                public void onSaveAnuncioError(String error) {
+                                    alertaCriacaoAnuncioErro(error);
+                                }
+                            });
+                        }
+                    } else {
+                        alertaCamposNaoPreenchidos();
                     }
-                } else {
-                    alertaCamposNaoPreenchidos();
                 }
             }
         });
+    }
+
+    private void popularCampos(Anuncio anuncio) {
+
+        String[] items = new String[]{"Produto", "Serviço"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, items);
+        spinner_novo_ad.setAdapter(adapter);
+
+        if(anuncio != null){
+            botao_criar_novo_anuncio.setText(R.string.atualizar_anuncio);
+            edit_text_titulo_ad.setText(anuncio.getTitulo());
+            edit_text_descricao_criacao_anuncio.setText(anuncio.getDescricao());
+            edit_text_start_date.setText(anuncio.getDataInicio());
+            edit_text_end_date.setText(anuncio.getDataFim());
+            if(anuncio.getTipo().equals("Produto")){
+                spinner_novo_ad.setSelection(adapter.getPosition(items[0]));
+            }else if(anuncio.getTipo().equals("Serviço")){
+                spinner_novo_ad.setSelection(adapter.getPosition(items[1]));
+            }
+        }else{
+            botao_criar_novo_anuncio.setText(R.string.postar);
+        }
     }
 
     private void alertaDataInicioUltrapassada() {

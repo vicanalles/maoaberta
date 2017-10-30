@@ -74,4 +74,8 @@
     <string name="criacao_anuncio_sucesso">Anúncio criado com sucesso!</string>
     <string name="falha_criacao_anuncio">Falha ao criar o anúncio!</string>
     <string name="alerta_selecao_data">Atenção! Data de início do anúncio deve ser anterior à data de encerramento!</string>
+    <string name="titulo">Título:</string>
+    <string name="tipo">Tipo:</string>
+    <string name="editar_anuncio">Editar Anúncio</string>
+    <string name="atualizar_anuncio">ATUALIZAR ANÚNCIO</string>
 </resources>

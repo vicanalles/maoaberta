@@ -1,10 +1,12 @@
 package com.maoaberta.vinicius.maoaberta.domain.models;
 
+import java.io.Serializable;
+
 /**
  * Created by Vinicius on 24/10/2017.
  */
 
-public class Anuncio {
+public class Anuncio implements Serializable{
 
     private String id;
     private String titulo;

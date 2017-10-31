@@ -33,7 +33,7 @@ import butterknife.ButterKnife;
  * Created by Vinicius on 05/09/2017.
  */
 
-public class FragmentMenuMeusAnunciosOrganizacao extends Fragment {
+public class  FragmentMenuMeusAnunciosOrganizacao extends Fragment {
 
     @BindView(R.id.fab)
     FloatingActionButton fab;
@@ -59,10 +59,9 @@ public class FragmentMenuMeusAnunciosOrganizacao extends Fragment {
         mRecyclerview.setAdapter(mAdapter);
 
         anuncioRepository = new AnuncioRepository();
-        anuncioRepository.getAllAnunciosOrganizacao(currentUser.getUid(), new AnuncioRepository.OnGetAllAnunciosOrganizacao() {
+        anuncioRepository.getAllAnunciosOrganizacao(new AnuncioRepository.OnGetAllAnunciosOrganizacao() {
                     @Override
                     public void onGetAllAnunciosOrganizacaoSuccess(List<Anuncio> anuncios) {
-                        mAdapter.notifyDataSetChanged();
                         mAdapter.setItems(anuncios);
                     }
 

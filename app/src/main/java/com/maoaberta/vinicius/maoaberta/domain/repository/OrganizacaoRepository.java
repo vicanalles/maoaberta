@@ -21,10 +21,13 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.maoaberta.vinicius.maoaberta.R;
+import com.maoaberta.vinicius.maoaberta.domain.models.Anuncio;
 import com.maoaberta.vinicius.maoaberta.domain.models.Organizacao;
 import com.maoaberta.vinicius.maoaberta.util.Constants;
 
 import java.io.ByteArrayOutputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Vinicius on 23/09/2017.
@@ -131,6 +134,30 @@ public class OrganizacaoRepository {
         });
     }
 
+    public void getAllOrganizacoes(final OnGetAllOrganizacoes onGetAllOrganizacoes){
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                List<Organizacao> organizacoes = new ArrayList<>();
+                for(DataSnapshot data : dataSnapshot.getChildren()){
+                    Organizacao ong = data.getValue(Organizacao.class);
+                    if(ong != null){
+                        if(!data.getKey().equals(getUidCurrentUser())){
+                            ong.setId(data.getKey());
+                            organizacoes.add(ong);
+                        }
+                    }
+                }
+                onGetAllOrganizacoes.onGetAllOrganizacoesSuccess(organizacoes);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                onGetAllOrganizacoes.onGetAllOrganizacoesError(databaseError);
+            }
+        });
+    }
+
     public void atualizarDadosOrganizacao(final Organizacao organizacao, Bitmap imagemOrganizacao, final OnUpdateOrganizacao onUpdateOrganizacao){
         if(imagemOrganizacao != null){
             salvarImagemOrganizacao(imagemOrganizacao, getUidCurrentUser(), new OnImageUpload() {
@@ -183,5 +210,10 @@ public class OrganizacaoRepository {
     public interface OnUpdateOrganizacao{
         void onUpdateOrganizacaoSuccess(String sucesso);
         void onUpdateOrganizacaoError(String error);
+    }
+
+    public interface OnGetAllOrganizacoes{
+        void onGetAllOrganizacoesSuccess(List<Organizacao> organizacoes);
+        void onGetAllOrganizacoesError(DatabaseError databaseError);
     }
 }

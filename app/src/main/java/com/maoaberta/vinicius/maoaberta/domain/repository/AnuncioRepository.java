@@ -58,7 +58,7 @@ public class AnuncioRepository {
         });
     }
 
-    public void getAllAnunciosOrganizacao(String uid, final OnGetAllAnunciosOrganizacao onGetAllAnunciosOrganizacao){
+    public void getAllAnunciosOrganizacao(final OnGetAllAnunciosOrganizacao onGetAllAnunciosOrganizacao){
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {

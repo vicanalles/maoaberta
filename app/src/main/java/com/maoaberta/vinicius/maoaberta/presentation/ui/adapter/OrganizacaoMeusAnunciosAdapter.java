@@ -49,7 +49,7 @@ public class OrganizacaoMeusAnunciosAdapter extends RecyclerView.Adapter<Organiz
     }
 
     @Override
-    public OrganizacaoMeusAnunciosAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_meus_anuncios_organizacao, parent, false);
         return new MyViewHolder(itemView);

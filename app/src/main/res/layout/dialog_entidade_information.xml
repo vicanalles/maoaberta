@@ -1,0 +1,344 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="310dp"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:background="@color/backgroundColorApp">
+
+    <RelativeLayout
+        android:id="@+id/relative_layout_entidade_information"
+        android:layout_width="0dp"
+        android:layout_height="140dp"
+        android:background="@color/tabLayoutBottomColor"
+        android:clickable="true"
+        android:focusableInTouchMode="true"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/image_view_close_dialog"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            app:srcCompat="@drawable/ic_close"
+            android:tint="@color/textColorWhite"/>
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/image_view_entidade_information"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_centerInParent="true"
+            android:adjustViewBounds="false"
+            android:scaleType="centerCrop"
+            app:civ_border_color="@color/textColorWhite"
+            app:civ_border_width="2dp" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/linear_layout_nome_fantasia_entidade"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="15dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/relative_layout_entidade_information">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:text="@string/nome_fantasia"
+            android:textColor="@color/textColorBlack"
+            android:textSize="14sp"
+            android:textStyle="normal" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linear_layout_nome_fantasia_entidade_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toRightOf="@id/linear_layout_nome_fantasia_entidade"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@id/linear_layout_nome_fantasia_entidade">
+
+        <TextView
+            android:id="@+id/text_view_nome_fantasia_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:fontFamily="sans-serif"
+            android:text="Nome fantasia da Instituição"
+            android:textColor="@color/textColorWhite"
+            android:textSize="14sp"
+            android:textStyle="normal" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linear_layout_cnpj_entidade"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        app:layout_constraintLeft_toLeftOf="@id/linear_layout_nome_fantasia_entidade"
+        app:layout_constraintTop_toBottomOf="@id/linear_layout_nome_fantasia_entidade_text">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:text="@string/cnpj"
+            android:textColor="@color/textColorBlack"
+            android:textSize="14sp"
+            android:textStyle="normal" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linear_layout_cnpj_entidade_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        app:layout_constraintLeft_toRightOf="@id/linear_layout_cnpj_entidade"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/linear_layout_nome_fantasia_entidade_text">
+
+        <TextView
+            android:id="@+id/text_view_cnpj_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:fontFamily="sans-serif"
+            android:text="CNPJ da Organização"
+            android:textColor="@color/textColorWhite"
+            android:textSize="14sp"
+            android:textStyle="normal" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linear_layout_email_entidade"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        app:layout_constraintLeft_toLeftOf="@id/linear_layout_cnpj_entidade"
+        app:layout_constraintTop_toBottomOf="@id/linear_layout_cnpj_entidade_text">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:text="@string/email"
+            android:textColor="@color/textColorBlack"
+            android:textSize="14sp"
+            android:textStyle="normal" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linear_layout_email_entidade_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        app:layout_constraintLeft_toRightOf="@id/linear_layout_email_entidade"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/linear_layout_cnpj_entidade_text">
+
+        <TextView
+            android:id="@+id/text_view_email_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:fontFamily="sans-serif"
+            android:text="Email da Organização"
+            android:textColor="@color/textColorWhite"
+            android:textSize="14sp"
+            android:textStyle="normal" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linear_layout_nome_responsavel_entidade"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        app:layout_constraintLeft_toLeftOf="@id/linear_layout_email_entidade"
+        app:layout_constraintTop_toBottomOf="@id/linear_layout_email_entidade_text">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:text="@string/nome_responsavel"
+            android:textColor="@color/textColorBlack"
+            android:textSize="14sp"
+            android:textStyle="normal" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linear_layout_nome_responsavel_entidade_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        app:layout_constraintLeft_toRightOf="@id/linear_layout_nome_responsavel_entidade"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/linear_layout_email_entidade_text">
+
+        <TextView
+            android:id="@+id/text_view_nome_responsavel_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:fontFamily="sans-serif"
+            android:text="Nome do Responsável pela organização"
+            android:textColor="@color/textColorWhite"
+            android:textSize="14sp"
+            android:textStyle="normal" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linear_layout_endereco_entidade"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        app:layout_constraintLeft_toLeftOf="@id/linear_layout_nome_responsavel_entidade"
+        app:layout_constraintTop_toBottomOf="@id/linear_layout_nome_responsavel_entidade_text">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:text="@string/endereco"
+            android:textColor="@color/textColorBlack"
+            android:textSize="14sp"
+            android:textStyle="normal" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linear_layout_endereco_entidade_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        app:layout_constraintLeft_toRightOf="@id/linear_layout_endereco_entidade"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/linear_layout_nome_responsavel_entidade_text">
+
+        <TextView
+            android:id="@+id/text_view_endereco_entidade_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:fontFamily="sans-serif"
+            android:text="Endereço da Organização"
+            android:textColor="@color/textColorWhite"
+            android:textSize="14sp"
+            android:textStyle="normal" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linear_layout_descricao_entidade"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        app:layout_constraintLeft_toLeftOf="@id/linear_layout_endereco_entidade"
+        app:layout_constraintTop_toBottomOf="@id/linear_layout_endereco_entidade_text">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:text="@string/descricao"
+            android:textColor="@color/textColorBlack"
+            android:textSize="14sp"
+            android:textStyle="normal" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linear_layout_descricao_entidade_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        app:layout_constraintLeft_toRightOf="@id/linear_layout_descricao_entidade"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/linear_layout_endereco_entidade_text">
+
+        <TextView
+            android:id="@+id/text_view_descricao_entidade_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:fontFamily="sans-serif"
+            android:text="Descrição da Organização"
+            android:textColor="@color/textColorWhite"
+            android:textSize="14sp"
+            android:textStyle="normal" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linear_layout_social_media_icons"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/linear_layout_descricao_entidade_text"
+        android:orientation="horizontal"
+        android:weightSum="3">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center">
+
+            <ImageView
+                android:id="@+id/image_view_facebook_dialog"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                app:srcCompat="@drawable/ic_action_facebook" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center">
+
+            <ImageView
+                android:id="@+id/image_view_twitter_dialog"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                app:srcCompat="@drawable/ic_action_twitter"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center">
+
+            <ImageView
+                android:id="@+id/image_view_website_dialog"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                app:srcCompat="@drawable/ic_home"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/button_ver_anuncios_entidade"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:text="Ver Anúncios"
+        android:background="@drawable/rounded_button"
+        android:textColor="@color/textColorWhite"
+        android:fontFamily="sans-serif"
+        android:textStyle="normal"
+        android:textSize="14sp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/linear_layout_social_media_icons"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="10dp"/>
+
+</android.support.constraint.ConstraintLayout>

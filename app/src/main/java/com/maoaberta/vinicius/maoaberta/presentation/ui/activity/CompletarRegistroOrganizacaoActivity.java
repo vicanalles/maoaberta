@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -97,6 +98,9 @@ public class CompletarRegistroOrganizacaoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_completar_registro_organizacao);
         ButterKnife.bind(this);
         setSupportActionBar(toolbar_layout_menu_completar_registro_organizacao);
+
+        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+        StrictMode.setVmPolicy(builder.build());
 
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();

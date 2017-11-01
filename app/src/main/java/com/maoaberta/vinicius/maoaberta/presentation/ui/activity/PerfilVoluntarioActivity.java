@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -99,6 +100,9 @@ public class PerfilVoluntarioActivity extends AppCompatActivity {
         setContentView(R.layout.activity_perfil_cliente);
         ButterKnife.bind(this);
         setSupportActionBar(toolbar_layout_menu_perfil_cliente);
+
+        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+        StrictMode.setVmPolicy(builder.build());
 
         progressDialog = new ProgressDialog(this);
 

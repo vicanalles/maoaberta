@@ -13,7 +13,7 @@
     <LinearLayout
         android:id="@+id/linear_layout_organizacoes"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="72dp"
         android:layout_marginEnd="10dp"
         android:background="@drawable/rounded_edittext"
         android:weightSum="2">
@@ -22,13 +22,17 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_gravity="center"
-            android:layout_weight="0.5">
+            android:gravity="center"
+            android:layout_weight="0.5"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp">
 
-            <ImageView
+            <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/image_view_logo_entidade"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:srcCompat="@drawable/logo_mao_aberta" />
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                app:srcCompat="@drawable/logo_mao_aberta"
+                android:layout_marginStart="5dp" />
         </LinearLayout>
 
         <LinearLayout

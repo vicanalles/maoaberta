@@ -2,6 +2,7 @@ package com.maoaberta.vinicius.maoaberta.presentation.ui.adapter;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -17,6 +17,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.maoaberta.vinicius.maoaberta.R;
 import com.maoaberta.vinicius.maoaberta.domain.models.Organizacao;
+import com.maoaberta.vinicius.maoaberta.presentation.ui.activity.AnunciosOrganizacaoActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -126,12 +127,18 @@ public class OrganizacaoEntidadesAdapter extends RecyclerView.Adapter<Organizaca
                 button_ver_anuncios_entidade.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Toast.makeText(context, "Mostrar anúncios da organização selecionada", Toast.LENGTH_SHORT).show();
+                        abrirTelaAnunciosOrganizacao(organizacao);
                     }
                 });
                 dialog.show();
             }
         });
+    }
+
+    public void abrirTelaAnunciosOrganizacao(Organizacao organizacao){
+        Intent intent = new Intent(context, AnunciosOrganizacaoActivity.class);
+        intent.putExtra("organizacao", organizacao);
+        context.startActivity(intent);
     }
 
     @Override

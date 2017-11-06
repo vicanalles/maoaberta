@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -51,7 +50,7 @@ public class OrganizacaoMeusAnunciosAdapter extends RecyclerView.Adapter<Organiz
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_meus_anuncios_organizacao, parent, false);
+                .inflate(R.layout.item_menu_meus_anuncios_organizacao, parent, false);
         return new MyViewHolder(itemView);
     }
 

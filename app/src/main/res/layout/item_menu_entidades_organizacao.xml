@@ -22,17 +22,17 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_gravity="center"
-            android:gravity="center"
-            android:layout_weight="0.5"
+            android:layout_marginBottom="5dp"
             android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp">
+            android:layout_weight="0.5"
+            android:gravity="center">
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/image_view_logo_entidade"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
-                app:srcCompat="@drawable/logo_mao_aberta"
-                android:layout_marginStart="5dp" />
+                android:layout_marginStart="5dp"
+                app:srcCompat="@drawable/logo_mao_aberta" />
         </LinearLayout>
 
         <LinearLayout
@@ -44,12 +44,12 @@
                 android:id="@+id/text_view_nome_instituicao"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text="Nome da Instituição"
-                android:textSize="16sp"
-                android:textStyle="normal"
-                android:textColor="@color/textColorBlack"
                 android:fontFamily="sans-serif"
-                android:gravity="center"/>
+                android:gravity="center"
+                android:text="Nome da Instituição"
+                android:textColor="@color/textColorBlack"
+                android:textSize="16sp"
+                android:textStyle="normal" />
         </LinearLayout>
 
         <LinearLayout
@@ -60,7 +60,7 @@
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:srcCompat="@drawable/ic_keyboard_arrow_right"/>
+                app:srcCompat="@drawable/ic_keyboard_arrow_right" />
 
         </LinearLayout>
 

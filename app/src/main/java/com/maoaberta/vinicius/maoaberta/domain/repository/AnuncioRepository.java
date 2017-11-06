@@ -14,6 +14,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.maoaberta.vinicius.maoaberta.R;
 import com.maoaberta.vinicius.maoaberta.domain.models.Anuncio;
+import com.maoaberta.vinicius.maoaberta.domain.models.Organizacao;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -82,6 +83,28 @@ public class AnuncioRepository {
         });
     }
 
+    public void getAllAnuncios(final Organizacao organizacao, final OnGetAllAnuncios onGetAllAnuncios){
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                List<Anuncio> anuncios = new ArrayList<>();
+                for(DataSnapshot data : dataSnapshot.getChildren()){
+                    Anuncio anuncio = data.getValue(Anuncio.class);
+                    if(anuncio.getIdProprietario().equals(organizacao.getId())){
+                        anuncios.add(anuncio);
+                    }
+                }
+
+                onGetAllAnuncios.onGetAllAnunciosSuccess(anuncios);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                onGetAllAnuncios.onGetAllAnunciosError(databaseError);
+            }
+        });
+    }
+
     public void atualizarAnuncio(Anuncio anuncio, String id, final OnUpdateAnuncio onUpdateAnuncio){
         reference.child(id).setValue(anuncio).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
@@ -108,5 +131,10 @@ public class AnuncioRepository {
     public interface OnUpdateAnuncio{
         void onUpdateAnuncioSuccess(String sucesso);
         void onUpdateAnuncioError(String erro);
+    }
+
+    public interface OnGetAllAnuncios{
+        void onGetAllAnunciosSuccess(List<Anuncio> anuncios);
+        void onGetAllAnunciosError(DatabaseError erro);
     }
 }

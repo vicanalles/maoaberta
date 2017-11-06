@@ -1,10 +1,12 @@
 package com.maoaberta.vinicius.maoaberta.domain.models;
 
+import java.io.Serializable;
+
 /**
  * Created by Vinicius on 23/09/2017.
  */
 
-public class Organizacao {
+public class Organizacao implements Serializable{
 
     private String id;
     private String cnpj;

@@ -14,6 +14,7 @@ import android.widget.Toast;
 import com.maoaberta.vinicius.maoaberta.R;
 import com.maoaberta.vinicius.maoaberta.domain.models.Anuncio;
 import com.maoaberta.vinicius.maoaberta.domain.models.Organizacao;
+import com.maoaberta.vinicius.maoaberta.domain.repository.AnuncioRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +31,7 @@ public class AnunciosOrganizacaoAdapter extends RecyclerView.Adapter<AnunciosOrg
     private Context context;
     private List<Anuncio> anuncios;
     private Organizacao ong;
+    private AnuncioRepository anuncioRepository;
     private ImageView image_view_close_dialog_interesse;
     private TextView text_view_titulo_ad_text_interesse;
     private TextView text_view_tipo_ad_text_interesse;
@@ -89,7 +91,19 @@ public class AnunciosOrganizacaoAdapter extends RecyclerView.Adapter<AnunciosOrg
                 button_demonstrar_interesse.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Toast.makeText(context, "Demonstrando interesse no anúncio", Toast.LENGTH_SHORT).show();
+                        anuncioRepository = new AnuncioRepository();
+                        anuncioRepository.salvarOrganizacaoInteressadaAnuncio(anuncio, new AnuncioRepository.OnSalvarInteresse() {
+                            @Override
+                            public void onSalvarInteresseSuccess() {
+                                Toast.makeText(context, "Seu interesse foi enviado para organização. Muito obrigado!", Toast.LENGTH_SHORT).show();
+                                dialog.dismiss();
+                            }
+
+                            @Override
+                            public void onSalvarInteresseError() {
+                                Toast.makeText(context, "Não foi possível enviar o seu interesse. Tente novamente!", Toast.LENGTH_SHORT).show();
+                            }
+                        });
                     }
                 });
                 dialog.show();

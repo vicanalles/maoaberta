@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -59,6 +60,20 @@ public class AnuncioRepository {
         });
     }
 
+    public void salvarOrganizacaoInteressadaAnuncio(Anuncio anuncio, final OnSalvarInteresse onSalvarInteresse){
+        reference.child(anuncio.getId()).child("Interessados").child(getUidCurrentUser()).setValue(true).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                onSalvarInteresse.onSalvarInteresseSuccess();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                onSalvarInteresse.onSalvarInteresseError();
+            }
+        });
+    }
+
     public void getAllAnunciosOrganizacao(final OnGetAllAnunciosOrganizacao onGetAllAnunciosOrganizacao){
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -91,6 +106,7 @@ public class AnuncioRepository {
                 for(DataSnapshot data : dataSnapshot.getChildren()){
                     Anuncio anuncio = data.getValue(Anuncio.class);
                     if(anuncio.getIdProprietario().equals(organizacao.getId())){
+                        anuncio.setId(data.getKey());
                         anuncios.add(anuncio);
                     }
                 }
@@ -136,5 +152,10 @@ public class AnuncioRepository {
     public interface OnGetAllAnuncios{
         void onGetAllAnunciosSuccess(List<Anuncio> anuncios);
         void onGetAllAnunciosError(DatabaseError erro);
+    }
+
+    public interface OnSalvarInteresse{
+        void onSalvarInteresseSuccess();
+        void onSalvarInteresseError();
     }
 }

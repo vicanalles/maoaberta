@@ -66,7 +66,7 @@ public class OrganizacaoMeusAnunciosAdapter extends RecyclerView.Adapter<Organiz
             @Override
             public void onClick(View view) {
                 final Dialog dialog = new Dialog(context);
-                dialog.setContentView(R.layout.dialog_ad_information);
+                dialog.setContentView(R.layout.dialog_meus_anuncios_information);
 
 
                 image_view_close_dialog = (ImageView) dialog.findViewById(R.id.image_view_close_dialog);

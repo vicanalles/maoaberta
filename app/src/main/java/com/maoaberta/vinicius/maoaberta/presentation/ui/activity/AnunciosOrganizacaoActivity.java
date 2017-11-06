@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 
 import com.google.firebase.database.DatabaseError;
 import com.maoaberta.vinicius.maoaberta.R;
@@ -74,5 +75,14 @@ public class AnunciosOrganizacaoActivity extends AppCompatActivity{
 
             }
         });
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case android.R.id.home:
+                finish();
+        }
+        return true;
     }
 }

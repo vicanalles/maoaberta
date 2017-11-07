@@ -32,7 +32,6 @@ public class FragmentMenuEntidadesOrganizacao extends Fragment {
     @BindView(R.id.recycler_organizacao_list)
     RecyclerView mRecyclerview;
 
-    private FirebaseUser currentUser;
     private List<Organizacao> mOrganizacoes;
     private OrganizacaoEntidadesAdapter mAdapter;
     private OrganizacaoRepository organizacaoRepository;
@@ -45,7 +44,6 @@ public class FragmentMenuEntidadesOrganizacao extends Fragment {
 
         mOrganizacoes = new ArrayList<>();
 
-        currentUser = FirebaseAuth.getInstance().getCurrentUser();
         mRecyclerview.setLayoutManager(new LinearLayoutManager(getContext()));
         mAdapter = new OrganizacaoEntidadesAdapter(getContext());
         mRecyclerview.setAdapter(mAdapter);

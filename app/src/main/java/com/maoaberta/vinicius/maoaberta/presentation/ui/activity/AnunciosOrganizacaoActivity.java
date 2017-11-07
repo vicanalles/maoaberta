@@ -1,13 +1,19 @@
 package com.maoaberta.vinicius.maoaberta.presentation.ui.activity;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseError;
 import com.maoaberta.vinicius.maoaberta.R;
 import com.maoaberta.vinicius.maoaberta.domain.models.Anuncio;
@@ -64,7 +70,7 @@ public class AnunciosOrganizacaoActivity extends AppCompatActivity{
         mRecyclerView.setAdapter(mAdapter);
 
         anuncioRepository = new AnuncioRepository();
-        anuncioRepository.getAllAnuncios(organizacao, new AnuncioRepository.OnGetAllAnuncios() {
+        anuncioRepository.getAllAnunciosOrganizacao(organizacao, new AnuncioRepository.OnGetAllAnuncios() {
             @Override
             public void onGetAllAnunciosSuccess(List<Anuncio> anuncios) {
                 mAdapter.setItems(anuncios);
@@ -80,9 +86,46 @@ public class AnunciosOrganizacaoActivity extends AppCompatActivity{
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
+
             case android.R.id.home:
                 finish();
+                break;
+            case R.id.item_exit_menu_principal:
+                sairDoApp();
         }
         return true;
+    }
+
+    private void sairDoApp() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.AppTheme));
+        builder.setMessage(R.string.sair_app);
+        builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                FirebaseAuth.getInstance().signOut();
+                abrirTelaLogin();
+            }
+        });
+        builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    private void abrirTelaLogin() {
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_perfil, menu);
+
+        return super.onCreateOptionsMenu(menu);
     }
 }

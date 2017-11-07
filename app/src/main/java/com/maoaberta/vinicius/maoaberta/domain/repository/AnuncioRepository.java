@@ -74,7 +74,8 @@ public class AnuncioRepository {
         });
     }
 
-    public void getAllAnunciosOrganizacao(final OnGetAllAnunciosOrganizacao onGetAllAnunciosOrganizacao){
+    //pega todos os anuncios da organizacao que esta logada
+    public void getAllMeusAnunciosOrganizacao(final OnGetAllAnunciosOrganizacao onGetAllAnunciosOrganizacao){
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -98,14 +99,41 @@ public class AnuncioRepository {
         });
     }
 
-    public void getAllAnuncios(final Organizacao organizacao, final OnGetAllAnuncios onGetAllAnuncios){
+    //pega todos os anuncios da organizacao selecionada
+    public void getAllAnunciosOrganizacao(final Organizacao organizacao, final OnGetAllAnuncios onGetAllAnuncios){
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 List<Anuncio> anuncios = new ArrayList<>();
                 for(DataSnapshot data : dataSnapshot.getChildren()){
                     Anuncio anuncio = data.getValue(Anuncio.class);
-                    if(anuncio.getIdProprietario().equals(organizacao.getId())){
+                    if(anuncio != null){
+                        if(anuncio.getIdProprietario().equals(organizacao.getId())){
+                            anuncio.setId(data.getKey());
+                            anuncios.add(anuncio);
+                        }
+                    }
+                }
+
+                onGetAllAnuncios.onGetAllAnunciosSuccess(anuncios);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                onGetAllAnuncios.onGetAllAnunciosError(databaseError);
+            }
+        });
+    }
+
+    //pega todos os anuncios que não são do usuário logado
+    public void getAllAnuncios(final OnGetAllAnuncios onGetAllAnuncios){
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                List<Anuncio> anuncios = new ArrayList<>();
+                for(DataSnapshot data : dataSnapshot.getChildren()){
+                    Anuncio anuncio = data.getValue(Anuncio.class);
+                    if(!anuncio.getIdProprietario().equals(getUidCurrentUser())){
                         anuncio.setId(data.getKey());
                         anuncios.add(anuncio);
                     }

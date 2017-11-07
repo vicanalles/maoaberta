@@ -34,7 +34,6 @@ public class OrganizacaoEntidadesAdapter extends RecyclerView.Adapter<Organizaca
 
     private Context context;
     private List<Organizacao> organizacoes;
-    private FirebaseUser currentUser;
     private ImageView image_view_close_dialog;
     private CircleImageView image_view_entidade_information;
     private TextView text_view_nome_fantasia_text;
@@ -48,7 +47,6 @@ public class OrganizacaoEntidadesAdapter extends RecyclerView.Adapter<Organizaca
     public OrganizacaoEntidadesAdapter(Context context){
         this.context = context;
         organizacoes = new ArrayList<>();
-        currentUser = FirebaseAuth.getInstance().getCurrentUser();
     }
 
     @Override

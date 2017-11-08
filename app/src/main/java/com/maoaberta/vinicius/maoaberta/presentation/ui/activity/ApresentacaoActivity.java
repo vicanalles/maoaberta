@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -17,6 +18,7 @@ import com.maoaberta.vinicius.maoaberta.R;
 import com.maoaberta.vinicius.maoaberta.domain.models.Voluntario;
 import com.maoaberta.vinicius.maoaberta.domain.repository.TipoRepository;
 import com.maoaberta.vinicius.maoaberta.domain.repository.UsuarioRepository;
+import com.maoaberta.vinicius.maoaberta.presentation.ui.adapter.ViewPagerConteudoSobreAdapter;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -33,8 +35,11 @@ public class ApresentacaoActivity extends AppCompatActivity {
 
     @BindView(R.id.toolbar_layout_sobre)
     Toolbar toolbar_layout_sobre;
+    @BindView(R.id.view_pager_conteudo_sobre)
+    ViewPager view_pager_conteudo_sobre;
 
     private ProgressDialog progressDialog;
+    private ViewPagerConteudoSobreAdapter adapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -44,6 +49,10 @@ public class ApresentacaoActivity extends AppCompatActivity {
         setSupportActionBar(toolbar_layout_sobre);
 
         progressDialog = new ProgressDialog(this);
+
+        adapter = new ViewPagerConteudoSobreAdapter(getSupportFragmentManager());
+
+        view_pager_conteudo_sobre.setAdapter(adapter);
 
         mAuth = FirebaseAuth.getInstance();
         tipoRepository = new TipoRepository();

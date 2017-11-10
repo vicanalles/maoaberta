@@ -25,6 +25,12 @@ public class TabInformacaoSobre1 extends Fragment{
         ButterKnife.bind(this, v);
 
         return v;
+    }
 
+    public static TabInformacaoSobre1 newInstance(){
+
+        TabInformacaoSobre1 tab1 = new TabInformacaoSobre1();
+
+        return tab1;
     }
 }

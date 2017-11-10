@@ -18,9 +18,9 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:subtitleTextColor="@color/textColorWhite"
         app:title="@string/sobre"
-        app:titleTextColor="@color/textColorWhite"
-        app:subtitleTextColor="@color/textColorWhite">
+        app:titleTextColor="@color/textColorWhite">
 
     </android.support.v7.widget.Toolbar>
 
@@ -28,8 +28,8 @@
         android:id="@+id/image_view_logo_app_apresentacao"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:contentDescription="@string/sobre"
         android:layout_marginTop="80dp"
+        android:contentDescription="@string/sobre"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -39,6 +39,7 @@
         android:id="@+id/text_view_nome_projeto_apresentacao"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
         android:fontFamily="sans-serif"
         android:text="@string/nome_projeto"
         android:textAlignment="center"
@@ -46,19 +47,21 @@
         android:textSize="28sp"
         android:textStyle="bold"
         android:typeface="normal"
-        android:layout_marginTop="15dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/image_view_logo_app_apresentacao" />
 
     <android.support.v4.view.ViewPager
         android:id="@+id/view_pager_conteudo_sobre"
-        android:layout_width="320dp"
+        android:layout_width="280dp"
         android:layout_height="0dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/text_view_nome_projeto_apresentacao">
+
     </android.support.v4.view.ViewPager>
 
 </android.support.constraint.ConstraintLayout>

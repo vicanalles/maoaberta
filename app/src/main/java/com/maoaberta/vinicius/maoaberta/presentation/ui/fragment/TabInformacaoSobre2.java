@@ -26,4 +26,11 @@ public class TabInformacaoSobre2 extends Fragment{
 
         return v;
     }
+
+    public static TabInformacaoSobre2 newInstance(){
+
+        TabInformacaoSobre2 tab2 = new TabInformacaoSobre2();
+
+        return tab2;
+    }
 }

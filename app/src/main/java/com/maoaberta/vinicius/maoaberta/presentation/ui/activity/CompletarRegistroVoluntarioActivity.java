@@ -2,7 +2,6 @@ package com.maoaberta.vinicius.maoaberta.presentation.ui.activity;
 
 import android.Manifest;
 import android.app.ProgressDialog;
-import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -258,7 +257,7 @@ public class CompletarRegistroVoluntarioActivity extends AppCompatActivity {
 
     private void abrirMenuPrincipalCliente() {
         hideProgressDialog();
-        Intent intent = new Intent(CompletarRegistroVoluntarioActivity.this, MenuPrincipalClienteActivity.class);
+        Intent intent = new Intent(CompletarRegistroVoluntarioActivity.this, MenuPrincipalVoluntarioActivity.class);
         startActivity(intent);
         finish();
     }

@@ -33,7 +33,7 @@ import butterknife.ButterKnife;
  * Created by Vinicius on 02/09/2017.
  */
 
-public class MenuPrincipalClienteActivity extends AppCompatActivity{
+public class MenuPrincipalVoluntarioActivity extends AppCompatActivity{
 
     private FirebaseAuth mAuth = null;
     private UsuarioRepository usuarioRepository;
@@ -58,6 +58,7 @@ public class MenuPrincipalClienteActivity extends AppCompatActivity{
         usuarioRepository = new UsuarioRepository();
 
         final String[] tabTitles = {
+                "Meus Interesses",
                 getString(R.string.anuncios_tab_title),
                 getString(R.string.entidades_tab_title),
                 getString(R.string.sobre_tab_title)
@@ -93,7 +94,7 @@ public class MenuPrincipalClienteActivity extends AppCompatActivity{
                             tabStrip.getChildAt(i).setOnTouchListener(new View.OnTouchListener() {
                                 @Override
                                 public boolean onTouch(View v, MotionEvent event) {
-                                    Toast.makeText(MenuPrincipalClienteActivity.this, R.string.preencha_todos_campos, Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(MenuPrincipalVoluntarioActivity.this, R.string.preencha_todos_campos, Toast.LENGTH_SHORT).show();
                                     return true;
                                 }
                             });
@@ -131,7 +132,7 @@ public class MenuPrincipalClienteActivity extends AppCompatActivity{
     }
 
     private void abrirTelaPerfilVoluntario() {
-        Intent intent = new Intent(MenuPrincipalClienteActivity.this, PerfilVoluntarioActivity.class);
+        Intent intent = new Intent(MenuPrincipalVoluntarioActivity.this, PerfilVoluntarioActivity.class);
         startActivity(intent);
         finish();
     }

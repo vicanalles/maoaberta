@@ -37,7 +37,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.maoaberta.vinicius.maoaberta.R;
 import com.maoaberta.vinicius.maoaberta.domain.models.Voluntario;
-import com.maoaberta.vinicius.maoaberta.domain.repository.TipoRepository;
 import com.maoaberta.vinicius.maoaberta.domain.repository.UsuarioRepository;
 import com.maoaberta.vinicius.maoaberta.util.CustomPhotoPickerDialog;
 
@@ -46,14 +45,10 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
-
-import static com.maoaberta.vinicius.maoaberta.R.string.escolher_foto;
-import static com.maoaberta.vinicius.maoaberta.R.string.senha;
 
 /**
  * Created by vinicius on 29/08/17.
@@ -426,7 +421,7 @@ public class PerfilVoluntarioActivity extends AppCompatActivity {
     }
 
     private void abrirMenuPrincipal() {
-        Intent intent = new Intent(PerfilVoluntarioActivity.this, MenuPrincipalClienteActivity.class);
+        Intent intent = new Intent(PerfilVoluntarioActivity.this, MenuPrincipalVoluntarioActivity.class);
         startActivity(intent);
         finish();
     }

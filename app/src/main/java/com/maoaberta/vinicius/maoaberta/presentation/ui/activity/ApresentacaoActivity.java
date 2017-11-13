@@ -10,14 +10,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.maoaberta.vinicius.maoaberta.R;
-import com.maoaberta.vinicius.maoaberta.domain.models.Voluntario;
 import com.maoaberta.vinicius.maoaberta.domain.repository.TipoRepository;
-import com.maoaberta.vinicius.maoaberta.domain.repository.UsuarioRepository;
 import com.maoaberta.vinicius.maoaberta.presentation.ui.adapter.ViewPagerConteudoSobreAdapter;
 
 import butterknife.BindView;
@@ -114,7 +111,7 @@ public class ApresentacaoActivity extends AppCompatActivity {
 
     public void abrirMenuPrincipalCliente() {
         hideProgressDialog();
-        Intent intent = new Intent(getApplicationContext(), MenuPrincipalClienteActivity.class);
+        Intent intent = new Intent(getApplicationContext(), MenuPrincipalVoluntarioActivity.class);
         startActivity(intent);
         finish();
     }

@@ -3,12 +3,10 @@ package com.maoaberta.vinicius.maoaberta.presentation.ui.fragment;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.view.ContextThemeWrapper;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,10 +34,8 @@ import com.maoaberta.vinicius.maoaberta.domain.models.Voluntario;
 import com.maoaberta.vinicius.maoaberta.domain.repository.UsuarioRepository;
 import com.maoaberta.vinicius.maoaberta.presentation.ui.activity.CadastroActivity;
 import com.maoaberta.vinicius.maoaberta.presentation.ui.activity.CompletarRegistroVoluntarioActivity;
-import com.maoaberta.vinicius.maoaberta.presentation.ui.activity.EsqueceuSenhaActivity;
 import com.maoaberta.vinicius.maoaberta.presentation.ui.activity.LoginActivity;
-import com.maoaberta.vinicius.maoaberta.presentation.ui.activity.MenuPrincipalClienteActivity;
-import com.maoaberta.vinicius.maoaberta.presentation.ui.activity.PerfilVoluntarioActivity;
+import com.maoaberta.vinicius.maoaberta.presentation.ui.activity.MenuPrincipalVoluntarioActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -192,7 +188,7 @@ public class TabLoginCliente extends Fragment implements GoogleApiClient.OnConne
 
     private void abrirMenuPrincipalVoluntario() {
         ((LoginActivity) getActivity()).hideProgressDialog();
-        Intent intent = new Intent(getActivity(), MenuPrincipalClienteActivity.class);
+        Intent intent = new Intent(getActivity(), MenuPrincipalVoluntarioActivity.class);
         startActivity(intent);
         getActivity().finish();
     }

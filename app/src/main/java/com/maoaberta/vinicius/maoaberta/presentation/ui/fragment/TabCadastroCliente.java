@@ -24,7 +24,7 @@ import com.maoaberta.vinicius.maoaberta.domain.models.Voluntario;
 import com.maoaberta.vinicius.maoaberta.domain.repository.UsuarioRepository;
 import com.maoaberta.vinicius.maoaberta.presentation.ui.activity.CadastroActivity;
 import com.maoaberta.vinicius.maoaberta.presentation.ui.activity.CompletarRegistroVoluntarioActivity;
-import com.maoaberta.vinicius.maoaberta.presentation.ui.activity.MenuPrincipalClienteActivity;
+import com.maoaberta.vinicius.maoaberta.presentation.ui.activity.MenuPrincipalVoluntarioActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -183,7 +183,7 @@ public class TabCadastroCliente extends Fragment {
     }
 
     private void abrirMenuPrincipalCliente() {
-        Intent intent = new Intent(getContext(), MenuPrincipalClienteActivity.class);
+        Intent intent = new Intent(getContext(), MenuPrincipalVoluntarioActivity.class);
         startActivity(intent);
         getActivity().finish();
     }

@@ -17,7 +17,7 @@ import butterknife.ButterKnife;
  * Created by Vinicius on 03/09/2017.
  */
 
-public class FragmentMenuMeusAnunciosCliente extends Fragment {
+public class FragmentMenuMeusAnunciosVoluntario extends Fragment {
 
     @BindView(R.id.text_view_menu_meus_anuncios_fragment_cliente)
     TextView text_view_menu_meus_anuncios_fragment_cliente;

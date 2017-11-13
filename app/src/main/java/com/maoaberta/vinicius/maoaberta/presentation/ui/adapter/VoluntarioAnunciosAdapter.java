@@ -27,10 +27,10 @@ import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
- * Created by vinicius on 07/11/17.
+ * Created by vinicius on 13/11/17.
  */
 
-public class OrganizacaoAnunciosAdapter extends RecyclerView.Adapter<OrganizacaoAnunciosAdapter.MyViewHolder>{
+public class VoluntarioAnunciosAdapter extends RecyclerView.Adapter<VoluntarioAnunciosAdapter.MyViewholder>{
 
     private Context context;
     private List<Anuncio> anuncios;
@@ -43,26 +43,26 @@ public class OrganizacaoAnunciosAdapter extends RecyclerView.Adapter<Organizacao
     private TextView text_view_end_date_text_interesse;
     private Button button_demonstrar_interesse;
 
-    public OrganizacaoAnunciosAdapter(Context context){
+    public VoluntarioAnunciosAdapter(Context context){
         this.context = context;
         anuncios = new ArrayList<>();
         organizacaoRepository = new OrganizacaoRepository();
     }
 
     @Override
-    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_menu_anuncios_entidades_organizacao, parent, false);
-        return new MyViewHolder(itemView);
+    public MyViewholder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_menu_anuncios_entidades_voluntario, parent, false);
+        return new MyViewholder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(final MyViewHolder holder, int position) {
+    public void onBindViewHolder(final MyViewholder holder, int position) {
 
         final Anuncio anuncio = anuncios.get(position);
 
-        holder.text_view_titulo_anuncio_organizacao.setText(anuncio.getTitulo());
-        holder.text_view_valido_de_anuncios.setText(anuncio.getDataInicio());
-        holder.text_view_valido_ate_anuncios.setText(anuncio.getDataFim());
+        holder.text_view_titulo_anuncio_organizacao_voluntario.setText(anuncio.getTitulo());
+        holder.text_view_valido_de_anuncios_voluntario.setText(anuncio.getDataInicio());
+        holder.text_view_valido_ate_anuncios_voluntario.setText(anuncio.getDataFim());
 
         organizacaoRepository.getOrganizacaoById(anuncio.getIdProprietario(), new OrganizacaoRepository.OnGetOrganizacaoById() {
             @Override
@@ -70,15 +70,15 @@ public class OrganizacaoAnunciosAdapter extends RecyclerView.Adapter<Organizacao
                 if(organizacao.getPhotoUrl() != null){
                     try{
                         Glide.with(context).load(organizacao.getPhotoUrl()).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true)
-                                .into(holder.image_view_logo_organizacao);
+                                .into(holder.image_view_logo_organizacao_voluntario);
                     }catch(Exception e){
                         e.printStackTrace();
                     }
                 }else{
                     Glide.with(context).load(R.drawable.ic_account_circle).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true)
-                            .into(holder.image_view_logo_organizacao);
+                            .into(holder.image_view_logo_organizacao_voluntario);
                 }
-                holder.text_view_nome_organizacao_anuncios.setText(organizacao.getNomeFantasia());
+                holder.text_view_nome_organizacao_anuncios_voluntario.setText(organizacao.getNomeFantasia());
             }
 
             @Override
@@ -142,26 +142,26 @@ public class OrganizacaoAnunciosAdapter extends RecyclerView.Adapter<Organizacao
         return anuncios.size();
     }
 
-    public void setItems(List<Anuncio> anuncios) {
+    public void setItems(List<Anuncio> anuncios){
         this.anuncios.clear();
         this.anuncios.addAll(anuncios);
         notifyDataSetChanged();
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder{
+    public class MyViewholder extends RecyclerView.ViewHolder{
 
-        @BindView(R.id.image_view_logo_organizacao)
-        CircleImageView image_view_logo_organizacao;
-        @BindView(R.id.text_view_nome_organizacao_anuncios)
-        TextView text_view_nome_organizacao_anuncios;
-        @BindView(R.id.text_view_titulo_anuncio_organizacao)
-        TextView text_view_titulo_anuncio_organizacao;
-        @BindView(R.id.text_view_valido_de_anuncios)
-        TextView text_view_valido_de_anuncios;
-        @BindView(R.id.text_view_valido_ate_anuncios)
-        TextView text_view_valido_ate_anuncios;
+        @BindView(R.id.image_view_logo_organizacao_voluntario)
+        CircleImageView image_view_logo_organizacao_voluntario;
+        @BindView(R.id.text_view_nome_organizacao_anuncios_voluntario)
+        TextView text_view_nome_organizacao_anuncios_voluntario;
+        @BindView(R.id.text_view_titulo_anuncio_organizacao_voluntario)
+        TextView text_view_titulo_anuncio_organizacao_voluntario;
+        @BindView(R.id.text_view_valido_de_anuncios_voluntario)
+        TextView text_view_valido_de_anuncios_voluntario;
+        @BindView(R.id.text_view_valido_ate_anuncios_voluntario)
+        TextView text_view_valido_ate_anuncios_voluntario;
 
-        public MyViewHolder(View itemView){
+        public MyViewholder(View itemView){
             super(itemView);
             ButterKnife.bind(this, itemView);
         }

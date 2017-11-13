@@ -25,10 +25,10 @@ import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
- * Created by vinicius on 31/10/17.
+ * Created by vinicius on 13/11/17.
  */
 
-public class OrganizacaoEntidadesAdapter extends RecyclerView.Adapter<OrganizacaoEntidadesAdapter.MyViewHolder>{
+public class VoluntarioEntidadesAdapter extends RecyclerView.Adapter<VoluntarioEntidadesAdapter.MyViewHolder> {
 
     private Context context;
     private List<Organizacao> organizacoes;
@@ -42,35 +42,36 @@ public class OrganizacaoEntidadesAdapter extends RecyclerView.Adapter<Organizaca
     private TextView text_view_descricao_entidade_text;
     private Button button_ver_anuncios_entidade;
 
-    public OrganizacaoEntidadesAdapter(Context context){
+    public VoluntarioEntidadesAdapter(Context context) {
         this.context = context;
         organizacoes = new ArrayList<>();
     }
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_menu_entidades_organizacao, parent, false);
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_menu_entidades_voluntario, parent, false);
         return new MyViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(final MyViewHolder holder, int position) {
+    public void onBindViewHolder(MyViewHolder holder, int position) {
         final Organizacao organizacao = organizacoes.get(position);
 
-        holder.text_view_nome_instituicao.setText(organizacao.getNomeFantasia());
-        if(organizacao.getPhotoUrl() != null){
-            try{
-                Glide.with(context).load(organizacao.getPhotoUrl()).diskCacheStrategy(DiskCacheStrategy.NONE)
-                        .skipMemoryCache(true).into(holder.image_view_logo_entidade);
-            }catch(Exception ex){
-                ex.printStackTrace();
+        holder.text_view_nome_instituicao_voluntario.setText(organizacao.getNomeFantasia());
+
+        if (organizacao.getPhotoUrl() != null) {
+            try {
+                Glide.with(context).load(organizacao.getPhotoUrl()).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true)
+                        .into(holder.image_view_logo_entidade_voluntario);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }else{
             try{
-                Glide.with(context).load(R.drawable.ic_account_circle).diskCacheStrategy(DiskCacheStrategy.NONE)
-                        .skipMemoryCache(true).into(holder.image_view_logo_entidade);
-            }catch(Exception ex){
-                ex.printStackTrace();
+                Glide.with(context).load(R.drawable.ic_account_circle).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true)
+                        .into(holder.image_view_logo_entidade_voluntario);
+            }catch(Exception e){
+
             }
         }
 
@@ -129,9 +130,16 @@ public class OrganizacaoEntidadesAdapter extends RecyclerView.Adapter<Organizaca
                 dialog.show();
             }
         });
+
     }
 
-    public void abrirTelaAnunciosOrganizacao(Organizacao organizacao){
+    public void setItems(List<Organizacao> organizacoes){
+        this.organizacoes.clear();
+        this.organizacoes.addAll(organizacoes);
+        notifyDataSetChanged();
+    }
+
+    private void abrirTelaAnunciosOrganizacao(Organizacao organizacao) {
         Intent intent = new Intent(context, AnunciosOrganizacaoActivity.class);
         intent.putExtra("organizacao", organizacao);
         context.startActivity(intent);
@@ -142,23 +150,16 @@ public class OrganizacaoEntidadesAdapter extends RecyclerView.Adapter<Organizaca
         return organizacoes.size();
     }
 
-    public void setItems(List<Organizacao> organizacoes){
-        this.organizacoes.clear();
-        this.organizacoes.addAll(organizacoes);
-        notifyDataSetChanged();
-    }
+    public class MyViewHolder extends RecyclerView.ViewHolder {
 
-    public class MyViewHolder extends RecyclerView.ViewHolder{
+        @BindView(R.id.image_view_logo_entidade_voluntario)
+        CircleImageView image_view_logo_entidade_voluntario;
+        @BindView(R.id.text_view_nome_instituicao_voluntario)
+        TextView text_view_nome_instituicao_voluntario;
 
-        @BindView(R.id.image_view_logo_entidade)
-        ImageView image_view_logo_entidade;
-        @BindView(R.id.text_view_nome_instituicao)
-        TextView text_view_nome_instituicao;
-
-        public MyViewHolder(View itemView){
+        public MyViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
         }
     }
-
 }

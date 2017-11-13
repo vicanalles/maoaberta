@@ -57,11 +57,11 @@
 
         <activity android:name=".presentation.ui.activity.PerfilVoluntarioActivity"
             android:label="@string/perfil_organizacao"
-            android:parentActivityName=".presentation.ui.activity.MenuPrincipalClienteActivity"
+            android:parentActivityName=".presentation.ui.activity.MenuPrincipalVoluntarioActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme">
             <meta-data android:name="android.support.PARENT_ACTIVITY"
-                android:value=".presentation.ui.activity.MenuPrincipalClienteActivity"/>
+                android:value=".presentation.ui.activity.MenuPrincipalVoluntarioActivity"/>
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.DEFAULT"/>
@@ -84,7 +84,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".presentation.ui.activity.MenuPrincipalClienteActivity"
+        <activity android:name=".presentation.ui.activity.MenuPrincipalVoluntarioActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>

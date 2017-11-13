@@ -17,6 +17,7 @@ import com.maoaberta.vinicius.maoaberta.R;
 import com.maoaberta.vinicius.maoaberta.domain.models.Anuncio;
 import com.maoaberta.vinicius.maoaberta.domain.models.Organizacao;
 import com.maoaberta.vinicius.maoaberta.domain.repository.AnuncioRepository;
+import com.maoaberta.vinicius.maoaberta.domain.repository.InteressadosRepository;
 import com.maoaberta.vinicius.maoaberta.domain.repository.OrganizacaoRepository;
 
 import java.util.ArrayList;
@@ -117,8 +118,8 @@ public class OrganizacaoAnunciosAdapter extends RecyclerView.Adapter<Organizacao
                 button_demonstrar_interesse.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        AnuncioRepository anuncioRepository = new AnuncioRepository();
-                        anuncioRepository.salvarOrganizacaoInteressadaAnuncio(anuncio, new AnuncioRepository.OnSalvarInteresse() {
+                        InteressadosRepository interessadosRepository = new InteressadosRepository();
+                        interessadosRepository.salvarOrganizacaoInteressadaAnuncio(anuncio, new InteressadosRepository.OnSalvarInteresse() {
                             @Override
                             public void onSalvarInteresseSuccess() {
                                 Toast.makeText(context, "Seu interesse foi enviado para organização. Muito obrigado!", Toast.LENGTH_SHORT).show();

@@ -2,6 +2,7 @@ package com.maoaberta.vinicius.maoaberta.domain.repository;
 
 import android.support.annotation.NonNull;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -16,9 +17,11 @@ import com.google.firebase.database.ValueEventListener;
 import com.maoaberta.vinicius.maoaberta.R;
 import com.maoaberta.vinicius.maoaberta.domain.models.Anuncio;
 import com.maoaberta.vinicius.maoaberta.domain.models.Organizacao;
+import com.maoaberta.vinicius.maoaberta.domain.models.Voluntario;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Vinicius on 24/10/2017.
@@ -29,13 +32,13 @@ public class AnuncioRepository {
     private final DatabaseReference reference;
     private FirebaseAuth firebaseAuth;
 
-    public AnuncioRepository(){
+    public AnuncioRepository() {
         firebaseAuth = FirebaseAuth.getInstance();
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         reference = database.getReference("anuncios/");
     }
 
-    public String getUidCurrentUser(){
+    public String getUidCurrentUser() {
         FirebaseUser currentUser = firebaseAuth.getCurrentUser();
         if (currentUser != null) {
             return currentUser.getUid();
@@ -49,10 +52,10 @@ public class AnuncioRepository {
         push.setValue(anuncio).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-                if(task.isSuccessful()){
+                if (task.isSuccessful()) {
                     Log.i("CADASTRO", "Anúncio cadastrado com sucesso!");
                     onSaveAnuncio.onSaveAnuncioSuccess("Anúncio criado com sucesso!");
-                }else{
+                } else {
                     Log.i("CADASTRO", "Falha no cadastro do anúncio");
                     onSaveAnuncio.onSaveAnuncioError("Falha na criação do anúncio! Por favor, tente novamente!");
                 }
@@ -60,30 +63,16 @@ public class AnuncioRepository {
         });
     }
 
-    public void salvarOrganizacaoInteressadaAnuncio(Anuncio anuncio, final OnSalvarInteresse onSalvarInteresse){
-        reference.child(anuncio.getId()).child("Interessados").child(getUidCurrentUser()).setValue(true).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                onSalvarInteresse.onSalvarInteresseSuccess();
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                onSalvarInteresse.onSalvarInteresseError();
-            }
-        });
-    }
-
     //pega todos os anuncios da organizacao que esta logada
-    public void getAllMeusAnunciosOrganizacao(final OnGetAllAnunciosOrganizacao onGetAllAnunciosOrganizacao){
+    public void getAllMeusAnunciosOrganizacao(final OnGetAllAnunciosOrganizacao onGetAllAnunciosOrganizacao) {
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 List<Anuncio> anuncios = new ArrayList<>();
-                for(DataSnapshot data : dataSnapshot.getChildren()){
+                for (DataSnapshot data : dataSnapshot.getChildren()) {
                     Anuncio anuncio = data.getValue(Anuncio.class);
-                    if(anuncio != null){
-                        if(anuncio.getIdProprietario().equals(getUidCurrentUser())){
+                    if (anuncio != null) {
+                        if (anuncio.getIdProprietario().equals(getUidCurrentUser())) {
                             anuncio.setId(data.getKey());
                             anuncios.add(anuncio);
                         }
@@ -100,15 +89,15 @@ public class AnuncioRepository {
     }
 
     //pega todos os anuncios da organizacao selecionada
-    public void getAllAnunciosOrganizacao(final Organizacao organizacao, final OnGetAllAnuncios onGetAllAnuncios){
+    public void getAllAnunciosOrganizacao(final Organizacao organizacao, final OnGetAllAnuncios onGetAllAnuncios) {
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 List<Anuncio> anuncios = new ArrayList<>();
-                for(DataSnapshot data : dataSnapshot.getChildren()){
+                for (DataSnapshot data : dataSnapshot.getChildren()) {
                     Anuncio anuncio = data.getValue(Anuncio.class);
-                    if(anuncio != null){
-                        if(anuncio.getIdProprietario().equals(organizacao.getId())){
+                    if (anuncio != null) {
+                        if (anuncio.getIdProprietario().equals(organizacao.getId())) {
                             anuncio.setId(data.getKey());
                             anuncios.add(anuncio);
                         }
@@ -126,14 +115,14 @@ public class AnuncioRepository {
     }
 
     //pega todos os anuncios que não são do usuário logado
-    public void getAllAnuncios(final OnGetAllAnuncios onGetAllAnuncios){
+    public void getAllAnuncios(final OnGetAllAnuncios onGetAllAnuncios) {
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 List<Anuncio> anuncios = new ArrayList<>();
-                for(DataSnapshot data : dataSnapshot.getChildren()){
+                for (DataSnapshot data : dataSnapshot.getChildren()) {
                     Anuncio anuncio = data.getValue(Anuncio.class);
-                    if(!anuncio.getIdProprietario().equals(getUidCurrentUser())){
+                    if (!anuncio.getIdProprietario().equals(getUidCurrentUser())) {
                         anuncio.setId(data.getKey());
                         anuncios.add(anuncio);
                     }
@@ -149,41 +138,40 @@ public class AnuncioRepository {
         });
     }
 
-    public void atualizarAnuncio(Anuncio anuncio, String id, final OnUpdateAnuncio onUpdateAnuncio){
+    public void atualizarAnuncio(Anuncio anuncio, String id, final OnUpdateAnuncio onUpdateAnuncio) {
         reference.child(id).setValue(anuncio).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-                if(task.isSuccessful()){
+                if (task.isSuccessful()) {
                     onUpdateAnuncio.onUpdateAnuncioSuccess("Anúncio atualizado com sucesso!");
-                }else{
+                } else {
                     onUpdateAnuncio.onUpdateAnuncioError("Falha na atualização do anúncio! Por favor, tente novamente!");
                 }
             }
         });
     }
 
-    public interface OnSaveAnuncio{
+    public interface OnSaveAnuncio {
         void onSaveAnuncioSuccess(String sucesso);
+
         void onSaveAnuncioError(String error);
     }
 
-    public interface OnGetAllAnunciosOrganizacao{
+    public interface OnGetAllAnunciosOrganizacao {
         void onGetAllAnunciosOrganizacaoSuccess(List<Anuncio> anuncios);
+
         void onGetAllAnunciosOrganizacaoError(DatabaseError databaseError);
     }
 
-    public interface OnUpdateAnuncio{
-        void onUpdateAnuncioSuccess(String sucesso);
-        void onUpdateAnuncioError(String erro);
-    }
-
-    public interface OnGetAllAnuncios{
+    public interface OnGetAllAnuncios {
         void onGetAllAnunciosSuccess(List<Anuncio> anuncios);
+
         void onGetAllAnunciosError(DatabaseError erro);
     }
 
-    public interface OnSalvarInteresse{
-        void onSalvarInteresseSuccess();
-        void onSalvarInteresseError();
+    public interface OnUpdateAnuncio {
+        void onUpdateAnuncioSuccess(String sucesso);
+
+        void onUpdateAnuncioError(String erro);
     }
 }

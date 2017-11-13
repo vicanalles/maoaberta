@@ -1,6 +1,8 @@
 package com.maoaberta.vinicius.maoaberta.domain.models;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by Vinicius on 24/10/2017.
@@ -15,6 +17,7 @@ public class Anuncio implements Serializable{
     private String dataInicio;
     private String dataFim;
     private String idProprietario;
+    private HashMap<String, Boolean> interessados;
 
     public String getIdProprietario() {
         return idProprietario;
@@ -70,5 +73,13 @@ public class Anuncio implements Serializable{
 
     public void setDataFim(String dataFim) {
         this.dataFim = dataFim;
+    }
+
+    public HashMap<String, Boolean> getInteressados() {
+        return interessados;
+    }
+
+    public void setInteressados(HashMap<String, Boolean> interessados) {
+        this.interessados = interessados;
     }
 }

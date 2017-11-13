@@ -36,10 +36,8 @@ public class  FragmentMenuMeusAnunciosOrganizacao extends Fragment {
     @BindView(R.id.recycler_ad_list)
     RecyclerView mRecyclerview;
 
-    private FirebaseUser currentUser;
     private OrganizacaoMeusAnunciosAdapter mAdapter;
     private AnuncioRepository anuncioRepository;
-    private List<Anuncio> mAnuncios;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -47,9 +45,6 @@ public class  FragmentMenuMeusAnunciosOrganizacao extends Fragment {
         View view = inflater.inflate(R.layout.fragment_menu_meus_anuncios_organizacao, container, false);
         ButterKnife.bind(this, view);
 
-        mAnuncios = new ArrayList<>();
-
-        currentUser = FirebaseAuth.getInstance().getCurrentUser();
         mRecyclerview.setLayoutManager(new LinearLayoutManager(getContext()));
         mAdapter = new OrganizacaoMeusAnunciosAdapter(getContext());
         mRecyclerview.setAdapter(mAdapter);

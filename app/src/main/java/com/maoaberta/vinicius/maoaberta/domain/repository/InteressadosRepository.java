@@ -1,12 +1,14 @@
 package com.maoaberta.vinicius.maoaberta.domain.repository;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -18,6 +20,7 @@ import com.maoaberta.vinicius.maoaberta.domain.models.Interessados;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by vinicius on 13/11/17.
@@ -28,13 +31,13 @@ public class InteressadosRepository {
     private final DatabaseReference reference;
     private FirebaseAuth firebaseAuth;
 
-    public InteressadosRepository(){
+    public InteressadosRepository() {
         firebaseAuth = FirebaseAuth.getInstance();
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         reference = database.getReference("interessados/");
     }
 
-    public String getUidCurrentUser(){
+    public String getUidCurrentUser() {
         FirebaseUser currentUser = firebaseAuth.getCurrentUser();
         if (currentUser != null) {
             return currentUser.getUid();
@@ -44,7 +47,7 @@ public class InteressadosRepository {
     }
 
     public void salvarOrganizacaoInteressadaAnuncio(Anuncio anuncio, final OnSalvarInteresse onSalvarInteresse) {
-        reference.child(anuncio.getId()).child(getUidCurrentUser()).setValue(true).addOnCompleteListener(new OnCompleteListener<Void>() {
+        reference.child(getUidCurrentUser()).child(anuncio.getId()).setValue(true).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 onSalvarInteresse.onSalvarInteresseSuccess();
@@ -57,38 +60,38 @@ public class InteressadosRepository {
         });
     }
 
-    public void getAnunciosInteressado(final OnGetAllAnunciosInteresseVoluntario onGetAllAnunciosInteresseVoluntario){
-        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+    public void getAnunciosInteressado(final OnGetAllAnunciosInteresseVoluntario onGetAllAnunciosInteresseVoluntario) {
+        reference.child(getUidCurrentUser()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                HashMap<String, Boolean> anuncios = new HashMap<>();
-                for(DataSnapshot data : dataSnapshot.getChildren()){
-                    Interessados id = data.getValue(Interessados.class);
-                    if(id != null){
-                        if(id.equals(getUidCurrentUser())){
-                            anuncios.put(id.getChave(), id.getValor());
-                        }
-                    }
+                List<String> identificadores = new ArrayList<>();
+                HashMap<String, Boolean> dataValue = new HashMap<>();
+                String[] dados;
+                for (DataSnapshot data : dataSnapshot.getChildren()) {
+                    dados = data.getValue().toString().substring(1).split("=");
+                    if(dados[0].equals(getUidCurrentUser())){
+                        identificadores.add(data.getKey());
                 }
-                onGetAllAnunciosInteresseVoluntario.onGetAllAnunciosInteresseVoluntarioSuccess(anuncios);
             }
+                onGetAllAnunciosInteresseVoluntario.onGetAllAnunciosInteresseVoluntarioSuccess(identificadores);
+        }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                onGetAllAnunciosInteresseVoluntario.onGetAllAnunciosInteresseVoluntarioError(databaseError);
-            }
-        });
-    }
+        @Override
+        public void onCancelled (DatabaseError databaseError){
+            onGetAllAnunciosInteresseVoluntario.onGetAllAnunciosInteresseVoluntarioError(databaseError);
+        }
+    });
+}
 
-    public interface OnSalvarInteresse {
-        void onSalvarInteresseSuccess();
+public interface OnSalvarInteresse {
+    void onSalvarInteresseSuccess();
 
-        void onSalvarInteresseError();
-    }
+    void onSalvarInteresseError();
+}
 
-    public interface OnGetAllAnunciosInteresseVoluntario {
-        void onGetAllAnunciosInteresseVoluntarioSuccess(HashMap<String, Boolean> anuncios);
+public interface OnGetAllAnunciosInteresseVoluntario {
+    void onGetAllAnunciosInteresseVoluntarioSuccess(List<String> anuncios);
 
-        void onGetAllAnunciosInteresseVoluntarioError(DatabaseError databaseError);
-    }
+    void onGetAllAnunciosInteresseVoluntarioError(DatabaseError databaseError);
+}
 }

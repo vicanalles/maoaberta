@@ -49,7 +49,7 @@ public class FragmentMenuMeusAnunciosVoluntario extends Fragment {
         InteressadosRepository interessadosRepository = new InteressadosRepository();
         interessadosRepository.getAnunciosInteressado(new InteressadosRepository.OnGetAllAnunciosInteresseVoluntario() {
             @Override
-            public void onGetAllAnunciosInteresseVoluntarioSuccess(HashMap<String, Boolean> anuncios) {
+            public void onGetAllAnunciosInteresseVoluntarioSuccess(List<String> anuncios) {
 
             }
 

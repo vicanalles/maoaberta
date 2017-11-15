@@ -7,14 +7,13 @@
     android:layout_marginTop="5dp"
     android:layout_marginEnd="5dp"
     android:orientation="vertical"
-    app:cardBackgroundColor="@color/textColorWhite"
+    app:cardBackgroundColor="@color/backgroundColorApp"
     app:cardCornerRadius="10dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="72dp"
         android:layout_marginEnd="10dp"
-        android:background="@drawable/rounded_edittext"
         android:weightSum="2">
 
         <LinearLayout
@@ -38,7 +37,7 @@
                     android:gravity="center"
                     android:text="Nome da Instituição"
                     android:textAlignment="center"
-                    android:textColor="@color/textColorBlack"
+                    android:textColor="@color/textColorWhite"
                     android:textSize="15sp"
                     android:textStyle="normal" />
 
@@ -51,7 +50,7 @@
                     android:gravity="center"
                     android:text="Nome do Anúncio"
                     android:textAlignment="center"
-                    android:textColor="@color/textColorBlack"
+                    android:textColor="@color/textColorWhite"
                     android:textSize="15sp"
                     android:textStyle="normal" />
 
@@ -86,7 +85,7 @@
                         android:fontFamily="sans-serif"
                         android:gravity="center"
                         android:text="Válido de:"
-                        android:textColor="@color/textColorBlack"
+                        android:textColor="@color/textColorWhite"
                         android:textSize="13sp"
                         android:textStyle="normal" />
 
@@ -98,7 +97,7 @@
                         android:layout_marginStart="5dp"
                         android:fontFamily="sans-serif"
                         android:text="15/07/2017"
-                        android:textColor="@color/textColorBlack"
+                        android:textColor="@color/textColorWhite"
                         android:textSize="13sp"
                         android:textStyle="normal" />
 
@@ -119,7 +118,7 @@
                         android:fontFamily="sans-serif"
                         android:gravity="center"
                         android:text="Válido até:"
-                        android:textColor="@color/textColorBlack"
+                        android:textColor="@color/textColorWhite"
                         android:textSize="13sp"
                         android:textStyle="normal"/>
 
@@ -131,7 +130,7 @@
                         android:layout_marginStart="5dp"
                         android:fontFamily="sans-serif"
                         android:text="19/07/2017"
-                        android:textColor="@color/textColorBlack"
+                        android:textColor="@color/textColorWhite"
                         android:textSize="13sp"
                         android:textStyle="normal"/>
 

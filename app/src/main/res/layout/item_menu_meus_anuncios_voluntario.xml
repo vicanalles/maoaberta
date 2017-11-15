@@ -33,7 +33,8 @@
                 android:text="Título do Anúncio"
                 android:textColor="@color/textColorWhite"
                 android:textSize="15sp"
-                android:layout_gravity="center"/>
+                android:layout_gravity="center"
+                android:textAlignment="center"/>
         </LinearLayout>
 
         <LinearLayout

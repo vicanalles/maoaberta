@@ -19,6 +19,7 @@ import com.maoaberta.vinicius.maoaberta.domain.repository.AnuncioRepository;
 import com.maoaberta.vinicius.maoaberta.domain.repository.InteressadosRepository;
 import com.maoaberta.vinicius.maoaberta.presentation.ui.adapter.VoluntarioMeusAnunciosAdapter;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -50,7 +51,24 @@ public class FragmentMenuMeusAnunciosVoluntario extends Fragment {
         interessadosRepository.getAnunciosInteressado(new InteressadosRepository.OnGetAllAnunciosInteresseVoluntario() {
             @Override
             public void onGetAllAnunciosInteresseVoluntarioSuccess(List<String> anuncios) {
+                AnuncioRepository anuncioRepository = new AnuncioRepository();
+                final List<Anuncio> anuncioList = new ArrayList<>();
+                for(String id : anuncios){
+                    anuncioRepository.getAnuncioById(id, new AnuncioRepository.OnGetAnuncioById() {
+                        @Override
+                        public void onGetAnuncioByIdSuccess(Anuncio anuncio) {
+                            if(anuncio != null){
+                                anuncioList.add(anuncio);
+                            }
+                            mAdapter.setItems(anuncioList);
+                        }
 
+                        @Override
+                        public void onGetAnuncioByIdError(DatabaseError databaseError) {
+
+                        }
+                    });
+                }
             }
 
             @Override

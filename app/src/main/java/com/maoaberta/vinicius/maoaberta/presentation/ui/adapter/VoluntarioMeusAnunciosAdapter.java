@@ -10,11 +10,13 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.maoaberta.vinicius.maoaberta.R;
 import com.maoaberta.vinicius.maoaberta.domain.models.Anuncio;
+import com.maoaberta.vinicius.maoaberta.domain.repository.InteressadosRepository;
 import com.maoaberta.vinicius.maoaberta.presentation.ui.activity.CriacaoAnunciosActivity;
 import com.maoaberta.vinicius.maoaberta.presentation.ui.activity.MenuPrincipalOrganizacaoActivity;
 
@@ -83,12 +85,24 @@ public class VoluntarioMeusAnunciosAdapter extends RecyclerView.Adapter<Voluntar
                 text_view_start_date_text.setText(anuncio.getDataInicio());
                 text_view_end_date_text.setText(anuncio.getDataFim());
 
+                button_edit_ad.setText(R.string.cancelar_interesse);
+
                 button_edit_ad.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        if(anuncio.getIdProprietario().equals(currentUser.getUid())){
-                            abrirTelaEdicaoAnuncio(anuncio);
-                        }
+                        InteressadosRepository interessadosRepository = new InteressadosRepository();
+                        interessadosRepository.removerInteresseAnuncio(anuncio.getId(), new InteressadosRepository.OnRemoverInteresse() {
+                            @Override
+                            public void onRemoverInteresseSuccess(String sucesso) {
+                                Toast.makeText(context, sucesso, Toast.LENGTH_SHORT).show();
+                                dialog.dismiss();
+                            }
+
+                            @Override
+                            public void onRemoverInteresseError(String error) {
+                                Toast.makeText(context, error, Toast.LENGTH_SHORT).show();
+                            }
+                        });
                     }
                 });
 

@@ -60,38 +60,57 @@ public class InteressadosRepository {
         });
     }
 
+    public void removerInteresseAnuncio(String idAnuncio, final OnRemoverInteresse onRemoverInteresse){
+        reference.child(getUidCurrentUser()).child(idAnuncio).setValue(false).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if(task.isSuccessful()){
+                    onRemoverInteresse.onRemoverInteresseSuccess("Interesse removido com sucesso");
+                }
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                onRemoverInteresse.onRemoverInteresseError("Não foi possível remover seu interesse. Por favor, tente novamente!");
+            }
+        });
+    }
+
     public void getAnunciosInteressado(final OnGetAllAnunciosInteresseVoluntario onGetAllAnunciosInteresseVoluntario) {
         reference.child(getUidCurrentUser()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 List<String> identificadores = new ArrayList<>();
-                HashMap<String, Boolean> dataValue = new HashMap<>();
-                String[] dados;
                 for (DataSnapshot data : dataSnapshot.getChildren()) {
-                    dados = data.getValue().toString().substring(1).split("=");
-                    if(dados[0].equals(getUidCurrentUser())){
-                        identificadores.add(data.getKey());
+                    if(data.getValue().equals(true)){
+                        String id = data.getKey();
+                        if(id != null){
+                            identificadores.add(id);
+                        }
+                    }
                 }
-            }
                 onGetAllAnunciosInteresseVoluntario.onGetAllAnunciosInteresseVoluntarioSuccess(identificadores);
-        }
+            }
 
-        @Override
-        public void onCancelled (DatabaseError databaseError){
-            onGetAllAnunciosInteresseVoluntario.onGetAllAnunciosInteresseVoluntarioError(databaseError);
-        }
-    });
-}
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                onGetAllAnunciosInteresseVoluntario.onGetAllAnunciosInteresseVoluntarioError(databaseError);
+            }
+        });
+    }
 
-public interface OnSalvarInteresse {
-    void onSalvarInteresseSuccess();
+    public interface OnSalvarInteresse {
+        void onSalvarInteresseSuccess();
+        void onSalvarInteresseError();
+    }
 
-    void onSalvarInteresseError();
-}
+    public interface OnRemoverInteresse{
+        void onRemoverInteresseSuccess(String sucesso);
+        void onRemoverInteresseError(String error);
+    }
 
-public interface OnGetAllAnunciosInteresseVoluntario {
-    void onGetAllAnunciosInteresseVoluntarioSuccess(List<String> anuncios);
-
-    void onGetAllAnunciosInteresseVoluntarioError(DatabaseError databaseError);
-}
+    public interface OnGetAllAnunciosInteresseVoluntario {
+        void onGetAllAnunciosInteresseVoluntarioSuccess(List<String> anuncios);
+        void onGetAllAnunciosInteresseVoluntarioError(DatabaseError databaseError);
+    }
 }

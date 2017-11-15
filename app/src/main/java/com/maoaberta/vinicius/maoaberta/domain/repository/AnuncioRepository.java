@@ -47,7 +47,7 @@ public class AnuncioRepository {
         }
     }
 
-    public void salvarDadosAnuncio(Anuncio anuncio, final OnSaveAnuncio onSaveAnuncio) {
+    public void salvarDadosAnuncio(final Anuncio anuncio, final OnSaveAnuncio onSaveAnuncio) {
         DatabaseReference push = reference.push();
         push.setValue(anuncio).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
@@ -138,6 +138,24 @@ public class AnuncioRepository {
         });
     }
 
+    public void getAnuncioById(String id, final OnGetAnuncioById onGetAnuncioById) {
+        reference.child(id).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Anuncio anuncio = new Anuncio();
+                if(dataSnapshot != null){
+                    anuncio = dataSnapshot.getValue(Anuncio.class);
+                }
+                onGetAnuncioById.onGetAnuncioByIdSuccess(anuncio);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                onGetAnuncioById.onGetAnuncioByIdError(databaseError);
+            }
+        });
+    }
+
     public void atualizarAnuncio(Anuncio anuncio, String id, final OnUpdateAnuncio onUpdateAnuncio) {
         reference.child(id).setValue(anuncio).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
@@ -153,25 +171,26 @@ public class AnuncioRepository {
 
     public interface OnSaveAnuncio {
         void onSaveAnuncioSuccess(String sucesso);
-
         void onSaveAnuncioError(String error);
     }
 
     public interface OnGetAllAnunciosOrganizacao {
         void onGetAllAnunciosOrganizacaoSuccess(List<Anuncio> anuncios);
-
         void onGetAllAnunciosOrganizacaoError(DatabaseError databaseError);
     }
 
     public interface OnGetAllAnuncios {
         void onGetAllAnunciosSuccess(List<Anuncio> anuncios);
-
         void onGetAllAnunciosError(DatabaseError erro);
+    }
+
+    public interface OnGetAnuncioById {
+        void onGetAnuncioByIdSuccess(Anuncio anuncio);
+        void onGetAnuncioByIdError(DatabaseError databaseError);
     }
 
     public interface OnUpdateAnuncio {
         void onUpdateAnuncioSuccess(String sucesso);
-
         void onUpdateAnuncioError(String erro);
     }
 }

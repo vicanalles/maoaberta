@@ -49,6 +49,8 @@ public class AnuncioRepository {
 
     public void salvarDadosAnuncio(final Anuncio anuncio, final OnSaveAnuncio onSaveAnuncio) {
         DatabaseReference push = reference.push();
+        String key = push.getKey();
+        anuncio.setId(key);
         push.setValue(anuncio).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {

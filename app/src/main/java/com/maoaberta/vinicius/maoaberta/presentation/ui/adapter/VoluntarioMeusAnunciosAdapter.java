@@ -94,6 +94,7 @@ public class VoluntarioMeusAnunciosAdapter extends RecyclerView.Adapter<Voluntar
                         interessadosRepository.removerInteresseAnuncio(anuncio.getId(), new InteressadosRepository.OnRemoverInteresse() {
                             @Override
                             public void onRemoverInteresseSuccess(String sucesso) {
+                                removeItems(anuncio);
                                 Toast.makeText(context, sucesso, Toast.LENGTH_SHORT).show();
                                 dialog.dismiss();
                             }
@@ -117,11 +118,9 @@ public class VoluntarioMeusAnunciosAdapter extends RecyclerView.Adapter<Voluntar
         });
     }
 
-    private void abrirTelaEdicaoAnuncio(Anuncio anuncio) {
-        Intent intent = new Intent(context, CriacaoAnunciosActivity.class);
-        intent.putExtra("anuncio", anuncio);
-        context.startActivity(intent);
-        ((MenuPrincipalOrganizacaoActivity)context).finish();
+    public void removeItems(Anuncio anuncio){
+        this.mAnuncios.remove(anuncio);
+        notifyDataSetChanged();
     }
 
     @Override

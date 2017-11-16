@@ -33,7 +33,6 @@ public class AnunciosOrganizacaoAdapter extends RecyclerView.Adapter<AnunciosOrg
     private Context context;
     private List<Anuncio> anuncios;
     private Organizacao ong;
-    private AnuncioRepository anuncioRepository;
     private ImageView image_view_close_dialog_interesse;
     private TextView text_view_titulo_ad_text_interesse;
     private TextView text_view_tipo_ad_text_interesse;

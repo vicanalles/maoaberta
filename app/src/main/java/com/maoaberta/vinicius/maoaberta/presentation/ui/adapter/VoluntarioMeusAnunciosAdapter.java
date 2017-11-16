@@ -42,6 +42,7 @@ public class VoluntarioMeusAnunciosAdapter extends RecyclerView.Adapter<Voluntar
     private TextView text_view_start_date_text;
     private TextView text_view_end_date_text;
     private Button button_edit_ad;
+    private Button button_ver_interessados;
     private FirebaseUser currentUser;
 
     public VoluntarioMeusAnunciosAdapter(Context context){
@@ -79,6 +80,7 @@ public class VoluntarioMeusAnunciosAdapter extends RecyclerView.Adapter<Voluntar
                 text_view_start_date_text = (TextView) dialog.findViewById(R.id.text_view_start_date_text);
                 text_view_end_date_text = (TextView) dialog.findViewById(R.id.text_view_end_date_text);
                 button_edit_ad = (Button) dialog.findViewById(R.id.button_edit_ad);
+                button_ver_interessados = (Button) dialog.findViewById(R.id.button_ver_interessados);
 
                 text_view_titulo_ad_text.setText(anuncio.getTitulo());
                 text_view_tipo_ad_text.setText(anuncio.getTipo());
@@ -86,6 +88,7 @@ public class VoluntarioMeusAnunciosAdapter extends RecyclerView.Adapter<Voluntar
                 text_view_start_date_text.setText(anuncio.getDataInicio());
                 text_view_end_date_text.setText(anuncio.getDataFim());
 
+                button_ver_interessados.setVisibility(View.GONE);
                 button_edit_ad.setText(R.string.cancelar_interesse);
 
                 button_edit_ad.setOnClickListener(new View.OnClickListener() {

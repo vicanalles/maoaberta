@@ -7,9 +7,16 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.maoaberta.vinicius.maoaberta.domain.models.Anuncio;
+import com.maoaberta.vinicius.maoaberta.domain.models.Voluntario;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Vinicius on 16/11/2017.
@@ -19,6 +26,7 @@ public class InteressesRepository {
 
     private final DatabaseReference reference;
     private FirebaseAuth firebaseAuth;
+    private String pessoa;
 
     public InteressesRepository() {
         firebaseAuth = FirebaseAuth.getInstance();
@@ -63,6 +71,27 @@ public class InteressesRepository {
         });
     }
 
+    public void getInteressadosAnuncio(Anuncio anuncio, final OnGetInteressadosAnuncio onGetInteressadosAnuncio){
+        reference.child(anuncio.getId()).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                List<String> pessoasInteressadas = new ArrayList<>();
+                for(DataSnapshot data : dataSnapshot.getChildren()){
+                    pessoa = data.getKey();
+                    if(pessoa != null){
+                        pessoasInteressadas.add(pessoa);
+                    }
+                }
+                onGetInteressadosAnuncio.onGetInteressadosAnuncioSuccess(pessoasInteressadas);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                onGetInteressadosAnuncio.onGetInteressadosAnuncioError(databaseError);
+            }
+        });
+    }
+
     public interface OnSaveInteresse{
         void onSaveInteresseSuccess();
         void onSaveInteresseError();
@@ -71,5 +100,10 @@ public class InteressesRepository {
     public interface OnRemoveInteresse{
         void onRemoveInteresseSuccess();
         void onRemoveInteresseError();
+    }
+
+    public interface OnGetInteressadosAnuncio{
+        void onGetInteressadosAnuncioSuccess(List<String> pessoas);
+        void onGetInteressadosAnuncioError(DatabaseError databaseError);
     }
 }

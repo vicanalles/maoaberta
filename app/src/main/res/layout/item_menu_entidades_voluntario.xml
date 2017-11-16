@@ -30,8 +30,7 @@
                 android:id="@+id/image_view_logo_entidade_voluntario"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
-                android:layout_marginStart="5dp"
-                app:srcCompat="@drawable/logo_mao_aberta" />
+                android:layout_marginStart="5dp" />
         </LinearLayout>
 
         <LinearLayout

@@ -16,6 +16,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.maoaberta.vinicius.maoaberta.R;
 import com.maoaberta.vinicius.maoaberta.domain.models.Anuncio;
 import com.maoaberta.vinicius.maoaberta.presentation.ui.activity.CriacaoAnunciosActivity;
+import com.maoaberta.vinicius.maoaberta.presentation.ui.activity.InteressadosAnuncioActivity;
 import com.maoaberta.vinicius.maoaberta.presentation.ui.activity.MenuPrincipalOrganizacaoActivity;
 
 import java.util.ArrayList;
@@ -40,6 +41,7 @@ public class OrganizacaoMeusAnunciosAdapter extends RecyclerView.Adapter<Organiz
     private TextView text_view_start_date_text;
     private TextView text_view_end_date_text;
     private Button button_edit_ad;
+    private Button button_ver_interessados;
 
     public OrganizacaoMeusAnunciosAdapter(Context context){
         this.context = context;
@@ -68,7 +70,6 @@ public class OrganizacaoMeusAnunciosAdapter extends RecyclerView.Adapter<Organiz
                 final Dialog dialog = new Dialog(context);
                 dialog.setContentView(R.layout.dialog_meus_anuncios_information);
 
-
                 image_view_close_dialog = (ImageView) dialog.findViewById(R.id.image_view_close_dialog);
                 text_view_titulo_ad_text = (TextView) dialog.findViewById(R.id.text_view_titulo_ad_text);
                 text_view_tipo_ad_text = (TextView) dialog.findViewById(R.id.text_view_tipo_ad_text);
@@ -76,6 +77,7 @@ public class OrganizacaoMeusAnunciosAdapter extends RecyclerView.Adapter<Organiz
                 text_view_start_date_text = (TextView) dialog.findViewById(R.id.text_view_start_date_text);
                 text_view_end_date_text = (TextView) dialog.findViewById(R.id.text_view_end_date_text);
                 button_edit_ad = (Button) dialog.findViewById(R.id.button_edit_ad);
+                button_ver_interessados = (Button) dialog.findViewById(R.id.button_ver_interessados);
 
                 text_view_titulo_ad_text.setText(anuncio.getTitulo());
                 text_view_tipo_ad_text.setText(anuncio.getTipo());
@@ -92,6 +94,13 @@ public class OrganizacaoMeusAnunciosAdapter extends RecyclerView.Adapter<Organiz
                     }
                 });
 
+                button_ver_interessados.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        abrirTelaInteressadosAnuncio(anuncio);
+                    }
+                });
+
                 image_view_close_dialog.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -102,6 +111,13 @@ public class OrganizacaoMeusAnunciosAdapter extends RecyclerView.Adapter<Organiz
                 dialog.show();
             }
         });
+    }
+
+    private void abrirTelaInteressadosAnuncio(Anuncio anuncio) {
+        Intent intent = new Intent(context, InteressadosAnuncioActivity.class);
+        intent.putExtra("anuncio", anuncio);
+        context.startActivity(intent);
+        ((MenuPrincipalOrganizacaoActivity)context).finish();
     }
 
     private void abrirTelaEdicaoAnuncio(Anuncio anuncio) {

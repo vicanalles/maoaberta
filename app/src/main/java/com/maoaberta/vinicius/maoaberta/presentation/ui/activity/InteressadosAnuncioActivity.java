@@ -3,7 +3,6 @@ package com.maoaberta.vinicius.maoaberta.presentation.ui.activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ContextThemeWrapper;
@@ -18,8 +17,13 @@ import com.google.firebase.database.DatabaseError;
 import com.maoaberta.vinicius.maoaberta.R;
 import com.maoaberta.vinicius.maoaberta.domain.models.Anuncio;
 import com.maoaberta.vinicius.maoaberta.domain.models.Organizacao;
-import com.maoaberta.vinicius.maoaberta.domain.repository.AnuncioRepository;
-import com.maoaberta.vinicius.maoaberta.presentation.ui.adapter.AnunciosOrganizacaoAdapter;
+import com.maoaberta.vinicius.maoaberta.domain.models.Voluntario;
+import com.maoaberta.vinicius.maoaberta.domain.repository.InteressadosRepository;
+import com.maoaberta.vinicius.maoaberta.domain.repository.InteressesRepository;
+import com.maoaberta.vinicius.maoaberta.domain.repository.OrganizacaoRepository;
+import com.maoaberta.vinicius.maoaberta.domain.repository.TipoRepository;
+import com.maoaberta.vinicius.maoaberta.domain.repository.UsuarioRepository;
+import com.maoaberta.vinicius.maoaberta.presentation.ui.adapter.InteressadosAnuncioAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,32 +32,32 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
- * Created by vinicius on 06/11/17.
+ * Created by Vinicius on 16/11/2017.
  */
 
-public class AnunciosOrganizacaoActivity extends AppCompatActivity{
+public class InteressadosAnuncioActivity extends AppCompatActivity{
 
-    @BindView(R.id.toolbar_anuncios_organizacao)
-    Toolbar toolbar_anuncios_organizacao;
-    @BindView(R.id.recycler_view_anuncios_organizacao)
-    RecyclerView mRecyclerView;
+    @BindView(R.id.toolbar_interesses_anuncio)
+    Toolbar toolbar_interesses_anuncio;
+    @BindView(R.id.recycler_view_interesses_anuncio)
+    RecyclerView mRecycler;
 
-    private Organizacao organizacao;
-    private List<Anuncio> mAnuncios;
-    private AnuncioRepository anuncioRepository;
-    private AnunciosOrganizacaoAdapter mAdapter;
+    private Anuncio anuncio;
+    private InteressadosAnuncioAdapter mAdapter;
+    private List<Voluntario> voluntarios;
+    private List<Organizacao> organizacoes;
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_anuncios_organizacao);
+        setContentView(R.layout.activity_interessados_anuncio);
         ButterKnife.bind(this);
-        setSupportActionBar(toolbar_anuncios_organizacao);
+        setSupportActionBar(toolbar_interesses_anuncio);
 
         Bundle extras = getIntent().getExtras();
 
         if(extras != null){
-            organizacao = (Organizacao) extras.get("organizacao");
+            anuncio = (Anuncio) extras.get("anuncio");
         }
 
         if(getSupportActionBar() != null){
@@ -63,22 +67,32 @@ public class AnunciosOrganizacaoActivity extends AppCompatActivity{
             getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_arrow_back);
         }
 
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mAdapter = new AnunciosOrganizacaoAdapter(this, organizacao);
-        mRecyclerView.setAdapter(mAdapter);
+        voluntarios = new ArrayList<>();
+        organizacoes = new ArrayList<>();
 
-        anuncioRepository = new AnuncioRepository();
-        anuncioRepository.getAllAnunciosOrganizacao(organizacao, new AnuncioRepository.OnGetAllAnuncios() {
+        mRecycler.setLayoutManager(new LinearLayoutManager(this));
+        mAdapter = new InteressadosAnuncioAdapter(this);
+        mRecycler.setAdapter(mAdapter);
+
+        InteressesRepository interessesRepository = new InteressesRepository();
+        interessesRepository.getInteressadosAnuncio(anuncio, new InteressesRepository.OnGetInteressadosAnuncio() {
             @Override
-            public void onGetAllAnunciosSuccess(List<Anuncio> anuncios) {
-                mAdapter.setItems(anuncios);
+            public void onGetInteressadosAnuncioSuccess(final List<String> voluntarios) {
+                mAdapter.setItems(voluntarios);
             }
 
             @Override
-            public void onGetAllAnunciosError(DatabaseError erro) {
+            public void onGetInteressadosAnuncioError(DatabaseError databaseError) {
 
             }
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_perfil, menu);
+
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
@@ -86,7 +100,7 @@ public class AnunciosOrganizacaoActivity extends AppCompatActivity{
         switch (item.getItemId()){
 
             case android.R.id.home:
-                finish();
+                abrirMenuPrincipalOrganizacao();
                 break;
             case R.id.item_exit_menu_principal:
                 sairDoApp();
@@ -120,10 +134,9 @@ public class AnunciosOrganizacaoActivity extends AppCompatActivity{
         finish();
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_perfil, menu);
-
-        return super.onCreateOptionsMenu(menu);
+    private void abrirMenuPrincipalOrganizacao() {
+        Intent intent = new Intent(InteressadosAnuncioActivity.this, MenuPrincipalOrganizacaoActivity.class);
+        startActivity(intent);
+        finish();
     }
 }

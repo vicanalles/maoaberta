@@ -16,6 +16,7 @@ import com.maoaberta.vinicius.maoaberta.domain.models.Anuncio;
 import com.maoaberta.vinicius.maoaberta.domain.models.Organizacao;
 import com.maoaberta.vinicius.maoaberta.domain.repository.AnuncioRepository;
 import com.maoaberta.vinicius.maoaberta.domain.repository.InteressadosRepository;
+import com.maoaberta.vinicius.maoaberta.domain.repository.InteressesRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -92,12 +93,23 @@ public class AnunciosOrganizacaoAdapter extends RecyclerView.Adapter<AnunciosOrg
                 button_demonstrar_interesse.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        final InteressesRepository interessesRepository = new InteressesRepository();
                         InteressadosRepository interessadosRepository = new InteressadosRepository();
                         interessadosRepository.salvarOrganizacaoInteressadaAnuncio(anuncio, new InteressadosRepository.OnSalvarInteresse() {
                             @Override
                             public void onSalvarInteresseSuccess() {
-                                Toast.makeText(context, "Seu interesse foi enviado para organização. Muito obrigado!", Toast.LENGTH_SHORT).show();
-                                dialog.dismiss();
+                                interessesRepository.salvarInteresseOrganizacao(anuncio, new InteressesRepository.OnSaveInteresse() {
+                                    @Override
+                                    public void onSaveInteresseSuccess() {
+                                        Toast.makeText(context, "Seu interesse foi enviado para organização. Muito obrigado!", Toast.LENGTH_SHORT).show();
+                                        dialog.dismiss();
+                                    }
+
+                                    @Override
+                                    public void onSaveInteresseError() {
+                                        Toast.makeText(context, "Não foi possível enviar o seu interesse. Tente novamente!", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
                             }
 
                             @Override

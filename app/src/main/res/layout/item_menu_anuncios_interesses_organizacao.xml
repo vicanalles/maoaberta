@@ -26,8 +26,7 @@
                 android:id="@+id/image_view_logo_organizacao"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
-                android:layout_gravity="center"
-                android:src="@drawable/logo_mao_aberta" />
+                android:layout_gravity="center" />
         </LinearLayout>
 
         <LinearLayout

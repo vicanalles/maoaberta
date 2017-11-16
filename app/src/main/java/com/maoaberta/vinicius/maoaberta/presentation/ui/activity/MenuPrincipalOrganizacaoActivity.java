@@ -58,7 +58,7 @@ public class MenuPrincipalOrganizacaoActivity extends AppCompatActivity {
 
         final String[] tabTitles = {
                 getString(R.string.meus_anuncios_tab_title),
-                getString(R.string.anuncios_tab_title),
+                getString(R.string.meus_interesses),
                 getString(R.string.entidades_tab_title),
                 getString(R.string.sobre_tab_title)
         };

@@ -17,6 +17,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.maoaberta.vinicius.maoaberta.R;
 import com.maoaberta.vinicius.maoaberta.domain.models.Anuncio;
 import com.maoaberta.vinicius.maoaberta.domain.repository.InteressadosRepository;
+import com.maoaberta.vinicius.maoaberta.domain.repository.InteressesRepository;
 import com.maoaberta.vinicius.maoaberta.presentation.ui.activity.CriacaoAnunciosActivity;
 import com.maoaberta.vinicius.maoaberta.presentation.ui.activity.MenuPrincipalOrganizacaoActivity;
 
@@ -90,13 +91,24 @@ public class VoluntarioMeusAnunciosAdapter extends RecyclerView.Adapter<Voluntar
                 button_edit_ad.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        final InteressesRepository interessesRepository = new InteressesRepository();
                         InteressadosRepository interessadosRepository = new InteressadosRepository();
                         interessadosRepository.removerInteresseAnuncio(anuncio.getId(), new InteressadosRepository.OnRemoverInteresse() {
                             @Override
                             public void onRemoverInteresseSuccess(String sucesso) {
-                                removeItems(anuncio);
-                                Toast.makeText(context, sucesso, Toast.LENGTH_SHORT).show();
-                                dialog.dismiss();
+                                interessesRepository.removerInteresseOrganizacao(anuncio, new InteressesRepository.OnRemoveInteresse() {
+                                    @Override
+                                    public void onRemoveInteresseSuccess() {
+                                        removeItems(anuncio);
+                                        Toast.makeText(context, "Interesse removido com sucesso", Toast.LENGTH_SHORT).show();
+                                        dialog.dismiss();
+                                    }
+
+                                    @Override
+                                    public void onRemoveInteresseError() {
+                                        Toast.makeText(context, "Não foi possível remover seu interesse. Por favor, tente novamente!", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
                             }
 
                             @Override

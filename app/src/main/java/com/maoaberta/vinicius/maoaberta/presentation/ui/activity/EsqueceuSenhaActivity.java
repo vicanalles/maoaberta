@@ -1,10 +1,14 @@
 package com.maoaberta.vinicius.maoaberta.presentation.ui.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -16,6 +20,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.maoaberta.vinicius.maoaberta.R;
 
 import butterknife.BindView;
@@ -48,10 +55,40 @@ public class EsqueceuSenhaActivity extends AppCompatActivity {
             getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_arrow_back);
         }
 
-        edit_text_nova_senha.setOnClickListener(new View.OnClickListener() {
+        botao_recuperar_senha.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                FirebaseAuth.getInstance().sendPasswordResetEmail(edit_text_nova_senha.getText().toString()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if(task.isSuccessful()){
+                            AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(EsqueceuSenhaActivity.this, R.style.AppTheme));
+                            builder.setMessage("E-mail de recuperação de senha enviado com sucesso!");
+                            builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialogInterface.dismiss();
+                                    Intent intent = new Intent(EsqueceuSenhaActivity.this, LoginActivity.class);
+                                    startActivity(intent);
+                                    finish();
+                                }
+                            });
+                            AlertDialog dialog = builder.create();
+                            dialog.show();
+                        }else{
+                            AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(EsqueceuSenhaActivity.this, R.style.AppTheme));
+                            builder.setMessage("Falha no envio do E-mail. Por favor, tente novamente!");
+                            builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialogInterface.dismiss();
+                                }
+                            });
+                            AlertDialog dialog = builder.create();
+                            dialog.show();
+                        }
+                    }
+                });
             }
         });
     }

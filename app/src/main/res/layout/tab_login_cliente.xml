@@ -132,38 +132,18 @@
 
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/linear_layout_facebook"
+    <com.facebook.login.widget.LoginButton
+        android:id="@+id/login_button"
         android:layout_width="0dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="10dp"
-        android:background="@color/facebook_background_button_color"
-        android:clickable="true"
-        android:orientation="horizontal"
+        android:layout_height="wrap_content"
+        app:com_facebook_login_text="Entrar com o Facebook"
+        android:layout_gravity="center_vertical"
+        android:gravity="center"
+        android:layout_marginTop="15dp"
+        android:paddingTop="12dp"
+        android:paddingBottom="12dp"
         app:layout_constraintLeft_toLeftOf="@id/linear_layout_gmail"
-        app:layout_constraintRight_toRightOf="@id/linear_layout_gmail"
-        app:layout_constraintTop_toBottomOf="@id/linear_layout_gmail">
-
-        <ImageView
-            android:id="@+id/image_view_facebook_logo"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:contentDescription="@string/facebook"
-            android:src="@drawable/ic_action_facebook" />
-
-        <TextView
-            android:id="@+id/text_view_facebook_cadastro"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:fontFamily="sans-serif"
-            android:gravity="center_vertical"
-            android:text="@string/string_text_facebook"
-            android:textAlignment="center"
-            android:textColor="@color/textColorWhite"
-            android:textSize="15sp"
-            android:textStyle="normal" />
-
-    </LinearLayout>
+        app:layout_constraintTop_toBottomOf="@id/linear_layout_gmail"
+        app:layout_constraintRight_toRightOf="@id/linear_layout_gmail"/>
 
 </android.support.constraint.ConstraintLayout>

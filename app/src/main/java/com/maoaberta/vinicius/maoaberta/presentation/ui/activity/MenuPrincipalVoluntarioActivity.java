@@ -20,6 +20,9 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.facebook.Profile;
+import com.facebook.login.LoginManager;
+import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.maoaberta.vinicius.maoaberta.R;
@@ -59,6 +62,7 @@ public class MenuPrincipalVoluntarioActivity extends AppCompatActivity{
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
         usuarioRepository = new UsuarioRepository();
+        Profile profile = Profile.getCurrentProfile();
 
         final String[] tabTitles = {
                 "Meus Interesses",
@@ -152,6 +156,7 @@ public class MenuPrincipalVoluntarioActivity extends AppCompatActivity{
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 FirebaseAuth.getInstance().signOut();
+                LoginManager.getInstance().logOut();
                 abrirTelaLogin();
             }
         });

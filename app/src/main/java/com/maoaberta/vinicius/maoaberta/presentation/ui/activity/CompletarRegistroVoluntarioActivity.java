@@ -107,6 +107,16 @@ public class CompletarRegistroVoluntarioActivity extends AppCompatActivity {
             edit_text_nome_completar_registro_voluntario.setText(user.getDisplayName());
             edit_text_email_completar_registro_voluntario.setText(user.getEmail());
             edit_text_telefone_completar_registro_voluntario.setText(user.getPhoneNumber());
+
+            if(user.getPhotoUrl() != null){
+                try{
+                    Glide.with(this).load(user.getPhotoUrl()).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true)
+                            .into(image_view_logo_completar_registro_voluntario);
+                    text_view_escolher_foto_completar_registro_voluntario.setVisibility(View.INVISIBLE);
+                }catch(Exception e){
+
+                }
+            }
         }
 
         image_view_logo_completar_registro_voluntario.setOnClickListener(new View.OnClickListener() {

@@ -31,6 +31,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.facebook.login.LoginManager;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -105,7 +106,7 @@ public class PerfilVoluntarioActivity extends AppCompatActivity {
         user = mAuth.getCurrentUser();
         usuarioRepository = new UsuarioRepository();
 
-        if (String.valueOf(user.getProviders()).equals("[google.com]")) {
+        if (String.valueOf(user.getProviders()).equals("[google.com]") || String.valueOf(user.getProviders()).equals("[facebook.com]")) {
             edit_text_senha_perfil_cliente.setVisibility(View.GONE);
             edit_text_confirmar_senha_perfil_cliente.setVisibility(View.GONE);
         } else {
@@ -437,6 +438,7 @@ public class PerfilVoluntarioActivity extends AppCompatActivity {
         builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                LoginManager.getInstance().logOut();
                 FirebaseAuth.getInstance().signOut();
                 abrirTelaLogin();
             }

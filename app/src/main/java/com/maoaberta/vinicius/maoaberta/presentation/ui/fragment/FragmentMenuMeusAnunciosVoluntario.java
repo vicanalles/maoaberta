@@ -1,17 +1,13 @@
 package com.maoaberta.vinicius.maoaberta.presentation.ui.fragment;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseError;
 import com.maoaberta.vinicius.maoaberta.R;
 import com.maoaberta.vinicius.maoaberta.domain.models.Anuncio;
@@ -20,7 +16,6 @@ import com.maoaberta.vinicius.maoaberta.domain.repository.InteressadosRepository
 import com.maoaberta.vinicius.maoaberta.presentation.ui.adapter.VoluntarioMeusAnunciosAdapter;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
@@ -30,7 +25,7 @@ import butterknife.ButterKnife;
  * Created by Vinicius on 03/09/2017.
  */
 
-public class FragmentMenuMeusAnunciosVoluntario extends Fragment {
+public class FragmentMenuMeusAnunciosVoluntario extends Fragment{
 
     @BindView(R.id.recycler_view_meus_anuncios_voluntario)
     RecyclerView mRecycler;
@@ -78,5 +73,11 @@ public class FragmentMenuMeusAnunciosVoluntario extends Fragment {
         });
 
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mAdapter.notifyDataSetChanged();
     }
 }

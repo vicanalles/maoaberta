@@ -20,6 +20,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.facebook.FacebookSdk;
 import com.facebook.Profile;
 import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FacebookAuthProvider;
@@ -55,6 +56,7 @@ public class MenuPrincipalVoluntarioActivity extends AppCompatActivity{
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        FacebookSdk.sdkInitialize(this);
         setContentView(R.layout.activity_menu_principal_cliente);
         ButterKnife.bind(this);
         setSupportActionBar(toolbar_layout_menu_cliente);

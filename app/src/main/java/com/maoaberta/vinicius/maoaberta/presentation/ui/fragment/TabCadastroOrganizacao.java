@@ -1,5 +1,6 @@
 package com.maoaberta.vinicius.maoaberta.presentation.ui.fragment;
 
+import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -85,7 +86,7 @@ public class TabCadastroOrganizacao extends Fragment {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(!task.isSuccessful()){
-                            AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), R.style.AppTheme));
+                            @SuppressLint("RestrictedApi") AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), R.style.AppTheme));
                             builder.setMessage("Não foi possível salvar a organização. Por favor, tente novamente!");
                             builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                                 @Override
@@ -103,7 +104,7 @@ public class TabCadastroOrganizacao extends Fragment {
                                 @Override
                                 public void onGetOrganizacaoByIdSuccess(Organizacao organizacao) {
                                     if(organizacao != null){
-                                        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), R.style.AppTheme));
+                                        @SuppressLint("RestrictedApi") AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), R.style.AppTheme));
                                         builder.setMessage("Este endereço de e-mail já esta cadastrado em nosso banco de dados!");
                                         builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                                             @Override
@@ -137,7 +138,7 @@ public class TabCadastroOrganizacao extends Fragment {
     }
 
     private void alertaCamposNaoPreenchidos(){
-        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), R.style.AppTheme));
+        @SuppressLint("RestrictedApi") AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), R.style.AppTheme));
         builder.setMessage(R.string.campos_nao_preenchidos);
         builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             @Override
@@ -151,7 +152,7 @@ public class TabCadastroOrganizacao extends Fragment {
     }
 
     private void alertaSenhaCurta(){
-        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), R.style.AppTheme));
+        @SuppressLint("RestrictedApi") AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), R.style.AppTheme));
         builder.setMessage(R.string.senha_curta);
         builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             @Override
@@ -167,7 +168,7 @@ public class TabCadastroOrganizacao extends Fragment {
     }
 
     private void alertaSenhasDiferentes() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), R.style.AppTheme));
+        @SuppressLint("RestrictedApi") AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), R.style.AppTheme));
         builder.setMessage(R.string.senhas_diferentes);
         builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             @Override

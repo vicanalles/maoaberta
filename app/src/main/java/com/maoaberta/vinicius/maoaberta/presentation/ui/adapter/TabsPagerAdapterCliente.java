@@ -34,14 +34,17 @@ public class TabsPagerAdapterCliente extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int position) {
 
-        if (position == 0) {
-            return new FragmentMenuMeusAnunciosVoluntario();
-        } else if (position == 1) {
-            return new FragmentMenuAnunciosVoluntario();
-        } else if (position == 2) {
-            return new FragmentMenuEntidadesVoluntario();
-        } else {
-            return new TabSobre();
+        switch (position){
+            case 0:
+                return new FragmentMenuMeusAnunciosVoluntario();
+            case 1:
+                return new FragmentMenuAnunciosVoluntario();
+            case 2:
+                return new FragmentMenuEntidadesVoluntario();
+            case 3:
+                return new TabSobre();
+            default:
+                return null;
         }
     }
 

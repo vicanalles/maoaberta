@@ -116,7 +116,7 @@ public class OrganizacaoRepository {
 
     public void getOrganizacaoById(final String uid, final OnGetOrganizacaoById onGetOrganizacaoById){
         Query query = reference.child(uid);
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
+        query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Organizacao organizacao = new Organizacao();
@@ -135,7 +135,7 @@ public class OrganizacaoRepository {
     }
 
     public void getAllOrganizacoes(final OnGetAllOrganizacoes onGetAllOrganizacoes){
-        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+        reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 List<Organizacao> organizacoes = new ArrayList<>();

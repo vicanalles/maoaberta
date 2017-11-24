@@ -35,4 +35,9 @@ public class CustomViewPager extends ViewPager {
     public boolean isPagingEnabled(){
         return enabled;
     }
+
+    @Override
+    public void setOffscreenPageLimit(int limit) {
+        super.setOffscreenPageLimit(limit);
+    }
 }

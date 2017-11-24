@@ -4,8 +4,7 @@
     android:layout_width="310dp"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
-    android:background="@drawable/rounded_edittext"
-    app:cardCornerRadius="15dp">
+    android:background="@drawable/rounded_edittext">
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"

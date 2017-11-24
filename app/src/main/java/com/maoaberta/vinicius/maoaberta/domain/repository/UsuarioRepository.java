@@ -148,7 +148,7 @@ public class UsuarioRepository {
 
     public void getUserByUid(final String uid, final OnGetUserById onGetUserById ){
         Query query = reference.child(uid);
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
+        query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Voluntario voluntario = new Voluntario();

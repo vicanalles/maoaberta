@@ -47,7 +47,7 @@ public class TipoRepository {
 
     public void getTipoById(final String uid, final OnGetTipoById onGetTipoById){
         Query query = reference.child(uid);
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
+        query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 String tipoUser = null;

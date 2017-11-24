@@ -67,7 +67,7 @@ public class AnuncioRepository {
 
     //pega todos os anuncios da organizacao que esta logada
     public void getAllMeusAnunciosOrganizacao(final OnGetAllAnunciosOrganizacao onGetAllAnunciosOrganizacao) {
-        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+        reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 List<Anuncio> anuncios = new ArrayList<>();
@@ -92,7 +92,7 @@ public class AnuncioRepository {
 
     //pega todos os anuncios da organizacao selecionada
     public void getAllAnunciosOrganizacao(final Organizacao organizacao, final OnGetAllAnuncios onGetAllAnuncios) {
-        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+        reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 List<Anuncio> anuncios = new ArrayList<>();
@@ -118,7 +118,7 @@ public class AnuncioRepository {
 
     //pega todos os anuncios que não são do usuário logado
     public void getAllAnuncios(final OnGetAllAnuncios onGetAllAnuncios) {
-        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+        reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 List<Anuncio> anuncios = new ArrayList<>();
@@ -141,7 +141,7 @@ public class AnuncioRepository {
     }
 
     public void getAnuncioById(String id, final OnGetAnuncioById onGetAnuncioById) {
-        reference.child(id).addListenerForSingleValueEvent(new ValueEventListener() {
+        reference.child(id).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Anuncio anuncio = new Anuncio();

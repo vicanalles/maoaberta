@@ -102,9 +102,9 @@ public class VoluntarioMeusAnunciosAdapter extends RecyclerView.Adapter<Voluntar
                                 interessesRepository.removerInteresseOrganizacao(anuncio, new InteressesRepository.OnRemoveInteresse() {
                                     @Override
                                     public void onRemoveInteresseSuccess() {
+                                        dialog.dismiss();
                                         removeItems(anuncio);
                                         Toast.makeText(context, "Interesse removido com sucesso", Toast.LENGTH_SHORT).show();
-                                        dialog.dismiss();
                                     }
 
                                     @Override

@@ -1,5 +1,6 @@
 package com.maoaberta.vinicius.maoaberta.presentation.ui.activity;
 
+import android.annotation.SuppressLint;
 import android.app.Fragment;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -51,7 +52,7 @@ public class MenuPrincipalVoluntarioActivity extends AppCompatActivity{
     @BindView(R.id.tab_layout_menu_principal_cliente)
     TabLayout tab_layout_menu_principal_cliente;
     @BindView(R.id.pager_menu_principal_cliente)
-    CustomViewPager pager_menu_principal_cliente;
+    ViewPager pager_menu_principal_cliente;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -64,7 +65,6 @@ public class MenuPrincipalVoluntarioActivity extends AppCompatActivity{
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
         usuarioRepository = new UsuarioRepository();
-        Profile profile = Profile.getCurrentProfile();
 
         final String[] tabTitles = {
                 "Meus Interesses",
@@ -77,7 +77,6 @@ public class MenuPrincipalVoluntarioActivity extends AppCompatActivity{
             getSupportActionBar().setTitle(R.string.app_name);
         }
 
-        pager_menu_principal_cliente.setPagingEnabled(false);
         pager_menu_principal_cliente.setAdapter(new TabsPagerAdapterCliente(getSupportFragmentManager(), this));
         tab_layout_menu_principal_cliente.setTabTextColors(ColorStateList.valueOf(getResources().getColor(R.color.textColorWhite)));
         tab_layout_menu_principal_cliente.setSelectedTabIndicatorColor(getResources().getColor(R.color.textColorWhite));
@@ -152,7 +151,7 @@ public class MenuPrincipalVoluntarioActivity extends AppCompatActivity{
     }
 
     private void sairDoApp() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.AppTheme));
+        @SuppressLint("RestrictedApi") AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.AppTheme));
         builder.setMessage(R.string.sair_app);
         builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
             @Override

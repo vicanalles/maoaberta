@@ -3,8 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_height="wrap_content"
     android:layout_width="310dp"
-    android:layout_gravity="center"
-    app:cardCornerRadius="15dp">
+    android:layout_gravity="center">
 
     <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -58,7 +57,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif"
-                android:text="@string/nome_fantasia"
+                android:text="Nome Fantasia:"
                 android:textColor="@color/textColorBlack"
                 android:textSize="14sp"
                 android:textStyle="normal" />
@@ -96,7 +95,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif"
-                android:text="@string/cnpj"
+                android:text="CNPJ:"
                 android:textColor="@color/textColorBlack"
                 android:textSize="14sp"
                 android:textStyle="normal" />
@@ -135,7 +134,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif"
-                android:text="@string/email"
+                android:text="E-mail:"
                 android:textColor="@color/textColorBlack"
                 android:textSize="14sp"
                 android:textStyle="normal" />
@@ -174,7 +173,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif"
-                android:text="@string/nome_responsavel"
+                android:text="Nome do Responsável:"
                 android:textColor="@color/textColorBlack"
                 android:textSize="14sp"
                 android:textStyle="normal" />
@@ -213,7 +212,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif"
-                android:text="@string/endereco"
+                android:text="Endereço:"
                 android:textColor="@color/textColorBlack"
                 android:textSize="14sp"
                 android:textStyle="normal" />
@@ -252,7 +251,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif"
-                android:text="@string/descricao"
+                android:text="Descrição:"
                 android:textColor="@color/textColorBlack"
                 android:textSize="14sp"
                 android:textStyle="normal" />
@@ -279,60 +278,6 @@
                 android:textStyle="normal" />
         </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/linear_layout_social_media_icons"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/linear_layout_descricao_entidade_text"
-            android:orientation="horizontal"
-            android:weightSum="3">
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center">
-
-                <ImageView
-                    android:id="@+id/image_view_facebook_dialog"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    app:srcCompat="@drawable/ic_action_facebook"
-                    android:tint="@color/textColorBlack"/>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center">
-
-                <ImageView
-                    android:id="@+id/image_view_twitter_dialog"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    app:srcCompat="@drawable/ic_action_twitter"
-                    android:tint="@color/textColorBlack"/>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center">
-
-                <ImageView
-                    android:id="@+id/image_view_website_dialog"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    app:srcCompat="@drawable/ic_home"
-                    android:tint="@color/textColorBlack"/>
-            </LinearLayout>
-        </LinearLayout>
-
         <Button
             android:id="@+id/button_ver_anuncios_entidade"
             android:layout_width="150dp"
@@ -346,7 +291,7 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/linear_layout_social_media_icons"
+            app:layout_constraintTop_toBottomOf="@id/linear_layout_descricao_entidade_text"
             android:layout_marginTop="30dp"
             android:layout_marginBottom="10dp"/>
 

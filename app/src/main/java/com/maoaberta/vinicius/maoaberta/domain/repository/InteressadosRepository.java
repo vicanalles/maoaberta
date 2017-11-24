@@ -72,7 +72,7 @@ public class InteressadosRepository {
     }
 
     public void getAnunciosInteressado(final OnGetAllAnunciosInteresseVoluntario onGetAllAnunciosInteresseVoluntario) {
-        reference.child(getUidCurrentUser()).addListenerForSingleValueEvent(new ValueEventListener() {
+        reference.child(getUidCurrentUser()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 List<String> identificadores = new ArrayList<>();

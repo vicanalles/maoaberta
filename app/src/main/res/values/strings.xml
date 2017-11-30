@@ -87,4 +87,5 @@
     <string name="cancelar_interesse">CANCELAR INTERESSE</string>
     <string name="meus_interesses">Meus Interesses</string>
     <string name="ver_interessados">Ver Interessados</string>
+    <string name="endereco_desconhecido">Enredeço desconhecido</string>
 </resources>

@@ -22,6 +22,9 @@ public class Organizacao implements Serializable{
     private String endereco;
     private String photoUrl;
     private String uri;
+    private boolean hasPosition;
+    private Double latitude;
+    private Double longitude;
 
     public String getPhotoUrl() {
         return photoUrl;
@@ -133,5 +136,29 @@ public class Organizacao implements Serializable{
 
     public void setEndereco(String endereco) {
         this.endereco = endereco;
+    }
+
+    public boolean isHasPosition() {
+        return hasPosition;
+    }
+
+    public void setHasPosition(boolean hasPosition) {
+        this.hasPosition = hasPosition;
+    }
+
+    public Double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(Double latitude) {
+        this.latitude = latitude;
+    }
+
+    public Double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(Double longitude) {
+        this.longitude = longitude;
     }
 }

@@ -1,11 +1,14 @@
 package com.maoaberta.vinicius.maoaberta.presentation.ui.activity;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.location.Address;
+import android.location.Geocoder;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -23,8 +26,10 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -44,6 +49,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -58,6 +65,7 @@ public class CompletarRegistroOrganizacaoActivity extends AppCompatActivity {
     private static final int SELECT_PICTURE = 1596;
     private static final int REQUEST_IMAGE_CAPTURE = 1595;
     private static final int PERMISSION_WRITE_EXTERNAL = 1594;
+    private static final int REQUEST_POSITION = 4569;
     private FirebaseAuth mAuth;
     private FirebaseUser user;
     private OrganizacaoRepository organizacaoRepository;
@@ -83,6 +91,10 @@ public class CompletarRegistroOrganizacaoActivity extends AppCompatActivity {
     EditText edit_text_nome_responsavel_completar_registro_organizacao;
     @BindView(R.id.edit_text_email_completar_registro_organizacao)
     EditText edit_text_email_completar_registro_organizacao;
+    @BindView(R.id.edit_text_enderedo_completar_registro_organizacao)
+    EditText edit_text_enderedo_completar_registro_organizacao;
+    @BindView(R.id.image_view_add_position)
+    ImageView image_view_add_position;
     @BindView(R.id.edit_text_telefone_completar_registro_organizacao)
     EditText edit_text_telefone_completar_registro_organizacao;
     @BindView(R.id.edit_text_descricao_completar_registro_organizacao)
@@ -159,6 +171,13 @@ public class CompletarRegistroOrganizacaoActivity extends AppCompatActivity {
             }
         });
 
+        image_view_add_position.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                abrirMapsActivity();
+            }
+        });
+
         button_cadastrar_completar_registro_organizacao.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -187,7 +206,7 @@ public class CompletarRegistroOrganizacaoActivity extends AppCompatActivity {
                             tipoRepository.cadastrarTipo(user.getUid(), "tipo", "organizacao", new TipoRepository.OnCadastrarTipo() {
                                 @Override
                                 public void onCadastrarTipoSuccess(String sucesso) {
-                                    AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(CompletarRegistroOrganizacaoActivity.this, R.style.AppTheme));
+                                    @SuppressLint("RestrictedApi") AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(CompletarRegistroOrganizacaoActivity.this, R.style.AppTheme));
                                     builder.setMessage(sucesso);
                                     builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                                         @Override
@@ -201,7 +220,7 @@ public class CompletarRegistroOrganizacaoActivity extends AppCompatActivity {
 
                                 @Override
                                 public void onCadastrarTipoError(String error) {
-                                    AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(CompletarRegistroOrganizacaoActivity.this, R.style.AppTheme));
+                                    @SuppressLint("RestrictedApi") AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(CompletarRegistroOrganizacaoActivity.this, R.style.AppTheme));
                                     builder.setMessage(error);
                                     builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                                         @Override
@@ -218,7 +237,7 @@ public class CompletarRegistroOrganizacaoActivity extends AppCompatActivity {
 
                         @Override
                         public void onSaveOrganizacaoError(String error) {
-                            AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(CompletarRegistroOrganizacaoActivity.this, R.style.AppTheme));
+                            @SuppressLint("RestrictedApi") AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(CompletarRegistroOrganizacaoActivity.this, R.style.AppTheme));
                             builder.setMessage(error);
                             builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                                 @Override
@@ -235,6 +254,11 @@ public class CompletarRegistroOrganizacaoActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private void abrirMapsActivity() {
+        Intent intent = new Intent(CompletarRegistroOrganizacaoActivity.this, MapsActivity.class);
+        startActivityForResult(intent, REQUEST_POSITION);
     }
 
     private File createImageFile() throws IOException{
@@ -272,11 +296,42 @@ public class CompletarRegistroOrganizacaoActivity extends AppCompatActivity {
                 text_view_escolher_foto_completar_registro_organizacao.setVisibility(View.GONE);
                 text_view_escolher_foto_completar_registro_organizacao.setEnabled(false);
             }
+        }else if(requestCode == REQUEST_POSITION){
+            if(resultCode == RESULT_OK){
+                if(data != null){
+                    Bundle extras = data.getExtras();
+                    double latitude = (double) extras.get("latitude");
+                    double longitude = (double) extras.get("longitude");
+                    Geocoder geocoder = new Geocoder(CompletarRegistroOrganizacaoActivity.this, Locale.getDefault());
+                    try{
+                        List<Address> addresses = geocoder.getFromLocation(latitude, longitude, 1);
+                        if(addresses != null && addresses.size() != 0){
+                            Address returnedAddress = addresses.get(0);
+                            String returnString = (returnedAddress.getThoroughfare() != null ?
+                                    String.format("%s, ", returnedAddress.getThoroughfare()) : "") +
+                                    (returnedAddress.getSubThoroughfare() != null ?
+                                            String.format("%s, ", returnedAddress.getSubThoroughfare()) : "") +
+                                    (returnedAddress.getSubAdminArea() != null ?
+                                            String.format("%s - ", returnedAddress.getSubAdminArea()) : "") +
+                                    (returnedAddress.getAdminArea() != null ? returnedAddress.getAdminArea() : "");
+                            returnString = returnString.replace("Unnamed Road,", "");
+                            edit_text_enderedo_completar_registro_organizacao.setText(returnString);
+                            if (returnString.equals(""))
+                                edit_text_enderedo_completar_registro_organizacao.setText(R.string.endereco_desconhecido);
+                        }else{
+                            edit_text_enderedo_completar_registro_organizacao.setText(R.string.endereco_desconhecido);
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        edit_text_enderedo_completar_registro_organizacao.setText(R.string.endereco_desconhecido);
+                    }
+                }
+            }
         }
     }
 
     private void alertaCamposVazios() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(CompletarRegistroOrganizacaoActivity.this, R.style.AppTheme));
+        @SuppressLint("RestrictedApi") AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(CompletarRegistroOrganizacaoActivity.this, R.style.AppTheme));
         builder.setMessage("Preencha todos os campos para realizar o cadastro!");
         builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             @Override
@@ -295,7 +350,7 @@ public class CompletarRegistroOrganizacaoActivity extends AppCompatActivity {
     }
 
     private void sairDoApp() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.AppTheme));
+        @SuppressLint("RestrictedApi") AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.AppTheme));
         builder.setMessage(R.string.sair_app);
         builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
             @Override
@@ -308,7 +363,7 @@ public class CompletarRegistroOrganizacaoActivity extends AppCompatActivity {
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(CompletarRegistroOrganizacaoActivity.this, R.style.AppTheme));
+                        @SuppressLint("RestrictedApi") AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(CompletarRegistroOrganizacaoActivity.this, R.style.AppTheme));
                         builder.setMessage("Ocorreu um erro. Por favor, tente novamente!!");
                         builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                             @Override

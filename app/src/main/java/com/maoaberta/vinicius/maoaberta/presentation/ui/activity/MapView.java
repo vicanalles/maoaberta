@@ -35,11 +35,7 @@ import java.util.Locale;
 
 public class MapView extends SupportMapFragment implements GoogleMap.OnMapClickListener, OnMapReadyCallback {
 
-    private static final int MY_PERMISSIONS_REQUEST_FINE_LOCATION = 0;
     private GoogleMap map;
-    private boolean hasPosition = false;
-    private double latitude;
-    private double longitude;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -55,14 +51,6 @@ public class MapView extends SupportMapFragment implements GoogleMap.OnMapClickL
     @Override
     public void onMapReady(final GoogleMap googleMap) {
         map = googleMap;
-
-        try{
-            map.setMyLocationEnabled(true);
-        }catch(SecurityException e){
-
-        }
-
-        setupMap();
 
         map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
@@ -84,72 +72,5 @@ public class MapView extends SupportMapFragment implements GoogleMap.OnMapClickL
                 getActivity().finish();
             }
         });
-    }
-
-    private void setupMap() {
-        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) !=
-                PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) !=
-                PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
-        }else{
-            map.setMyLocationEnabled(true);
-            LocationManager locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
-            Criteria criteria = new Criteria();
-            String provider = locationManager.getBestProvider(criteria, true);
-            Location myLocation = locationManager.getLastKnownLocation(provider);
-            map.setMapType(GoogleMap.MAP_TYPE_HYBRID);
-            double latitude = myLocation.getLatitude();
-            double longitude = myLocation.getLongitude();
-            LatLng latLng = new LatLng(latitude, longitude);
-            map.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-            map.animateCamera(CameraUpdateFactory.zoomTo(20));
-        }
-    }
-
-    public void checarPermissaoGPS(){
-        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
-
-            ActivityCompat.requestPermissions(getActivity(),
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                    MY_PERMISSIONS_REQUEST_FINE_LOCATION);
-        }
-    }
-
-    public void verificarStatusGPS(){
-        checarPermissaoGPS();
-        LocationManager locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
-        //Checks if the GPS service is active
-        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-            final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-            builder.setMessage("Seu GPS está Offline, deseja ativá-lo?")
-                    .setCancelable(false)
-                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                        public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
-                            startActivityForResult(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS), TURN_ON_GPS);
-                            dialog.cancel();
-                        }
-                    })
-                    .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                        public void onClick(final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
-                            dialog.cancel();
-                        }
-                    });
-            final AlertDialog alert = builder.create();
-            alert.show();
-        }
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        verificarStatusGPS();
     }
 }

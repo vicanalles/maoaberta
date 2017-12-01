@@ -48,7 +48,7 @@ public class CadastroActivity extends AppCompatActivity {
 
         progressDialog = new ProgressDialog(this);
 
-        if(getSupportActionBar() != null){
+        if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle(R.string.app_name);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -124,21 +124,21 @@ public class CadastroActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case android.R.id.home:
                 finish();
         }
         return true;
     }
 
-    public void showProgressDialog(String title, String content){
+    public void showProgressDialog(String title, String content) {
         progressDialog.setTitle(title);
         progressDialog.setMessage(content);
         progressDialog.setCancelable(false);
         progressDialog.show();
     }
 
-    public void hideProgressDialog(){
+    public void hideProgressDialog() {
         progressDialog.dismiss();
     }
 }

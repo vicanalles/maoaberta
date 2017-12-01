@@ -218,7 +218,7 @@ public class TabLoginCliente extends Fragment implements GoogleApiClient.OnConne
 
                         @Override
                         public void onGetUserByIdError(String error) {
-                            Toast.makeText(getActivity(), "Erro na recuperação dos dados", Toast.LENGTH_SHORT).show();
+
                         }
                     });
                 } else {
@@ -265,7 +265,7 @@ public class TabLoginCliente extends Fragment implements GoogleApiClient.OnConne
 
                                 @Override
                                 public void onGetUserByIdError(String error) {
-                                    Toast.makeText(getActivity(), "Erro na recuperação dos dados", Toast.LENGTH_SHORT).show();
+
                                 }
                             });
                         } else {

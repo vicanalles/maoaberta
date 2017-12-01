@@ -30,12 +30,14 @@ import java.util.Map;
 public class AnuncioRepository {
 
     private final DatabaseReference reference;
+    private final DatabaseReference reference2;
     private FirebaseAuth firebaseAuth;
 
     public AnuncioRepository() {
         firebaseAuth = FirebaseAuth.getInstance();
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         reference = database.getReference("anuncios/");
+        reference2 = database.getReference("anuncios_teste/");
     }
 
     public String getUidCurrentUser() {
@@ -58,6 +60,22 @@ public class AnuncioRepository {
                     Log.i("CADASTRO", "Anúncio cadastrado com sucesso!");
                     onSaveAnuncio.onSaveAnuncioSuccess("Anúncio criado com sucesso!");
                 } else {
+                    Log.i("CADASTRO", "Falha no cadastro do anúncio");
+                    onSaveAnuncio.onSaveAnuncioError("Falha na criação do anúncio! Por favor, tente novamente!");
+                }
+            }
+        });
+    }
+
+    public void salvarAnuncio(final Anuncio anuncio, final OnSaveAnuncio onSaveAnuncio){
+        DatabaseReference push = reference2.push();
+        push.setValue(anuncio).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if(task.isSuccessful()){
+                    Log.i("CADASTRO", "Anúncio cadastrado com sucesso!");
+                    onSaveAnuncio.onSaveAnuncioSuccess("Anúncio criado com sucesso!");
+                }else{
                     Log.i("CADASTRO", "Falha no cadastro do anúncio");
                     onSaveAnuncio.onSaveAnuncioError("Falha na criação do anúncio! Por favor, tente novamente!");
                 }

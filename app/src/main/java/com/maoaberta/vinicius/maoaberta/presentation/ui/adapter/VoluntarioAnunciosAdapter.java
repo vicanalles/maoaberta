@@ -62,7 +62,7 @@ public class VoluntarioAnunciosAdapter extends RecyclerView.Adapter<VoluntarioAn
 
         final Anuncio anuncio = anuncios.get(position);
 
-        holder.text_view_titulo_anuncio_organizacao_voluntario.setText(anuncio.getTitulo());
+        holder.text_view_titulo_anuncio_organizacao_voluntario.setText(anuncio.getAnuncio());
         holder.text_view_valido_de_anuncios_voluntario.setText(anuncio.getDataInicio());
         holder.text_view_valido_ate_anuncios_voluntario.setText(anuncio.getDataFim());
 
@@ -110,9 +110,9 @@ public class VoluntarioAnunciosAdapter extends RecyclerView.Adapter<VoluntarioAn
                     }
                 });
 
-                text_view_titulo_ad_text_interesse.setText(anuncio.getTitulo());
+                text_view_titulo_ad_text_interesse.setText(anuncio.getAnuncio());
                 text_view_tipo_ad_text_interesse.setText(anuncio.getTipo());
-                text_view_descricao_ad_text_interesse.setText(anuncio.getDescricao());
+                text_view_descricao_ad_text_interesse.setText(anuncio.getInstituicao());
                 text_view_start_date_text_interesse.setText(anuncio.getDataInicio());
                 text_view_end_date_text_interesse.setText(anuncio.getDataFim());
 

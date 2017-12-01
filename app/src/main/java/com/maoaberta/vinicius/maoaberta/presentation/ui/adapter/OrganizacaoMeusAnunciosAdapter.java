@@ -60,7 +60,7 @@ public class OrganizacaoMeusAnunciosAdapter extends RecyclerView.Adapter<Organiz
     public void onBindViewHolder(final MyViewHolder holder, int position) {
         final Anuncio anuncio = anuncios.get(position);
 
-        holder.text_view_title_anuncio.setText(anuncio.getTitulo());
+        holder.text_view_title_anuncio.setText(anuncio.getAnuncio());
         holder.text_view_data_inicio_anuncio.setText(anuncio.getDataInicio());
         holder.text_view_data_termino_anuncio.setText(anuncio.getDataFim());
 
@@ -79,9 +79,9 @@ public class OrganizacaoMeusAnunciosAdapter extends RecyclerView.Adapter<Organiz
                 button_edit_ad = (Button) dialog.findViewById(R.id.button_edit_ad);
                 button_ver_interessados = (Button) dialog.findViewById(R.id.button_ver_interessados);
 
-                text_view_titulo_ad_text.setText(anuncio.getTitulo());
+                text_view_titulo_ad_text.setText(anuncio.getAnuncio());
                 text_view_tipo_ad_text.setText(anuncio.getTipo());
-                text_view_descricao_ad_text.setText(anuncio.getDescricao());
+                text_view_descricao_ad_text.setText(anuncio.getInstituicao());
                 text_view_start_date_text.setText(anuncio.getDataInicio());
                 text_view_end_date_text.setText(anuncio.getDataFim());
 

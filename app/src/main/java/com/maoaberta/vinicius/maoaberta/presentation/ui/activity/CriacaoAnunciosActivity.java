@@ -1,5 +1,6 @@
 package com.maoaberta.vinicius.maoaberta.presentation.ui.activity;
 
+import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -10,6 +11,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -23,7 +25,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.maoaberta.vinicius.maoaberta.R;
 import com.maoaberta.vinicius.maoaberta.domain.models.Anuncio;
+import com.maoaberta.vinicius.maoaberta.domain.models.Organizacao;
 import com.maoaberta.vinicius.maoaberta.domain.repository.AnuncioRepository;
+import com.maoaberta.vinicius.maoaberta.domain.repository.OrganizacaoRepository;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -65,6 +69,7 @@ public class CriacaoAnunciosActivity extends AppCompatActivity {
     private Date startDate;
     private Date endDate;
     private Anuncio anuncio;
+    private Anuncio anuncio2;
     private AnuncioRepository anuncioRepository;
     private ProgressDialog progressDialog;
     private FirebaseUser user;
@@ -155,9 +160,9 @@ public class CriacaoAnunciosActivity extends AppCompatActivity {
                             alertaDataInicioUltrapassada();
                         }else{
                             showProgressDialog("Aguarde", "Atualizando Anúncio...");
-                            anuncio.setTitulo(edit_text_titulo_ad.getText().toString());
+                            anuncio.setAnuncio(edit_text_titulo_ad.getText().toString());
                             anuncio.setTipo(spinner_novo_ad.getSelectedItem().toString());
-                            anuncio.setDescricao(edit_text_descricao_criacao_anuncio.getText().toString());
+                            anuncio.setInstituicao(edit_text_descricao_criacao_anuncio.getText().toString());
                             anuncio.setDataInicio(edit_text_start_date.getText().toString());
                             anuncio.setDataFim(edit_text_end_date.getText().toString());
                             anuncioRepository = new AnuncioRepository();
@@ -192,9 +197,9 @@ public class CriacaoAnunciosActivity extends AppCompatActivity {
                         }else {
                             showProgressDialog("Aguarde", "Criando anúncio...");
                             anuncio = new Anuncio();
-                            anuncio.setTitulo(edit_text_titulo_ad.getText().toString());
+                            anuncio.setAnuncio(edit_text_titulo_ad.getText().toString());
                             anuncio.setTipo(spinner_novo_ad.getSelectedItem().toString());
-                            anuncio.setDescricao(edit_text_descricao_criacao_anuncio.getText().toString());
+                            anuncio.setInstituicao(edit_text_descricao_criacao_anuncio.getText().toString());
                             anuncio.setDataInicio(edit_text_start_date.getText().toString());
                             anuncio.setDataFim(edit_text_end_date.getText().toString());
                             anuncio.setIdProprietario(user.getUid());
@@ -208,6 +213,34 @@ public class CriacaoAnunciosActivity extends AppCompatActivity {
                                 @Override
                                 public void onSaveAnuncioError(String error) {
                                     alertaCriacaoAnuncioErro(error);
+                                }
+                            });
+                            OrganizacaoRepository organizacaoRepository = new OrganizacaoRepository();
+                            anuncio2 = new Anuncio();
+                            anuncio2.setAnuncio(edit_text_titulo_ad.getText().toString());
+                            anuncio2.setInstituicao(edit_text_descricao_criacao_anuncio.getText().toString());
+                            organizacaoRepository.getOrganizacaoById(user.getUid(), new OrganizacaoRepository.OnGetOrganizacaoById() {
+                                @Override
+                                public void onGetOrganizacaoByIdSuccess(Organizacao organizacao) {
+                                    anuncio2.setNome(organizacao.getNomeFantasia());
+                                    anuncio2.setTelefone(organizacao.getTelefone());
+                                    anuncioRepository = new AnuncioRepository();
+                                    anuncioRepository.salvarAnuncio(anuncio2, new AnuncioRepository.OnSaveAnuncio() {
+                                        @Override
+                                        public void onSaveAnuncioSuccess(String sucesso) {
+                                            Log.d("Sucesso", "Sucesso!");
+                                        }
+
+                                        @Override
+                                        public void onSaveAnuncioError(String error) {
+                                            Log.d("Erro", "Erro!");
+                                        }
+                                    });
+                                }
+
+                                @Override
+                                public void onGetOrganizacaoByIdError(String error) {
+
                                 }
                             });
                         }
@@ -227,8 +260,8 @@ public class CriacaoAnunciosActivity extends AppCompatActivity {
 
         if(anuncio != null){
             botao_criar_novo_anuncio.setText(R.string.atualizar_anuncio);
-            edit_text_titulo_ad.setText(anuncio.getTitulo());
-            edit_text_descricao_criacao_anuncio.setText(anuncio.getDescricao());
+            edit_text_titulo_ad.setText(anuncio.getAnuncio());
+            edit_text_descricao_criacao_anuncio.setText(anuncio.getInstituicao());
             edit_text_start_date.setText(anuncio.getDataInicio());
             edit_text_end_date.setText(anuncio.getDataFim());
             if(anuncio.getTipo().equals("Produto")){
@@ -242,7 +275,7 @@ public class CriacaoAnunciosActivity extends AppCompatActivity {
     }
 
     private void alertaDataInicioUltrapassada() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(CriacaoAnunciosActivity.this, R.style.AppTheme));
+        @SuppressLint("RestrictedApi") AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(CriacaoAnunciosActivity.this, R.style.AppTheme));
         builder.setMessage("Atenção! Data de início deve ser igual ou depois a data atual!");
         builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             @Override
@@ -256,7 +289,7 @@ public class CriacaoAnunciosActivity extends AppCompatActivity {
     }
 
     private void alertaCamposNaoPreenchidos() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(CriacaoAnunciosActivity.this, R.style.AppTheme));
+        @SuppressLint("RestrictedApi") AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(CriacaoAnunciosActivity.this, R.style.AppTheme));
         builder.setMessage(R.string.campos_nao_preenchidos);
         builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             @Override
@@ -270,7 +303,7 @@ public class CriacaoAnunciosActivity extends AppCompatActivity {
     }
 
     public void alertaCriacaoAnuncioSucesso(String mensagem) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(CriacaoAnunciosActivity.this, R.style.AppTheme));
+        @SuppressLint("RestrictedApi") AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(CriacaoAnunciosActivity.this, R.style.AppTheme));
         builder.setMessage(mensagem);
         builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
             @Override
@@ -287,7 +320,7 @@ public class CriacaoAnunciosActivity extends AppCompatActivity {
     }
 
     private void alertaAtualizacaoAnuncioSucesso(String sucesso) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(CriacaoAnunciosActivity.this, R.style.AppTheme));
+        @SuppressLint("RestrictedApi") AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(CriacaoAnunciosActivity.this, R.style.AppTheme));
         builder.setMessage(sucesso);
         builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
             @Override
@@ -304,7 +337,7 @@ public class CriacaoAnunciosActivity extends AppCompatActivity {
     }
 
     public void alertaCriacaoAnuncioErro(String mensagem) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(CriacaoAnunciosActivity.this, R.style.AppTheme));
+        @SuppressLint("RestrictedApi") AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(CriacaoAnunciosActivity.this, R.style.AppTheme));
         builder.setMessage(mensagem);
         builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
             @Override
@@ -318,7 +351,7 @@ public class CriacaoAnunciosActivity extends AppCompatActivity {
     }
 
     private void alertaAtualizacaoAnuncioErro(String erro) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(CriacaoAnunciosActivity.this, R.style.AppTheme));
+        @SuppressLint("RestrictedApi") AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(CriacaoAnunciosActivity.this, R.style.AppTheme));
         builder.setMessage(erro);
         builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
             @Override
@@ -335,7 +368,7 @@ public class CriacaoAnunciosActivity extends AppCompatActivity {
     }
 
     public void alertaDataInicioMaiorFim() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(CriacaoAnunciosActivity.this, R.style.AppTheme));
+        @SuppressLint("RestrictedApi") AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(CriacaoAnunciosActivity.this, R.style.AppTheme));
         builder.setMessage(R.string.alerta_selecao_data);
         builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
             @Override

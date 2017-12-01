@@ -11,12 +11,14 @@ import java.util.List;
 public class Anuncio implements Serializable{
 
     private String id;
-    private String titulo;
+    private String anuncio; //vou usar na apresentação
     private String tipo;
-    private String descricao;
+    private String instituicao; //vou usar na apresentação
     private String dataInicio;
     private String dataFim;
     private String idProprietario;
+    private String nome;
+    private String telefone;
     private HashMap<String, Boolean> interessados;
 
     public String getIdProprietario() {
@@ -35,12 +37,12 @@ public class Anuncio implements Serializable{
         this.id = id;
     }
 
-    public String getTitulo() {
-        return titulo;
+    public String getAnuncio() {
+        return anuncio;
     }
 
-    public void setTitulo(String titulo) {
-        this.titulo = titulo;
+    public void setAnuncio(String titulo) {
+        this.anuncio = titulo;
     }
 
     public String getTipo() {
@@ -51,12 +53,12 @@ public class Anuncio implements Serializable{
         this.tipo = tipo;
     }
 
-    public String getDescricao() {
-        return descricao;
+    public String getInstituicao() {
+        return instituicao;
     }
 
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
+    public void setInstituicao(String descricao) {
+        this.instituicao = descricao;
     }
 
     public String getDataInicio() {
@@ -75,11 +77,19 @@ public class Anuncio implements Serializable{
         this.dataFim = dataFim;
     }
 
-    public HashMap<String, Boolean> getInteressados() {
-        return interessados;
+    public String getTelefone() {
+        return telefone;
     }
 
-    public void setInteressados(HashMap<String, Boolean> interessados) {
-        this.interessados = interessados;
+    public void setTelefone(String telefone) {
+        this.telefone = telefone;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
     }
 }

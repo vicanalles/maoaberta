@@ -62,16 +62,23 @@ public class TabCadastroOrganizacao extends Fragment {
                 ((CadastroActivity) getActivity()).showProgressDialog("Cadastro", "Cadastrando organização...");
                 if(String.valueOf(emailOrganizacao.getText()).equals("") || String.valueOf(senhaOrganizacao.getText()).equals("") ||
                         String.valueOf(confirmarSenhaOrganizacao.getText()).equals("")){
-                    alertaCamposNaoPreenchidos();
+                    ((CadastroActivity) getActivity()).hideProgressDialog();
+                    Toast.makeText(getActivity(), "Alguns campos não foram preenchidos. Por favor, preencher todos os campos", Toast.LENGTH_SHORT).show();
                 }else{
                     if(String.valueOf(senhaOrganizacao.getText()).equals(String.valueOf(confirmarSenhaOrganizacao.getText()))){
                         if(senhaOrganizacao.getText().length() >= 6 && confirmarSenhaOrganizacao.getText().length() >= 6){
                             createAccountWithEmailAndPassword(String.valueOf(emailOrganizacao.getText()), String.valueOf(senhaOrganizacao.getText()));
                         }else{
-                            alertaSenhaCurta();
+                            ((CadastroActivity) getActivity()).hideProgressDialog();
+                            senhaOrganizacao.setText("");
+                            confirmarSenhaOrganizacao.setText("");
+                            Toast.makeText(getActivity(), "Senha curta. Digite pelo menos 6 caracteres para definir sua senha.", Toast.LENGTH_SHORT).show();
                         }
                     }else{
-                        alertaSenhasDiferentes();
+                        ((CadastroActivity) getActivity()).hideProgressDialog();
+                        senhaOrganizacao.setText("");
+                        confirmarSenhaOrganizacao.setText("");
+                        Toast.makeText(getActivity(), "Senha e Confirmação de Senha devem ser iguais. Digite novamente!", Toast.LENGTH_SHORT).show();
                     }
                 }
             }
@@ -86,17 +93,8 @@ public class TabCadastroOrganizacao extends Fragment {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(!task.isSuccessful()){
-                            @SuppressLint("RestrictedApi") AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), R.style.AppTheme));
-                            builder.setMessage("Não foi possível salvar a organização. Por favor, tente novamente!");
-                            builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int i) {
-                                    ((CadastroActivity) getActivity()).hideProgressDialog();
-                                    dialog.dismiss();
-                                }
-                            });
-                            AlertDialog dialog = builder.create();
-                            dialog.show();
+                            ((CadastroActivity) getActivity()).hideProgressDialog();
+                            Toast.makeText(getActivity(), "Não foi possível salvar a organização. Por favor, tente novamente!", Toast.LENGTH_SHORT).show();
                         }else{
                             AuthResult result = task.getResult();
                             FirebaseUser user = result.getUser();
@@ -104,19 +102,12 @@ public class TabCadastroOrganizacao extends Fragment {
                                 @Override
                                 public void onGetOrganizacaoByIdSuccess(Organizacao organizacao) {
                                     if(organizacao != null){
-                                        @SuppressLint("RestrictedApi") AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), R.style.AppTheme));
-                                        builder.setMessage("Este endereço de e-mail já esta cadastrado em nosso banco de dados!");
-                                        builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int i) {
-                                                ((CadastroActivity) getActivity()).hideProgressDialog();
-                                                dialog.dismiss();
-                                            }
-                                        });
-                                        AlertDialog dialog = builder.create();
-                                        dialog.show();
+                                        ((CadastroActivity) getActivity()).hideProgressDialog();
+                                        Toast.makeText(getActivity(), "Este endereço de e-mail já esta cadastrado em nosso banco de dados!", Toast.LENGTH_SHORT).show();
                                     }else{
-                                        abrirTelaRegistro();
+                                        Intent intent = new Intent(getContext(), CompletarRegistroOrganizacaoActivity.class);
+                                        startActivity(intent);
+                                        getActivity().finish();
                                     }
                                 }
 
@@ -129,57 +120,5 @@ public class TabCadastroOrganizacao extends Fragment {
                         }
                     }
                 });
-    }
-
-    private void abrirTelaRegistro() {
-        Intent intent = new Intent(getContext(), CompletarRegistroOrganizacaoActivity.class);
-        startActivity(intent);
-        getActivity().finish();
-    }
-
-    private void alertaCamposNaoPreenchidos(){
-        @SuppressLint("RestrictedApi") AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), R.style.AppTheme));
-        builder.setMessage(R.string.campos_nao_preenchidos);
-        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                ((CadastroActivity) getActivity()).hideProgressDialog();
-                dialog.dismiss();
-            }
-        });
-        AlertDialog dialog = builder.create();
-        dialog.show();
-    }
-
-    private void alertaSenhaCurta(){
-        @SuppressLint("RestrictedApi") AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), R.style.AppTheme));
-        builder.setMessage(R.string.senha_curta);
-        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                ((CadastroActivity) getActivity()).hideProgressDialog();
-                senhaOrganizacao.setText("");
-                confirmarSenhaOrganizacao.setText("");
-                dialog.dismiss();
-            }
-        });
-        AlertDialog dialog = builder.create();
-        dialog.show();
-    }
-
-    private void alertaSenhasDiferentes() {
-        @SuppressLint("RestrictedApi") AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), R.style.AppTheme));
-        builder.setMessage(R.string.senhas_diferentes);
-        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                ((CadastroActivity) getActivity()).hideProgressDialog();
-                senhaOrganizacao.setText("");
-                confirmarSenhaOrganizacao.setText("");
-                dialog.dismiss();
-            }
-        });
-        AlertDialog dialog = builder.create();
-        dialog.show();
     }
 }

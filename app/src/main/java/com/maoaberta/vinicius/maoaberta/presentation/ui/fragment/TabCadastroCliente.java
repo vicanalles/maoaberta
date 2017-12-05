@@ -1,5 +1,7 @@
 package com.maoaberta.vinicius.maoaberta.presentation.ui.fragment;
 
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -37,6 +39,8 @@ public class TabCadastroCliente extends Fragment {
 
     FirebaseAuth mAuth;
     private UsuarioRepository usuarioRepository;
+    private Context context;
+    private ProgressDialog progressDialog;
 
     @BindView(R.id.edit_text_email_cadastro_cliente)
     EditText emailCliente;
@@ -52,26 +56,35 @@ public class TabCadastroCliente extends Fragment {
 
         View v = inflater.inflate(R.layout.tab_cadastro_cliente, container, false);
         ButterKnife.bind(this, v);
-
+        progressDialog = new ProgressDialog(context);
+        progressDialog.setTitle("Cadastro");
+        progressDialog.setMessage("Cadastrando voluntário...");
         mAuth = FirebaseAuth.getInstance();
         usuarioRepository = new UsuarioRepository();
 
         cadastrarCliente.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((CadastroActivity) getActivity()).showProgressDialog("Cadastro", "Cadastrando voluntário...");
+                progressDialog.show();
                 if (String.valueOf(emailCliente.getText()).equals("") || String.valueOf(senhaCliente.getText()).equals("") ||
                         String.valueOf(confirmarSenha.getText()).equals("")) {
-                    alertaCamposNaoPreenchidos();
+                    progressDialog.hide();
+                    Toast.makeText(context, "Alguns campos não foram preenchidos. Por favor, preencher todos os campos!", Toast.LENGTH_SHORT).show();
                 } else {
                     if (String.valueOf(senhaCliente.getText()).equals(String.valueOf(confirmarSenha.getText()))) {
-                        if(senhaCliente.getText().length() >= 6 && confirmarSenha.getText().length() >= 6){
+                        if (senhaCliente.getText().length() >= 6 && confirmarSenha.getText().length() >= 6) {
                             createAccountWithEmailAndPassword(String.valueOf(emailCliente.getText()), String.valueOf(senhaCliente.getText()));
-                        }else{
-                            alertaSenhaCurta();
+                        } else {
+                            progressDialog.hide();
+                            senhaCliente.setText("");
+                            confirmarSenha.setText("");
+                            Toast.makeText(context, "Senha curta. Digite pelo menos 6 caracteres para definir sua senha.", Toast.LENGTH_SHORT).show();
                         }
                     } else {
-                        alertaSenhasDiferentes();
+                        progressDialog.hide();
+                        senhaCliente.setText("");
+                        confirmarSenha.setText("");
+                        Toast.makeText(context, "Senha e Confirmação de Senha devem ser iguais. Digite novamente!", Toast.LENGTH_SHORT).show();
                     }
                 }
             }
@@ -85,44 +98,28 @@ public class TabCadastroCliente extends Fragment {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (!task.isSuccessful()) {
-                            AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), R.style.AppTheme));
-                            builder.setMessage("Não foi possível salvar o voluntário. Por favor, tente novamente!");
-                            builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int i) {
-                                    ((CadastroActivity) getActivity()).hideProgressDialog();
-                                    dialog.dismiss();
-                                }
-                            });
-                            AlertDialog dialog = builder.create();
-                            dialog.show();
+                            progressDialog.hide();
+                            Toast.makeText(context, "Não foi possível salvar o voluntário. Por favor, tente novamente!", Toast.LENGTH_SHORT).show();
                         } else {
                             AuthResult result = task.getResult();
                             FirebaseUser user = result.getUser();
                             usuarioRepository.getUserByUid(user.getUid(), new UsuarioRepository.OnGetUserById() {
                                 @Override
                                 public void onGetUserByIdSuccess(Voluntario voluntario) {
-                                    if(voluntario != null){
-                                        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), R.style.AppTheme));
-                                        builder.setMessage("Este endereço de e-mail já esta cadastrado em nosso banco de dados!");
-                                        builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int i) {
-                                                ((CadastroActivity) getActivity()).hideProgressDialog();
-                                                dialog.dismiss();
-                                            }
-                                        });
-                                        AlertDialog dialog = builder.create();
-                                        dialog.show();
-                                    }else{
-                                        abrirTelaRegistro();
+                                    if (voluntario != null) {
+                                        progressDialog.hide();
+                                        Toast.makeText(context, "Este endereço de e-mail já esta cadastrado em nosso banco de dados!", Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        Intent intent = new Intent(context, CompletarRegistroVoluntarioActivity.class);
+                                        startActivity(intent);
+                                        getActivity().finish();
                                     }
                                 }
 
                                 @Override
                                 public void onGetUserByIdError(String error) {
-                                    ((CadastroActivity) getActivity()).hideProgressDialog();
-                                    Toast.makeText(getActivity(), "Erro ao cadastrar os dados. Por favor tente novamente", Toast.LENGTH_SHORT).show();
+                                    progressDialog.hide();
+                                    Toast.makeText(context, "Erro ao cadastrar os dados. Por favor tente novamente", Toast.LENGTH_SHORT).show();
                                 }
                             });
                         }
@@ -130,61 +127,9 @@ public class TabCadastroCliente extends Fragment {
                 });
     }
 
-    private void abrirTelaRegistro() {
-        Intent intent = new Intent(getContext(), CompletarRegistroVoluntarioActivity.class);
-        startActivity(intent);
-        getActivity().finish();
-    }
-
-    private void alertaCamposNaoPreenchidos() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), R.style.AppTheme));
-        builder.setMessage(R.string.campos_nao_preenchidos);
-        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                ((CadastroActivity) getActivity()).hideProgressDialog();
-                dialog.dismiss();
-            }
-        });
-        AlertDialog dialog = builder.create();
-        dialog.show();
-    }
-
-    private void alertaSenhasDiferentes() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), R.style.AppTheme));
-        builder.setMessage(R.string.senhas_diferentes);
-        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                ((CadastroActivity) getActivity()).hideProgressDialog();
-                senhaCliente.setText("");
-                confirmarSenha.setText("");
-                dialog.dismiss();
-            }
-        });
-        AlertDialog dialog = builder.create();
-        dialog.show();
-    }
-
-    private void alertaSenhaCurta() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), R.style.AppTheme));
-        builder.setMessage(R.string.senha_curta);
-        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                ((CadastroActivity) getActivity()).hideProgressDialog();
-                senhaCliente.setText("");
-                confirmarSenha.setText("");
-                dialog.dismiss();
-            }
-        });
-        AlertDialog dialog = builder.create();
-        dialog.show();
-    }
-
-    private void abrirMenuPrincipalCliente() {
-        Intent intent = new Intent(getContext(), MenuPrincipalVoluntarioActivity.class);
-        startActivity(intent);
-        getActivity().finish();
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        this.context = context;
     }
 }

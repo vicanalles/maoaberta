@@ -1,12 +1,9 @@
 package com.maoaberta.vinicius.maoaberta.presentation.ui.fragment;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,14 +14,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.AccessToken;
-import com.facebook.AccessTokenTracker;
 import com.facebook.CallbackManager;
-import com.facebook.FacebookActivity;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
-import com.facebook.Profile;
-import com.facebook.ProfileTracker;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
@@ -111,7 +104,7 @@ public class TabLoginCliente extends Fragment implements GoogleApiClient.OnConne
                 if (!emailLogin.equals("") && !senhaLogin.equals("")) {
                     logarUsuario(emailLogin, senhaLogin);
                 } else {
-                    campoVazio();
+                    Toast.makeText(getActivity(), "Por favor, preencha todos os campos para realizar o login.", Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -179,17 +172,8 @@ public class TabLoginCliente extends Fragment implements GoogleApiClient.OnConne
                 GoogleSignInAccount account = result.getSignInAccount();
                 firebaseAuthWithGoogle(account);
             } else {
-                AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), R.style.AppTheme));
-                builder.setMessage(R.string.falha_nos_dados);
-                builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        dialogInterface.dismiss();
-                        ((LoginActivity) getActivity()).hideProgressDialog();
-                    }
-                });
-                AlertDialog dialog = builder.create();
-                dialog.show();
+                ((LoginActivity) getActivity()).hideProgressDialog();
+                Toast.makeText(getActivity(), "Falha na recuperação dos dados, por favor tente novamente!", Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -222,19 +206,10 @@ public class TabLoginCliente extends Fragment implements GoogleApiClient.OnConne
                         }
                     });
                 } else {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), R.style.AppTheme));
-                    builder.setMessage(R.string.falha_nos_dados);
-                    builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            ((LoginActivity) getActivity()).hideProgressDialog();
-                            dialogInterface.dismiss();
-                            edit_text_login_email_cliente.setText("");
-                            edit_text_login_senha_cliente.setText("");
-                        }
-                    });
-                    AlertDialog dialog = builder.create();
-                    dialog.show();
+                    ((LoginActivity) getActivity()).hideProgressDialog();
+                    edit_text_login_email_cliente.setText("");
+                    edit_text_login_senha_cliente.setText("");
+                    Toast.makeText(getActivity(), "Falha no login, por favor tente novamente!", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -269,19 +244,10 @@ public class TabLoginCliente extends Fragment implements GoogleApiClient.OnConne
                                 }
                             });
                         } else {
-                            AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), R.style.AppTheme));
-                            builder.setMessage(R.string.falha_nos_dados);
-                            builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    ((LoginActivity) getActivity()).hideProgressDialog();
-                                    dialogInterface.dismiss();
-                                    edit_text_login_email_cliente.setText("");
-                                    edit_text_login_senha_cliente.setText("");
-                                }
-                            });
-                            AlertDialog dialog = builder.create();
-                            dialog.show();
+                            Toast.makeText(getActivity(), "Erro na recuperação dos dados da conta. Por favor, tente novamente!", Toast.LENGTH_SHORT).show();
+                            ((LoginActivity) getActivity()).hideProgressDialog();
+                            edit_text_login_email_cliente.setText("");
+                            edit_text_login_senha_cliente.setText("");
                         }
                     }
                 });
@@ -314,7 +280,7 @@ public class TabLoginCliente extends Fragment implements GoogleApiClient.OnConne
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (!task.isSuccessful()) {
-                            alertaDadosIncorretos();
+                            Toast.makeText(getActivity(), "Dados incorretos. Por favor, tente novamente!", Toast.LENGTH_SHORT).show();
                         } else {
                             AuthResult result = task.getResult();
                             UsuarioRepository usuarioRepository = new UsuarioRepository();
@@ -324,18 +290,9 @@ public class TabLoginCliente extends Fragment implements GoogleApiClient.OnConne
                                     if (voluntario != null) {
                                         abrirMenuPrincipalVoluntario();
                                     } else {
-                                        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), R.style.AppTheme));
-                                        builder.setMessage("Esse usuário não existe! Por favor, tente novamente!");
-                                        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                ((LoginActivity) getActivity()).hideProgressDialog();
-                                                edit_text_login_senha_cliente.setText("");
-                                                dialog.dismiss();
-                                            }
-                                        });
-                                        AlertDialog dialog = builder.create();
-                                        dialog.show();
+                                        ((LoginActivity) getActivity()).hideProgressDialog();
+                                        Toast.makeText(getActivity(), "Usuário não existe. Por favor, realize o cadastro!", Toast.LENGTH_SHORT).show();
+                                        edit_text_login_senha_cliente.setText("");
                                     }
                                 }
 
@@ -347,34 +304,6 @@ public class TabLoginCliente extends Fragment implements GoogleApiClient.OnConne
                         }
                     }
                 });
-    }
-
-    private void alertaDadosIncorretos() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), R.style.AppTheme));
-        builder.setMessage(R.string.dados_incorretos);
-        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                ((LoginActivity) getActivity()).hideProgressDialog();
-                edit_text_login_senha_cliente.setText("");
-                dialog.dismiss();
-            }
-        });
-        AlertDialog dialog = builder.create();
-        dialog.show();
-    }
-
-    private void campoVazio() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), R.style.AppTheme));
-        builder.setMessage(R.string.preencher_campos);
-        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
-        AlertDialog dialog = builder.create();
-        dialog.show();
     }
 
     @Override

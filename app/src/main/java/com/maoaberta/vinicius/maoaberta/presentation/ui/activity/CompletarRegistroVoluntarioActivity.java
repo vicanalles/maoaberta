@@ -25,6 +25,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -180,47 +181,21 @@ public class CompletarRegistroVoluntarioActivity extends AppCompatActivity {
                         tipoRepository.cadastrarTipo(user.getUid(), "tipo", "voluntario", new TipoRepository.OnCadastrarTipo() {
                             @Override
                             public void onCadastrarTipoSuccess(String sucesso) {
-                                AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(CompletarRegistroVoluntarioActivity.this, R.style.AppTheme));
-                                builder.setMessage(sucesso);
-                                builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialogInterface, int i) {
-                                        abrirMenuPrincipalCliente();
-                                    }
-                                });
-                                AlertDialog dialog = builder.create();
-                                dialog.show();
+                                Toast.makeText(CompletarRegistroVoluntarioActivity.this, "Sucesso ao cadastrar o usuário!", Toast.LENGTH_SHORT).show();
+                                abrirMenuPrincipalCliente();
                             }
 
                             @Override
                             public void onCadastrarTipoError(String error) {
-                                AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(CompletarRegistroVoluntarioActivity.this, R.style.AppTheme));
-                                builder.setMessage(error);
-                                builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialogInterface, int i) {
-                                        dialogInterface.dismiss();
-                                        hideProgressDialog();
-                                    }
-                                });
-                                AlertDialog dialog = builder.create();
-                                dialog.show();
+                                Toast.makeText(CompletarRegistroVoluntarioActivity.this, "Erro ao cadastrar o usuário", Toast.LENGTH_SHORT).show();
+                                hideProgressDialog();
                             }
                         });
                     }
 
                     @Override
                     public void onSaveVoluntarioError(String error) {
-                        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(CompletarRegistroVoluntarioActivity.this, R.style.AppTheme));
-                        builder.setMessage(error);
-                        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                dialogInterface.dismiss();
-                            }
-                        });
-                        AlertDialog dialog = builder.create();
-                        dialog.show();
+                        Toast.makeText(CompletarRegistroVoluntarioActivity.this, "Erro ao cadastrar o usuário", Toast.LENGTH_SHORT).show();
                     }
                 });
             }
@@ -278,41 +253,17 @@ public class CompletarRegistroVoluntarioActivity extends AppCompatActivity {
     }
 
     private void sairDoApp() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.AppTheme));
-        builder.setMessage(R.string.sair_app);
-        builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+        user.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-                user.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        abrirTelaLogin();
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(CompletarRegistroVoluntarioActivity.this, R.style.AppTheme));
-                        builder.setMessage("Ocorreu um erro. Por favor, tente novamente!!");
-                        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                dialogInterface.dismiss();
-                            }
-                        });
-                        AlertDialog dialog = builder.create();
-                        dialog.show();
-                    }
-                });
+            public void onComplete(@NonNull Task<Void> task) {
+                abrirTelaLogin();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(CompletarRegistroVoluntarioActivity.this, "Ocorreu um erro, por favor tente novamente!", Toast.LENGTH_SHORT).show();
             }
         });
-        builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
-        AlertDialog dialog = builder.create();
-        dialog.show();
     }
 
     private void abrirTelaLogin() {

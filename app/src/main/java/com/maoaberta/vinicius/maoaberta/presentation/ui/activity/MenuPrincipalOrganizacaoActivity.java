@@ -104,7 +104,6 @@ public class MenuPrincipalOrganizacaoActivity extends AppCompatActivity {
                 @Override
                 public void onGetOrganizacaoByIdError(String error) {
                     Log.d("onGetUserByIdError", error);
-                    Toast.makeText(getApplicationContext(), R.string.usuario_inexistente, Toast.LENGTH_LONG).show();
                 }
             });
         }

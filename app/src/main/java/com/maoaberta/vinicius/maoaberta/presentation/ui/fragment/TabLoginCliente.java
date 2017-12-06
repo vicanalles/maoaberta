@@ -1,5 +1,7 @@
 package com.maoaberta.vinicius.maoaberta.presentation.ui.fragment;
 
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -40,7 +42,6 @@ import com.maoaberta.vinicius.maoaberta.domain.models.Voluntario;
 import com.maoaberta.vinicius.maoaberta.domain.repository.UsuarioRepository;
 import com.maoaberta.vinicius.maoaberta.presentation.ui.activity.CadastroActivity;
 import com.maoaberta.vinicius.maoaberta.presentation.ui.activity.CompletarRegistroVoluntarioActivity;
-import com.maoaberta.vinicius.maoaberta.presentation.ui.activity.LoginActivity;
 import com.maoaberta.vinicius.maoaberta.presentation.ui.activity.MenuPrincipalVoluntarioActivity;
 
 import butterknife.BindView;
@@ -56,6 +57,8 @@ public class TabLoginCliente extends Fragment implements GoogleApiClient.OnConne
     private FirebaseAuth mAuth;
     GoogleApiClient mGoogleApiClient;
     private CallbackManager callbackManager;
+    private Context context;
+    private ProgressDialog progressDialog;
 
     @BindView(R.id.edit_text_login_email_cliente)
     EditText edit_text_login_email_cliente;
@@ -76,6 +79,10 @@ public class TabLoginCliente extends Fragment implements GoogleApiClient.OnConne
         View v = inflater.inflate(R.layout.tab_login_cliente, container, false);
         ButterKnife.bind(this, v);
         loginButton.setFragment(this);
+
+        progressDialog = new ProgressDialog(context);
+        progressDialog.setTitle("Login");
+        progressDialog.setMessage("Obtendo informações do usuário...");
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
@@ -104,7 +111,7 @@ public class TabLoginCliente extends Fragment implements GoogleApiClient.OnConne
                 if (!emailLogin.equals("") && !senhaLogin.equals("")) {
                     logarUsuario(emailLogin, senhaLogin);
                 } else {
-                    Toast.makeText(getActivity(), "Por favor, preencha todos os campos para realizar o login.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "Por favor, preencha todos os campos para realizar o login.", Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -172,15 +179,15 @@ public class TabLoginCliente extends Fragment implements GoogleApiClient.OnConne
                 GoogleSignInAccount account = result.getSignInAccount();
                 firebaseAuthWithGoogle(account);
             } else {
-                ((LoginActivity) getActivity()).hideProgressDialog();
-                Toast.makeText(getActivity(), "Falha na recuperação dos dados, por favor tente novamente!", Toast.LENGTH_SHORT).show();
+                progressDialog.hide();
+                Toast.makeText(context, "Falha na recuperação dos dados, por favor tente novamente!", Toast.LENGTH_SHORT).show();
             }
         }
     }
 
     //Login utilizando conta do facebook
     private void signInWithFacebook(AccessToken token) {
-        ((LoginActivity) getActivity()).showProgressDialog("Aguarde", "Obtendo informações do Usuário");
+        progressDialog.show();
         final UsuarioRepository usuarioRepository = new UsuarioRepository();
         AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
         mAuth.signInWithCredential(credential).addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
@@ -202,14 +209,14 @@ public class TabLoginCliente extends Fragment implements GoogleApiClient.OnConne
 
                         @Override
                         public void onGetUserByIdError(String error) {
-                            Toast.makeText(getActivity(), "Erro na recuperação dos dados", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(context, "Erro na recuperação dos dados", Toast.LENGTH_SHORT).show();
                         }
                     });
                 } else {
-                    ((LoginActivity) getActivity()).hideProgressDialog();
+                    progressDialog.hide();
                     edit_text_login_email_cliente.setText("");
                     edit_text_login_senha_cliente.setText("");
-                    Toast.makeText(getActivity(), "Falha no login, por favor tente novamente!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "Falha no login, por favor tente novamente!", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -218,7 +225,7 @@ public class TabLoginCliente extends Fragment implements GoogleApiClient.OnConne
 
     //Login utilizando conta do google
     public void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
-        ((LoginActivity) getActivity()).showProgressDialog("Aguarde", "Obtendo informações do Usuário");
+        progressDialog.show();
         final UsuarioRepository usuarioRepository = new UsuarioRepository();
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
         mAuth.signInWithCredential(credential)
@@ -240,12 +247,12 @@ public class TabLoginCliente extends Fragment implements GoogleApiClient.OnConne
 
                                 @Override
                                 public void onGetUserByIdError(String error) {
-                                    Toast.makeText(getActivity(), "Erro na recuperação dos dados", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(context, "Erro na recuperação dos dados", Toast.LENGTH_SHORT).show();
                                 }
                             });
                         } else {
-                            Toast.makeText(getActivity(), "Erro na recuperação dos dados da conta. Por favor, tente novamente!", Toast.LENGTH_SHORT).show();
-                            ((LoginActivity) getActivity()).hideProgressDialog();
+                            Toast.makeText(context, "Erro na recuperação dos dados da conta. Por favor, tente novamente!", Toast.LENGTH_SHORT).show();
+                            progressDialog.hide();
                             edit_text_login_email_cliente.setText("");
                             edit_text_login_senha_cliente.setText("");
                         }
@@ -254,33 +261,34 @@ public class TabLoginCliente extends Fragment implements GoogleApiClient.OnConne
     }
 
     private void abrirMenuPrincipalVoluntario() {
-        ((LoginActivity) getActivity()).hideProgressDialog();
-        Intent intent = new Intent(getActivity(), MenuPrincipalVoluntarioActivity.class);
+        progressDialog.hide();
+        Intent intent = new Intent(context, MenuPrincipalVoluntarioActivity.class);
         startActivity(intent);
         getActivity().finish();
     }
 
     public void abrirActivityCadastro() {
-        Intent intent = new Intent(getContext(), CadastroActivity.class);
+        Intent intent = new Intent(context, CadastroActivity.class);
         startActivity(intent);
     }
 
     public void abrirTelaRegistro() {
-        ((LoginActivity) getActivity()).hideProgressDialog();
-        Intent intent = new Intent(getContext(), CompletarRegistroVoluntarioActivity.class);
+        progressDialog.hide();
+        Intent intent = new Intent(context, CompletarRegistroVoluntarioActivity.class);
         startActivity(intent);
         getActivity().finish();
     }
 
     //Login utilizando email e senha
     public void logarUsuario(final String email, String senha) {
-        ((LoginActivity) getActivity()).showProgressDialog("Aguarde", "Obtendo informações do Usuário");
+        progressDialog.show();
         mAuth.signInWithEmailAndPassword(email, senha)
                 .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (!task.isSuccessful()) {
-                            Toast.makeText(getActivity(), "Dados incorretos. Por favor, tente novamente!", Toast.LENGTH_SHORT).show();
+                            progressDialog.hide();
+                            Toast.makeText(context, "Dados incorretos. Por favor, tente novamente!", Toast.LENGTH_SHORT).show();
                         } else {
                             AuthResult result = task.getResult();
                             UsuarioRepository usuarioRepository = new UsuarioRepository();
@@ -290,15 +298,15 @@ public class TabLoginCliente extends Fragment implements GoogleApiClient.OnConne
                                     if (voluntario != null) {
                                         abrirMenuPrincipalVoluntario();
                                     } else {
-                                        ((LoginActivity) getActivity()).hideProgressDialog();
-                                        Toast.makeText(getActivity(), "Usuário não existe. Por favor, realize o cadastro!", Toast.LENGTH_SHORT).show();
+                                        progressDialog.hide();
+                                        Toast.makeText(context, "Usuário não existe. Por favor, realize o cadastro!", Toast.LENGTH_SHORT).show();
                                         edit_text_login_senha_cliente.setText("");
                                     }
                                 }
 
                                 @Override
                                 public void onGetUserByIdError(String error) {
-                                    Toast.makeText(getActivity(), "Erro ao recuperar dados do usuário", Toast.LENGTH_SHORT).show();
+
                                 }
                             });
                         }
@@ -308,6 +316,12 @@ public class TabLoginCliente extends Fragment implements GoogleApiClient.OnConne
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        Toast.makeText(getActivity(), connectionResult.getErrorMessage(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, connectionResult.getErrorMessage(), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        this.context = context;
     }
 }

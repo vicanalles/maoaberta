@@ -113,7 +113,6 @@ public class MenuPrincipalVoluntarioActivity extends AppCompatActivity{
                 @Override
                 public void onGetUserByIdError(String error) {
                     Log.d("onGetUserByIdError", error);
-                    Toast.makeText(getApplicationContext(), R.string.usuario_inexistente, Toast.LENGTH_LONG).show();
                 }
             });
         }

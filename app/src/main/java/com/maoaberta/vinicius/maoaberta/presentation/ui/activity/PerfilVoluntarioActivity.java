@@ -151,7 +151,6 @@ public class PerfilVoluntarioActivity extends AppCompatActivity {
                 public void onGetUserByIdError(String error) {
                     hideProgressDialog();
                     Log.d("onGetUserByIdError", error);
-                    Toast.makeText(PerfilVoluntarioActivity.this, R.string.usuario_inexistente, Toast.LENGTH_LONG).show();
                 }
             });
         }

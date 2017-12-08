@@ -1,7 +1,6 @@
 package com.maoaberta.vinicius.maoaberta.presentation.ui.adapter;
 
 import android.content.Context;
-import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -9,7 +8,6 @@ import android.support.v4.app.FragmentPagerAdapter;
 import com.maoaberta.vinicius.maoaberta.presentation.ui.fragment.FragmentMenuAnunciosVoluntario;
 import com.maoaberta.vinicius.maoaberta.presentation.ui.fragment.FragmentMenuEntidadesVoluntario;
 import com.maoaberta.vinicius.maoaberta.presentation.ui.fragment.FragmentMenuMeusAnunciosVoluntario;
-import com.maoaberta.vinicius.maoaberta.presentation.ui.fragment.TabSobre;
 
 /**
  * Created by Vinicius on 03/09/2017.
@@ -23,7 +21,6 @@ public class TabsPagerAdapterCliente extends FragmentPagerAdapter {
             "Meus Interesses",
             "Anúncios",
             "Entidades",
-            "Sobre"
     };
 
     public TabsPagerAdapterCliente(FragmentManager fm, Context context) {
@@ -41,8 +38,6 @@ public class TabsPagerAdapterCliente extends FragmentPagerAdapter {
                 return new FragmentMenuAnunciosVoluntario();
             case 2:
                 return new FragmentMenuEntidadesVoluntario();
-            case 3:
-                return new TabSobre();
             default:
                 return null;
         }

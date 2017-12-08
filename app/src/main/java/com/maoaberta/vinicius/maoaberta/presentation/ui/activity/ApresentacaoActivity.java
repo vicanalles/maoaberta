@@ -78,7 +78,6 @@ public class ApresentacaoActivity extends AppCompatActivity {
                         @Override
                         public void onGetTipoByIdError(String error) {
                             hideProgressDialog();
-                            abrirTelaLogin();
                         }
                     });
                 }

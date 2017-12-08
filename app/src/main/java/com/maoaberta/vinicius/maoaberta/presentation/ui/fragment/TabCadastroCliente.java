@@ -28,6 +28,8 @@ import com.maoaberta.vinicius.maoaberta.presentation.ui.activity.CadastroActivit
 import com.maoaberta.vinicius.maoaberta.presentation.ui.activity.CompletarRegistroVoluntarioActivity;
 import com.maoaberta.vinicius.maoaberta.presentation.ui.activity.MenuPrincipalVoluntarioActivity;
 
+import java.util.Objects;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -99,7 +101,7 @@ public class TabCadastroCliente extends Fragment {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (!task.isSuccessful()) {
                             progressDialog.hide();
-                            Toast.makeText(context, "Não foi possível salvar o voluntário. Por favor, tente novamente!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(context, "E-mail já existente!! Por favor, tente novamente.", Toast.LENGTH_SHORT).show();
                         } else {
                             AuthResult result = task.getResult();
                             FirebaseUser user = result.getUser();
@@ -108,7 +110,6 @@ public class TabCadastroCliente extends Fragment {
                                 public void onGetUserByIdSuccess(Voluntario voluntario) {
                                     if (voluntario != null) {
                                         progressDialog.hide();
-                                        Toast.makeText(context, "Este endereço de e-mail já esta cadastrado em nosso banco de dados!", Toast.LENGTH_SHORT).show();
                                     } else {
                                         Intent intent = new Intent(context, CompletarRegistroVoluntarioActivity.class);
                                         startActivity(intent);
@@ -119,7 +120,6 @@ public class TabCadastroCliente extends Fragment {
                                 @Override
                                 public void onGetUserByIdError(String error) {
                                     progressDialog.hide();
-                                    Toast.makeText(context, "Erro ao cadastrar os dados. Por favor tente novamente", Toast.LENGTH_SHORT).show();
                                 }
                             });
                         }

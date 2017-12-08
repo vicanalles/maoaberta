@@ -9,7 +9,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import com.maoaberta.vinicius.maoaberta.presentation.ui.fragment.FragmentMenuInteresseOrganizacao;
 import com.maoaberta.vinicius.maoaberta.presentation.ui.fragment.FragmentMenuEntidadesOrganizacao;
 import com.maoaberta.vinicius.maoaberta.presentation.ui.fragment.FragmentMenuMeusAnunciosOrganizacao;
-import com.maoaberta.vinicius.maoaberta.presentation.ui.fragment.TabSobre;
+import com.maoaberta.vinicius.maoaberta.presentation.ui.activity.SobreActivity;
 
 /**
  * Created by Vinicius on 04/09/2017.
@@ -22,8 +22,7 @@ public class TabsPagerAdapterOrganizacao extends FragmentPagerAdapter {
     final String[] tabTitles = {
             "Meus Anúncios",
             "Meus Interesses",
-            "Entidades",
-            "Sobre"
+            "Entidades"
     };
 
     public TabsPagerAdapterOrganizacao(FragmentManager fm, Context context){
@@ -45,9 +44,6 @@ public class TabsPagerAdapterOrganizacao extends FragmentPagerAdapter {
                 break;
             case 2:
                 frag = new FragmentMenuEntidadesOrganizacao();
-                break;
-            case 3:
-                frag = new TabSobre();
                 break;
         }
 

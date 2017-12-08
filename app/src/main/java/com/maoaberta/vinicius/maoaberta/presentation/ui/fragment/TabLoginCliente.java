@@ -180,7 +180,6 @@ public class TabLoginCliente extends Fragment implements GoogleApiClient.OnConne
                 firebaseAuthWithGoogle(account);
             } else {
                 progressDialog.hide();
-                Toast.makeText(context, "Falha na recuperação dos dados, por favor tente novamente!", Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -288,7 +287,8 @@ public class TabLoginCliente extends Fragment implements GoogleApiClient.OnConne
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (!task.isSuccessful()) {
                             progressDialog.hide();
-                            Toast.makeText(context, "Dados incorretos. Por favor, tente novamente!", Toast.LENGTH_SHORT).show();
+                            edit_text_login_senha_cliente.setText("");
+                            Toast.makeText(context, "Usuário inexistente. Por favor, realize o cadastro!", Toast.LENGTH_SHORT).show();
                         } else {
                             AuthResult result = task.getResult();
                             UsuarioRepository usuarioRepository = new UsuarioRepository();
@@ -299,7 +299,6 @@ public class TabLoginCliente extends Fragment implements GoogleApiClient.OnConne
                                         abrirMenuPrincipalVoluntario();
                                     } else {
                                         progressDialog.hide();
-                                        Toast.makeText(context, "Usuário não existe. Por favor, realize o cadastro!", Toast.LENGTH_SHORT).show();
                                         edit_text_login_senha_cliente.setText("");
                                     }
                                 }

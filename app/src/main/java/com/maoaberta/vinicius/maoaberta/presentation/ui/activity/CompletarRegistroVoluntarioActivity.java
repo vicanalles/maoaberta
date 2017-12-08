@@ -195,7 +195,7 @@ public class CompletarRegistroVoluntarioActivity extends AppCompatActivity {
 
                     @Override
                     public void onSaveVoluntarioError(String error) {
-                        Toast.makeText(CompletarRegistroVoluntarioActivity.this, "Erro ao cadastrar o usuário", Toast.LENGTH_SHORT).show();
+
                     }
                 });
             }

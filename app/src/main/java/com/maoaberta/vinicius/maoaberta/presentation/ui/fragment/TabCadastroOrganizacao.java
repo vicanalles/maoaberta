@@ -26,6 +26,8 @@ import com.maoaberta.vinicius.maoaberta.domain.repository.OrganizacaoRepository;
 import com.maoaberta.vinicius.maoaberta.presentation.ui.activity.CadastroActivity;
 import com.maoaberta.vinicius.maoaberta.presentation.ui.activity.CompletarRegistroOrganizacaoActivity;
 
+import java.util.Objects;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -94,7 +96,7 @@ public class TabCadastroOrganizacao extends Fragment {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(!task.isSuccessful()){
                             ((CadastroActivity) getActivity()).hideProgressDialog();
-                            Toast.makeText(getActivity(), "Não foi possível salvar a organização. Por favor, tente novamente!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(), "E-mail já existente!! Por favor, tente novamente.", Toast.LENGTH_SHORT).show();
                         }else{
                             AuthResult result = task.getResult();
                             FirebaseUser user = result.getUser();
@@ -103,7 +105,7 @@ public class TabCadastroOrganizacao extends Fragment {
                                 public void onGetOrganizacaoByIdSuccess(Organizacao organizacao) {
                                     if(organizacao != null){
                                         ((CadastroActivity) getActivity()).hideProgressDialog();
-                                        Toast.makeText(getActivity(), "Este endereço de e-mail já esta cadastrado em nosso banco de dados!", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(getActivity(), "Usuário já cadastrado no sistema!", Toast.LENGTH_SHORT).show();
                                     }else{
                                         Intent intent = new Intent(getContext(), CompletarRegistroOrganizacaoActivity.class);
                                         startActivity(intent);

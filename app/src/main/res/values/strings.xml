@@ -86,4 +86,7 @@
     <string name="cancelar_interesse">CANCELAR INTERESSE</string>
     <string name="meus_interesses">Meus Interesses</string>
     <string name="ver_interessados">Ver Interessados</string>
+    <string name="desenvolvido_por">Desenvolvido por:</string>
+    <string name="nome_desenvolvedor">Vinicius Reia Canalles</string>
+    <string name="versao_app">© 2017 - v%s</string>
 </resources>

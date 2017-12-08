@@ -1,7 +1,6 @@
 package com.maoaberta.vinicius.maoaberta.presentation.ui.activity;
 
 import android.annotation.SuppressLint;
-import android.app.Fragment;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.ColorStateList;
@@ -22,17 +21,13 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.facebook.FacebookSdk;
-import com.facebook.Profile;
 import com.facebook.login.LoginManager;
-import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.maoaberta.vinicius.maoaberta.R;
 import com.maoaberta.vinicius.maoaberta.domain.models.Voluntario;
 import com.maoaberta.vinicius.maoaberta.domain.repository.UsuarioRepository;
-import com.maoaberta.vinicius.maoaberta.presentation.component.CustomViewPager;
 import com.maoaberta.vinicius.maoaberta.presentation.ui.adapter.TabsPagerAdapterCliente;
-import com.maoaberta.vinicius.maoaberta.presentation.ui.fragment.FragmentMenuMeusAnunciosVoluntario;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -69,8 +64,7 @@ public class MenuPrincipalVoluntarioActivity extends AppCompatActivity{
         final String[] tabTitles = {
                 "Meus Interesses",
                 getString(R.string.anuncios_tab_title),
-                getString(R.string.entidades_tab_title),
-                getString(R.string.sobre_tab_title)
+                getString(R.string.entidades_tab_title)
         };
 
         if (getSupportActionBar() != null) {
@@ -134,8 +128,17 @@ public class MenuPrincipalVoluntarioActivity extends AppCompatActivity{
                 break;
             case R.id.item_perfil:
                 abrirTelaPerfilVoluntario();
+                break;
+            case R.id.item_sobre:
+                abrirTelaSobre();
+                break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void abrirTelaSobre() {
+        Intent intent = new Intent(MenuPrincipalVoluntarioActivity.this, SobreActivity.class);
+        startActivity(intent);
     }
 
     private void abrirTelaPerfilVoluntario() {

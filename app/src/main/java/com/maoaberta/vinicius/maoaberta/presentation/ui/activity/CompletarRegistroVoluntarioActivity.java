@@ -253,17 +253,31 @@ public class CompletarRegistroVoluntarioActivity extends AppCompatActivity {
     }
 
     private void sairDoApp() {
-        user.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Sair do App");
+        builder.setMessage("Deseja mesmo cancelar o cadastro? Todos os dados serão perdidos.");
+        builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
             @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                abrirTelaLogin();
+            public void onClick(DialogInterface dialog, int i) {
+                user.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        abrirTelaLogin();
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+
+                    }
+                });
             }
-        }).addOnFailureListener(new OnFailureListener() {
+        }).setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
             @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(CompletarRegistroVoluntarioActivity.this, "Ocorreu um erro, por favor tente novamente!", Toast.LENGTH_SHORT).show();
+            public void onClick(DialogInterface dialog, int i) {
+                dialog.dismiss();
             }
         });
+        builder.show();
     }
 
     private void abrirTelaLogin() {

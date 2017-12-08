@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -48,7 +49,7 @@
                     android:adjustViewBounds="false"
                     android:scaleType="centerCrop"
                     app:civ_border_color="@color/textColorWhite"
-                    app:civ_border_width="2dp"/>
+                    app:civ_border_width="1dp"/>
 
                 <TextView
                     android:id="@+id/text_view_escolher_foto_perfil_cliente"
@@ -129,25 +130,7 @@
                 android:layout_marginTop="10dp"
                 android:background="@drawable/rounded_edittext"
                 android:fontFamily="sans-serif"
-                android:hint="@string/senha"
-                android:inputType="textPassword"
-                android:paddingEnd="0dp"
-                android:paddingStart="10dp"
-                android:textAlignment="textStart"
-                android:textColor="@color/textColorBlack"
-                android:textSize="15sp"
-                android:textStyle="normal" />
-
-            <EditText
-                android:id="@+id/edit_text_confirmar_senha_perfil_cliente"
-                android:layout_width="320dp"
-                android:layout_height="30dp"
-                android:layout_below="@id/edit_text_senha_perfil_cliente"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="10dp"
-                android:background="@drawable/rounded_edittext"
-                android:fontFamily="sans-serif"
-                android:hint="@string/confirmar_senha"
+                android:hint="@string/nova_senha"
                 android:inputType="textPassword"
                 android:paddingEnd="0dp"
                 android:paddingStart="10dp"
@@ -160,7 +143,7 @@
                 android:id="@+id/botao_salvar_perfil_cliente"
                 android:layout_width="320dp"
                 android:layout_height="40dp"
-                android:layout_below="@id/edit_text_confirmar_senha_perfil_cliente"
+                android:layout_below="@id/edit_text_senha_perfil_cliente"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="20dp"
                 android:background="@drawable/rounded_button"

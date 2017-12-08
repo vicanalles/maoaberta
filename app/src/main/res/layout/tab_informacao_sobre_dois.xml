@@ -22,7 +22,7 @@
             android:fontFamily="sans-serif"
             android:text="As instituições poderão se cadastrar na aplicação, informando dados gerais como:"
             android:textColor="@color/textColorWhite"
-            android:textSize="19sp"
+            android:textSize="16sp"
             android:textStyle="normal"
             android:layout_gravity="center"
             android:gravity="center"/>
@@ -34,7 +34,7 @@
             android:fontFamily="sans-serif"
             android:text="Imagem/Logo"
             android:textColor="@color/textColorWhite"
-            android:textSize="19sp"
+            android:textSize="16sp"
             android:textStyle="normal"
             android:layout_gravity="center"
             android:gravity="center"/>
@@ -46,7 +46,7 @@
             android:fontFamily="sans-serif"
             android:text="Nome Fantasia"
             android:textColor="@color/textColorWhite"
-            android:textSize="19sp"
+            android:textSize="16sp"
             android:textStyle="normal" />
 
         <TextView
@@ -56,7 +56,7 @@
             android:fontFamily="sans-serif"
             android:text="Endereço"
             android:textColor="@color/textColorWhite"
-            android:textSize="19sp"
+            android:textSize="16sp"
             android:textStyle="normal" />
 
         <TextView
@@ -66,7 +66,7 @@
             android:fontFamily="sans-serif"
             android:text="Responsável"
             android:textColor="@color/textColorWhite"
-            android:textSize="19sp"
+            android:textSize="16sp"
             android:textStyle="normal" />
 
         <TextView
@@ -76,7 +76,7 @@
             android:fontFamily="sans-serif"
             android:text="Site/Facebook/Twitter"
             android:textColor="@color/textColorWhite"
-            android:textSize="19sp"
+            android:textSize="16sp"
             android:textStyle="normal" />
 
         <TextView
@@ -86,7 +86,7 @@
             android:fontFamily="sans-serif"
             android:text="Responsável"
             android:textColor="@color/textColorWhite"
-            android:textSize="19sp"
+            android:textSize="16sp"
             android:textStyle="normal" />
 
         <TextView
@@ -96,7 +96,7 @@
             android:fontFamily="sans-serif"
             android:text="Lista de Anúncios"
             android:textColor="@color/textColorWhite"
-            android:textSize="19sp"
+            android:textSize="16sp"
             android:textStyle="normal" />
 
     </LinearLayout>

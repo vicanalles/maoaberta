@@ -1,6 +1,7 @@
 package com.maoaberta.vinicius.maoaberta.presentation.ui.activity;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -140,5 +141,13 @@ public class CadastroActivity extends AppCompatActivity {
 
     public void hideProgressDialog(){
         progressDialog.dismiss();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent = new Intent(CadastroActivity.this, LoginActivity.class);
+        startActivity(intent);
+        finish();
     }
 }

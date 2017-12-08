@@ -269,6 +269,7 @@ public class TabLoginCliente extends Fragment implements GoogleApiClient.OnConne
     public void abrirActivityCadastro() {
         Intent intent = new Intent(context, CadastroActivity.class);
         startActivity(intent);
+        getActivity().finish();
     }
 
     public void abrirTelaRegistro() {

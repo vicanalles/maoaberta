@@ -144,7 +144,6 @@ public class MenuPrincipalVoluntarioActivity extends AppCompatActivity{
     private void abrirTelaPerfilVoluntario() {
         Intent intent = new Intent(MenuPrincipalVoluntarioActivity.this, PerfilVoluntarioActivity.class);
         startActivity(intent);
-        finish();
     }
 
     @Override

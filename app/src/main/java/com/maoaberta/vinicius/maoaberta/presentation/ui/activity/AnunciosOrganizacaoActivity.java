@@ -88,30 +88,8 @@ public class AnunciosOrganizacaoActivity extends AppCompatActivity{
             case android.R.id.home:
                 finish();
                 break;
-            case R.id.item_exit_menu_principal:
-                sairDoApp();
         }
         return true;
-    }
-
-    private void sairDoApp() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.AppTheme));
-        builder.setMessage(R.string.sair_app);
-        builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                FirebaseAuth.getInstance().signOut();
-                abrirTelaLogin();
-            }
-        });
-        builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
-        AlertDialog dialog = builder.create();
-        dialog.show();
     }
 
     private void abrirTelaLogin() {
@@ -122,8 +100,6 @@ public class AnunciosOrganizacaoActivity extends AppCompatActivity{
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_perfil, menu);
-
         return super.onCreateOptionsMenu(menu);
     }
 }

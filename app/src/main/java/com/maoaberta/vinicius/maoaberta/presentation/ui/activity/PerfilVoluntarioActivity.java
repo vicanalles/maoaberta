@@ -11,13 +11,11 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.StrictMode;
 import android.provider.MediaStore;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -32,8 +30,8 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.facebook.login.LoginManager;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.EmailAuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.maoaberta.vinicius.maoaberta.R;
@@ -42,7 +40,6 @@ import com.maoaberta.vinicius.maoaberta.domain.repository.UsuarioRepository;
 import com.maoaberta.vinicius.maoaberta.util.CustomPhotoPickerDialog;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -63,7 +60,6 @@ public class PerfilVoluntarioActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private FirebaseUser user;
     private UsuarioRepository usuarioRepository;
-    private Voluntario vol;
     private String mCurrentPhotoPath;
     private Bitmap mImageBitmap;
 
@@ -87,6 +83,7 @@ public class PerfilVoluntarioActivity extends AppCompatActivity {
     Toolbar toolbar_layout_menu_perfil_cliente;
     private ProgressDialog progressDialog;
     private CustomPhotoPickerDialog photoDialog;
+    private Voluntario voluntarioEditado;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -104,17 +101,17 @@ public class PerfilVoluntarioActivity extends AppCompatActivity {
         user = mAuth.getCurrentUser();
         usuarioRepository = new UsuarioRepository();
 
-        if (String.valueOf(user.getProviders()).equals("[google.com]") || String.valueOf(user.getProviders()).equals("[facebook.com]")) {
-            edit_text_senha_perfil_cliente.setVisibility(View.GONE);
-        } else {
-            edit_text_senha_perfil_cliente.setVisibility(View.VISIBLE);
-        }
-
         if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle(R.string.app_name);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
             getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_arrow_back);
+        }
+
+        if (String.valueOf(user.getProviders()).equals("[google.com]") || String.valueOf(user.getProviders()).equals("[facebook.com]")) {
+            edit_text_senha_perfil_cliente.setVisibility(View.GONE);
+        } else {
+            edit_text_senha_perfil_cliente.setVisibility(View.VISIBLE);
         }
 
         showProgressDialog("Carregando informações", "Carregando dados do usuário");
@@ -124,8 +121,9 @@ public class PerfilVoluntarioActivity extends AppCompatActivity {
                 @Override
                 public void onGetUserByIdSuccess(Voluntario voluntario) {
                     if (voluntario != null) {
+                        voluntarioEditado = voluntario;
                         if (voluntario.getPhotoUrl() != null) {
-                            Glide.with(PerfilVoluntarioActivity.this).load(voluntario.getPhotoUrl()).diskCacheStrategy(DiskCacheStrategy.NONE)
+                            Glide.with(getApplicationContext()).load(voluntario.getPhotoUrl()).diskCacheStrategy(DiskCacheStrategy.NONE)
                                     .skipMemoryCache(true).into(image_view_logo_perfil_cliente);
                             text_view_escolher_foto.setEnabled(false);
                             text_view_escolher_foto.setVisibility(View.GONE);
@@ -199,57 +197,40 @@ public class PerfilVoluntarioActivity extends AppCompatActivity {
         botao_salvar_perfil_cliente.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (String.valueOf(edit_text_nome_perfil_cliente.getText()).equals("")) {
-                    alertaCamposNaoPreenchidos();
-                } else {
-                    image_view_logo_perfil_cliente.setDrawingCacheEnabled(true);
-                    final Bitmap bmap = image_view_logo_perfil_cliente.getDrawingCache();
-                    usuarioRepository.getUserByUid(user.getUid(), new UsuarioRepository.OnGetUserById() {
+                image_view_logo_perfil_cliente.setDrawingCacheEnabled(true);
+                final Bitmap bmap = image_view_logo_perfil_cliente.getDrawingCache();
+                showProgressDialog("Atualizando Dados", "Aguarde enquanto os dados do usuário são atualizados");
+                if(edit_text_senha_perfil_cliente.getText().toString().isEmpty()){
+                    voluntarioEditado.setNome(edit_text_nome_perfil_cliente.getText().toString());
+                    voluntarioEditado.setTelefone(edit_text_telefone_perfil_cliente.getText().toString());
+                    usuarioRepository.atualizarDadosVoluntario(voluntarioEditado, bmap, new UsuarioRepository.OnUpdateUsuario() {
                         @Override
-                        public void onGetUserByIdSuccess(Voluntario voluntario) {
-                            showProgressDialog("Atualizando Dados", "Aguarde enquanto os dados são atualizados");
-                            if (voluntario != null) {
-                                voluntario.setNome(String.valueOf(edit_text_nome_perfil_cliente.getText()));
-                                voluntario.setEmail(voluntario.getEmail());
-                                voluntario.setTelefone(String.valueOf(edit_text_telefone_perfil_cliente.getText()));
-
-                                if (!String.valueOf(user.getProviders()).equals("[google.com]") || !String.valueOf(user.getProviders()).equals("[facebook.com]")) {
-                                    if (!String.valueOf(edit_text_senha_perfil_cliente.getText()).equals("")) {
-                                        if (edit_text_senha_perfil_cliente.getText().length() >= 6) {
-                                            user.updatePassword(String.valueOf(edit_text_senha_perfil_cliente.getText())).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                @Override
-                                                public void onComplete(@NonNull Task<Void> task) {
-                                                    if (task.isSuccessful()) {
-                                                        usuarioRepository.atualizarDadosVoluntario(vol, bmap, new UsuarioRepository.OnUpdateUsuario() {
-                                                            @Override
-                                                            public void onUpdateUsuarioSuccess(String sucesso) {
-                                                                hideProgressDialog();
-                                                                Toast.makeText(PerfilVoluntarioActivity.this, "Usuário editado com sucesso!", Toast.LENGTH_SHORT).show();
-                                                                abrirMenuPrincipal();
-                                                            }
-
-                                                            @Override
-                                                            public void onUpdateUsuarioError(String error) {
-                                                                hideProgressDialog();
-                                                                Toast.makeText(PerfilVoluntarioActivity.this, "Erro atualizar os dados do usuário.", Toast.LENGTH_SHORT).show();
-                                                            }
-                                                        });
-                                                    }else{
-                                                        Toast.makeText(PerfilVoluntarioActivity.this, "Erro atualizar os dados do usuário.", Toast.LENGTH_SHORT).show();
-                                                    }
-                                                }
-                                            });
-                                        } else {
-                                            alertaSenhaCurta();
-                                        }
-                                    }
-                                }
-                            }
+                        public void onUpdateUsuarioSuccess(String sucesso) {
+                            hideProgressDialog();
+                            Toast.makeText(PerfilVoluntarioActivity.this, "Usuário atualizado com sucesso!", Toast.LENGTH_SHORT).show();
+                            finish();
                         }
 
                         @Override
-                        public void onGetUserByIdError(String error) {
-                            Toast.makeText(PerfilVoluntarioActivity.this, "Erro atualizar os dados do usuário.", Toast.LENGTH_SHORT).show();
+                        public void onUpdateUsuarioError(String error) {
+
+                        }
+                    });
+                }else{
+                    voluntarioEditado.setNome(edit_text_nome_perfil_cliente.getText().toString());
+                    voluntarioEditado.setTelefone(edit_text_telefone_perfil_cliente.getText().toString());
+                    user.updatePassword(String.valueOf(edit_text_senha_perfil_cliente.getText()));
+                    usuarioRepository.atualizarDadosVoluntario(voluntarioEditado, bmap, new UsuarioRepository.OnUpdateUsuario() {
+                        @Override
+                        public void onUpdateUsuarioSuccess(String sucesso) {
+                            hideProgressDialog();
+                            Toast.makeText(PerfilVoluntarioActivity.this, "Usuário atualizado com sucesso!", Toast.LENGTH_SHORT).show();
+                            finish();
+                        }
+
+                        @Override
+                        public void onUpdateUsuarioError(String error) {
+
                         }
                     });
                 }
@@ -279,40 +260,25 @@ public class PerfilVoluntarioActivity extends AppCompatActivity {
                 image_view_logo_perfil_cliente.setImageBitmap(mImageBitmap);
                 text_view_escolher_foto.setVisibility(View.GONE);
                 text_view_escolher_foto.setEnabled(false);
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
             } catch (IOException e) {
                 e.printStackTrace();
             }
         } else if (requestCode == SELECT_PICTURE && resultCode == RESULT_OK) {
             if (data != null) {
                 Uri uri = data.getData();
-                Glide.with(this).load(uri).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(image_view_logo_perfil_cliente);
+                try{
+                    Glide.with(getApplicationContext()).load(uri).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(image_view_logo_perfil_cliente);
+                }catch(Exception e){
+                    e.printStackTrace();
+                }
                 text_view_escolher_foto.setVisibility(View.GONE);
                 text_view_escolher_foto.setEnabled(false);
             }
         }
     }
 
-    private void alertaSenhaCurta() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(PerfilVoluntarioActivity.this);
-        builder.setMessage(R.string.senha_curta);
-        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                edit_text_senha_perfil_cliente.setText("");
-                hideProgressDialog();
-                dialog.dismiss();
-            }
-        });
-        AlertDialog dialog = builder.create();
-        dialog.show();
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_perfil, menu);
-
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -320,9 +286,6 @@ public class PerfilVoluntarioActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
 
-            case R.id.item_exit_menu_principal:
-                sairDoApp();
-                break;
             case android.R.id.home:
                 abrirMenuPrincipal();
                 break;
@@ -339,46 +302,6 @@ public class PerfilVoluntarioActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         abrirMenuPrincipal();
-    }
-
-    private void sairDoApp() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(PerfilVoluntarioActivity.this);
-        builder.setMessage(R.string.sair_app);
-        builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                LoginManager.getInstance().logOut();
-                FirebaseAuth.getInstance().signOut();
-                abrirTelaLogin();
-            }
-        });
-        builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
-        AlertDialog dialog = builder.create();
-        dialog.show();
-    }
-
-    private void abrirTelaLogin() {
-        Intent intent = new Intent(this, LoginActivity.class);
-        startActivity(intent);
-        finish();
-    }
-
-    private void alertaCamposNaoPreenchidos() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(PerfilVoluntarioActivity.this);
-        builder.setMessage(R.string.campos_nao_preenchidos);
-        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
-        AlertDialog dialog = builder.create();
-        dialog.show();
     }
 
     public void showProgressDialog(String title, String content) {

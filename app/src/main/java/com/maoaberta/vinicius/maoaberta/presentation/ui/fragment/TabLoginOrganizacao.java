@@ -1,5 +1,6 @@
 package com.maoaberta.vinicius.maoaberta.presentation.ui.fragment;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -34,6 +36,7 @@ import butterknife.ButterKnife;
 public class TabLoginOrganizacao extends Fragment {
 
     private FirebaseAuth mAuth;
+    private Context context;
 
     @BindView(R.id.edit_text_login_email_organizacao)
     EditText edit_text_login_email_organizacao;
@@ -76,7 +79,7 @@ public class TabLoginOrganizacao extends Fragment {
                 if(!emailOrganizacao.equals("") && !senhaOrganizacao.equals("")){
                     signIn(emailOrganizacao, senhaOrganizacao);
                 }else{
-                    campoVazio();
+                    Toast.makeText(context, "Por favor, preencha todos os campos para logar.", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -91,27 +94,12 @@ public class TabLoginOrganizacao extends Fragment {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(!task.isSuccessful()){
-                            alertaDadosIncorretos();
+                            Toast.makeText(context, "Email ou senha inválidos. Por favor, digite novamente!", Toast.LENGTH_SHORT).show();
                         }else{
                             abrirMenuPrincipalOrganizacao();
                         }
                     }
                 });
-    }
-
-    private void alertaDadosIncorretos(){
-        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), R.style.AppTheme));
-        builder.setMessage(R.string.dados_incorretos);
-        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                ((LoginActivity) getActivity()).hideProgressDialog();
-                edit_text_login_senha_organizacao.setText("");
-                dialog.dismiss();
-            }
-        });
-        AlertDialog dialog = builder.create();
-        dialog.show();
     }
 
     private void abrirMenuPrincipalOrganizacao(){
@@ -132,16 +120,9 @@ public class TabLoginOrganizacao extends Fragment {
         getActivity().finish();
     }
 
-    private void campoVazio(){
-        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), R.style.AppTheme));
-        builder.setMessage(R.string.preencher_campos);
-        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
-        AlertDialog dialog = builder.create();
-        dialog.show();
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        this.context = context;
     }
 }

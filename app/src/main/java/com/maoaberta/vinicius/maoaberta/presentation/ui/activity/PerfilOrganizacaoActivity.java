@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.StrictMode;
 import android.provider.MediaStore;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -31,8 +30,6 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.maoaberta.vinicius.maoaberta.R;
@@ -45,7 +42,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -97,14 +93,13 @@ public class PerfilOrganizacaoActivity extends AppCompatActivity {
     EditText edit_text_descricao_perfil_organizacao;
     @BindView(R.id.edit_text_senha_perfil_organizacao)
     EditText edit_text_senha_perfil_organizacao;
-    @BindView(R.id.edit_text_confirmar_senha_perfil_organizacao)
-    EditText edit_text_confirmar_senha_perfil_organizacao;
     @BindView(R.id.button_atualizar_dados_organizacao)
     Button button_atualizar_dados_organizacao;
     private ProgressDialog progressDialog;
     private CustomPhotoPickerDialog photoDialog;
     private String mCurrentPhotoPath;
     private Bitmap mImageBitmap;
+    private Organizacao organizacaoEditada;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -135,6 +130,7 @@ public class PerfilOrganizacaoActivity extends AppCompatActivity {
                 @Override
                 public void onGetOrganizacaoByIdSuccess(Organizacao organizacao) {
                     if (organizacao != null) {
+                        organizacaoEditada = organizacao;
                         edit_text_razao_social_perfil_organizacao.setText(organizacao.getRazaoSocial());
                         edit_text_nome_fantasia_perfil_organizacao.setText(organizacao.getNomeFantasia());
                         edit_text_cnpj_perfil_organizacao.setText(organizacao.getCnpj());
@@ -147,7 +143,7 @@ public class PerfilOrganizacaoActivity extends AppCompatActivity {
                         edit_text_site_perfil_organizacao.setText(organizacao.getWebSite());
                         edit_text_descricao_perfil_organizacao.setText(organizacao.getDescricao());
                         if(organizacao.getPhotoUrl() != null){
-                            Glide.with(PerfilOrganizacaoActivity.this).load(organizacao.getPhotoUrl()).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true)
+                            Glide.with(getApplicationContext()).load(organizacao.getPhotoUrl()).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true)
                                     .into(image_view_logo_perfil_organizacao);
                             text_view_escolher_foto_perfil_organizacao.setVisibility(View.GONE);
                             text_view_escolher_foto_perfil_organizacao.setEnabled(false);
@@ -163,7 +159,6 @@ public class PerfilOrganizacaoActivity extends AppCompatActivity {
                 @Override
                 public void onGetOrganizacaoByIdError(String error) {
                     Log.d("onGetUserByIdError", error);
-                    Toast.makeText(PerfilOrganizacaoActivity.this, "Organização não existe", Toast.LENGTH_LONG).show();
                 }
             });
         }
@@ -214,136 +209,49 @@ public class PerfilOrganizacaoActivity extends AppCompatActivity {
         button_atualizar_dados_organizacao.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (String.valueOf(edit_text_razao_social_perfil_organizacao.getText()).equals("") || String.valueOf(edit_text_nome_fantasia_perfil_organizacao.getText()).equals("") ||
-                        String.valueOf(edit_text_cnpj_perfil_organizacao.getText()).equals("") || String.valueOf(edit_text_nome_responsavel_perfil_organizacao.getText()).equals("") ||
-                        String.valueOf(edit_text_email_perfil_organizacao.getText()).equals("") || String.valueOf(edit_text_telefone_perfil_organizacao.getText()).equals("")) {
-                    alertaCamposNaoPreenchidos();
-                } else {
-                    image_view_logo_perfil_organizacao.setDrawingCacheEnabled(true);
-                    final Bitmap bmap = image_view_logo_perfil_organizacao.getDrawingCache();
-                    user = mAuth.getCurrentUser();
-                    if (user != null) {
-                        organizacaoRepository.getOrganizacaoById(user.getUid(), new OrganizacaoRepository.OnGetOrganizacaoById() {
-                            @Override
-                            public void onGetOrganizacaoByIdSuccess(Organizacao organizacao) {
-                                showProgressDialog("Atualizando dados", "Aguarde enquanto os dados são atualizados");
-                                if (organizacao != null) {
-                                    ong = new Organizacao();
-                                    ong.setCnpj(String.valueOf(edit_text_cnpj_perfil_organizacao.getText()));
-                                    ong.setDescricao(String.valueOf(edit_text_descricao_perfil_organizacao.getText()));
-                                    ong.setEmail(String.valueOf(edit_text_email_perfil_organizacao.getText()));
-                                    ong.setFacebookAccount(String.valueOf(edit_text_facebook_perfil_organizacao.getText()));
-                                    ong.setNomeFantasia(String.valueOf(edit_text_nome_fantasia_perfil_organizacao.getText()));
-                                    ong.setNomeResponsavel(String.valueOf(edit_text_nome_responsavel_perfil_organizacao.getText()));
-                                    ong.setTelefone(String.valueOf(edit_text_telefone_perfil_organizacao.getText()));
-                                    ong.setTwitterAccount(String.valueOf(edit_text_twitter_perfil_organizacao.getText()));
-                                    ong.setWebSite(String.valueOf(edit_text_site_perfil_organizacao.getText()));
-                                    ong.setRazaoSocial(String.valueOf(edit_text_razao_social_perfil_organizacao.getText()));
-                                    ong.setEndereco(String.valueOf(edit_text_endereco_perfil_organizacao.getText()));
+                image_view_logo_perfil_organizacao.setDrawingCacheEnabled(true);
+                final Bitmap bmap = image_view_logo_perfil_organizacao.getDrawingCache();
+                showProgressDialog("Atualizando Dados", "Aguarde enquanto os dados do usuário são atualizados");
+                organizacaoEditada.setNomeFantasia(edit_text_nome_fantasia_perfil_organizacao.getText().toString());
+                organizacaoEditada.setRazaoSocial(edit_text_razao_social_perfil_organizacao.getText().toString());
+                organizacaoEditada.setCnpj(edit_text_cnpj_perfil_organizacao.getText().toString());
+                organizacaoEditada.setDescricao(edit_text_descricao_perfil_organizacao.getText().toString());
+                organizacaoEditada.setEndereco(edit_text_endereco_perfil_organizacao.getText().toString());
+                organizacaoEditada.setFacebookAccount(edit_text_facebook_perfil_organizacao.getText().toString());
+                organizacaoEditada.setNomeResponsavel(edit_text_nome_responsavel_perfil_organizacao.getText().toString());
+                organizacaoEditada.setTelefone(edit_text_telefone_perfil_organizacao.getText().toString());
+                organizacaoEditada.setTwitterAccount(edit_text_twitter_perfil_organizacao.getText().toString());
+                organizacaoEditada.setWebSite(edit_text_site_perfil_organizacao.getText().toString());
 
-                                    if (!String.valueOf(edit_text_senha_perfil_organizacao.getText()).equals("")) {
-                                        if (String.valueOf(edit_text_senha_perfil_organizacao.getText()).equals(String.valueOf(edit_text_confirmar_senha_perfil_organizacao.getText()))) {
-                                            if (edit_text_senha_perfil_organizacao.getText().length() >= 6 && edit_text_confirmar_senha_perfil_organizacao.getText().length() >= 6) {
-                                                user.updatePassword(String.valueOf(edit_text_senha_perfil_organizacao.getText())).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                    @Override
-                                                    public void onComplete(@NonNull Task<Void> task) {
-                                                        if (task.isSuccessful()) {
-                                                            organizacaoRepository.atualizarDadosOrganizacao(ong, bmap, new OrganizacaoRepository.OnUpdateOrganizacao() {
-                                                                @Override
-                                                                public void onUpdateOrganizacaoSuccess(String sucesso) {
-                                                                    AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(PerfilOrganizacaoActivity.this, R.style.AppTheme));
-                                                                    builder.setMessage(R.string.organizacao_atualizada_sucesso);
-                                                                    builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                                                                        @Override
-                                                                        public void onClick(DialogInterface dialog, int i) {
-                                                                            hideProgressDialog();
-                                                                            abrirMenuPerfilOrganizacao();
-                                                                        }
-                                                                    });
-                                                                    AlertDialog dialog = builder.create();
-                                                                    dialog.show();
-                                                                }
+                if(edit_text_senha_perfil_organizacao.getText().toString().isEmpty()){
+                    organizacaoRepository.atualizarDadosOrganizacao(organizacaoEditada, bmap, new OrganizacaoRepository.OnUpdateOrganizacao() {
+                        @Override
+                        public void onUpdateOrganizacaoSuccess(String sucesso) {
+                            hideProgressDialog();
+                            Toast.makeText(getApplicationContext(), "Usuário atualizado com sucesso!", Toast.LENGTH_SHORT).show();
+                            finish();
+                        }
 
-                                                                @Override
-                                                                public void onUpdateOrganizacaoError(String error) {
-                                                                    AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(PerfilOrganizacaoActivity.this, R.style.AppTheme));
-                                                                    builder.setMessage(R.string.erro_atualizacao_organizacao);
-                                                                    builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                                                                        @Override
-                                                                        public void onClick(DialogInterface dialog, int i) {
-                                                                            hideProgressDialog();
-                                                                            abrirMenuPerfilOrganizacao();
-                                                                        }
-                                                                    });
-                                                                    AlertDialog dialog = builder.create();
-                                                                    dialog.show();
-                                                                }
-                                                            });
-                                                        } else {
-                                                            hideProgressDialog();
-                                                            Toast.makeText(PerfilOrganizacaoActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                                                        }
-                                                    }
-                                                });
-                                            } else {
-                                                alertaSenhaCurta();
-                                            }
-                                        } else {
-                                            alertaSenhasDiferentes();
-                                        }
-                                    } else {
-                                        organizacaoRepository.atualizarDadosOrganizacao(ong, bmap, new OrganizacaoRepository.OnUpdateOrganizacao() {
-                                            @Override
-                                            public void onUpdateOrganizacaoSuccess(String sucesso) {
-                                                AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(PerfilOrganizacaoActivity.this, R.style.AppTheme));
-                                                builder.setMessage(R.string.organizacao_atualizada_sucesso);
-                                                builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                                                    @Override
-                                                    public void onClick(DialogInterface dialog, int i) {
-                                                        hideProgressDialog();
-                                                        abrirMenuPerfilOrganizacao();
-                                                    }
-                                                });
-                                                AlertDialog dialog = builder.create();
-                                                dialog.show();
-                                            }
+                        @Override
+                        public void onUpdateOrganizacaoError(String error) {
 
-                                            @Override
-                                            public void onUpdateOrganizacaoError(String error) {
-                                                AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(PerfilOrganizacaoActivity.this, R.style.AppTheme));
-                                                builder.setMessage(R.string.erro_atualizacao_organizacao);
-                                                builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                                                    @Override
-                                                    public void onClick(DialogInterface dialog, int i) {
-                                                        hideProgressDialog();
-                                                        abrirMenuPerfilOrganizacao();
-                                                    }
-                                                });
-                                                AlertDialog dialog = builder.create();
-                                                dialog.show();
-                                            }
-                                        });
-                                    }
-                                }
-                            }
+                        }
+                    });
+                }else{
+                    user.updatePassword(String.valueOf(edit_text_senha_perfil_organizacao.getText()));
+                    organizacaoRepository.atualizarDadosOrganizacao(organizacaoEditada, bmap, new OrganizacaoRepository.OnUpdateOrganizacao() {
+                        @Override
+                        public void onUpdateOrganizacaoSuccess(String sucesso) {
+                            hideProgressDialog();
+                            Toast.makeText(getApplicationContext(), "Usuário atualizado com sucesso!", Toast.LENGTH_SHORT).show();
+                            finish();
+                        }
 
-                            @Override
-                            public void onGetOrganizacaoByIdError(String error) {
-                                Log.d("onGetUserByIdError", error);
-                                AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(PerfilOrganizacaoActivity.this, R.style.AppTheme));
-                                builder.setMessage("Não foi possível atualizar os dados da organização. Por favor, tente novamente!");
-                                builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int i) {
-                                        hideProgressDialog();
-                                        dialog.dismiss();
-                                    }
-                                });
-                                AlertDialog dialog = builder.create();
-                                dialog.show();
-                            }
-                        });
-                    }
+                        @Override
+                        public void onUpdateOrganizacaoError(String error) {
+
+                        }
+                    });
                 }
             }
         });
@@ -371,71 +279,17 @@ public class PerfilOrganizacaoActivity extends AppCompatActivity {
                 image_view_logo_perfil_organizacao.setImageBitmap(mImageBitmap);
                 text_view_escolher_foto_perfil_organizacao.setVisibility(View.GONE);
                 text_view_escolher_foto_perfil_organizacao.setEnabled(false);
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
             } catch (IOException e) {
                 e.printStackTrace();
             }
         } else if (requestCode == SELECT_PICTURE && resultCode == RESULT_OK) {
             if (data != null) {
                 Uri uri = data.getData();
-                Glide.with(this).load(uri).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(image_view_logo_perfil_organizacao);
+                Glide.with(getApplicationContext()).load(uri).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(image_view_logo_perfil_organizacao);
                 text_view_escolher_foto_perfil_organizacao.setEnabled(false);
                 text_view_escolher_foto_perfil_organizacao.setVisibility(View.GONE);
             }
         }
-    }
-
-    private void alertaSenhasDiferentes() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(PerfilOrganizacaoActivity.this, R.style.AppTheme));
-        builder.setMessage(R.string.senhas_diferentes);
-        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                edit_text_senha_perfil_organizacao.setText("");
-                edit_text_confirmar_senha_perfil_organizacao.setText("");
-                hideProgressDialog();
-                dialog.dismiss();
-            }
-        });
-        AlertDialog dialog = builder.create();
-        dialog.show();
-    }
-
-    private void alertaCamposNaoPreenchidos() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(PerfilOrganizacaoActivity.this, R.style.AppTheme));
-        builder.setMessage(R.string.campos_nao_preenchidos);
-        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                hideProgressDialog();
-                dialog.dismiss();
-            }
-        });
-        AlertDialog dialog = builder.create();
-        dialog.show();
-    }
-
-    private void alertaSenhaCurta() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(PerfilOrganizacaoActivity.this, R.style.AppTheme));
-        builder.setMessage(R.string.senha_curta);
-        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                hideProgressDialog();
-                edit_text_senha_perfil_organizacao.setText("");
-                edit_text_confirmar_senha_perfil_organizacao.setText("");
-                dialog.dismiss();
-            }
-        });
-        AlertDialog dialog = builder.create();
-        dialog.show();
-    }
-
-    private void abrirMenuPerfilOrganizacao() {
-        Intent intent = new Intent(PerfilOrganizacaoActivity.this, PerfilOrganizacaoActivity.class);
-        startActivity(intent);
-        finish();
     }
 
     public void showProgressDialog(String title, String content) {
@@ -455,49 +309,18 @@ public class PerfilOrganizacaoActivity extends AppCompatActivity {
             case android.R.id.home:
                 abrirMenuPrincipal();
                 break;
-            case R.id.item_exit_menu_principal:
-                sairDoApp();
-                break;
         }
         return true;
     }
 
     private void abrirMenuPrincipal() {
-        Intent intent = new Intent(PerfilOrganizacaoActivity.this, MenuPrincipalOrganizacaoActivity.class);
+        Intent intent = new Intent(getApplicationContext(), MenuPrincipalOrganizacaoActivity.class);
         startActivity(intent);
         finish();
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_perfil, menu);
-
         return super.onCreateOptionsMenu(menu);
-    }
-
-    private void sairDoApp() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.AppTheme));
-        builder.setMessage(R.string.sair_app);
-        builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                FirebaseAuth.getInstance().signOut();
-                abrirTelaLogin();
-            }
-        });
-        builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
-        AlertDialog dialog = builder.create();
-        dialog.show();
-    }
-
-    private void abrirTelaLogin() {
-        Intent intent = new Intent(this, LoginActivity.class);
-        startActivity(intent);
-        finish();
     }
 }

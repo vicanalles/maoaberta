@@ -1,5 +1,6 @@
 package com.maoaberta.vinicius.maoaberta.presentation.ui.fragment;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -37,6 +38,7 @@ public class TabLoginOrganizacao extends Fragment {
 
     private FirebaseAuth mAuth;
     private Context context;
+    private ProgressDialog progressDialog;
 
     @BindView(R.id.edit_text_login_email_organizacao)
     EditText edit_text_login_email_organizacao;
@@ -54,6 +56,10 @@ public class TabLoginOrganizacao extends Fragment {
 
         View v = inflater.inflate(R.layout.tab_login_organizacao, container, false);
         ButterKnife.bind(this, v);
+
+        progressDialog = new ProgressDialog(context);
+        progressDialog.setTitle("Login");
+        progressDialog.setMessage("Obtendo informações do usuário...");
 
         mAuth = FirebaseAuth.getInstance();
 
@@ -88,12 +94,13 @@ public class TabLoginOrganizacao extends Fragment {
     }
 
     private void signIn(String email, String senha){
-        ((LoginActivity) getActivity()).showProgressDialog("Aguarde", "Obtendo informações da Organização");
+        progressDialog.show();
         mAuth.signInWithEmailAndPassword(email, senha)
                 .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(!task.isSuccessful()){
+                            progressDialog.hide();
                             Toast.makeText(context, "Email ou senha inválidos. Por favor, digite novamente!", Toast.LENGTH_SHORT).show();
                         }else{
                             abrirMenuPrincipalOrganizacao();
@@ -103,7 +110,7 @@ public class TabLoginOrganizacao extends Fragment {
     }
 
     private void abrirMenuPrincipalOrganizacao(){
-        ((LoginActivity) getActivity()).hideProgressDialog();
+        progressDialog.hide();
         Intent intent = new Intent(getContext(), MenuPrincipalOrganizacaoActivity.class);
         startActivity(intent);
         getActivity().finish();

@@ -1,10 +1,12 @@
 package com.maoaberta.vinicius.maoaberta.presentation.ui.activity;
 
+import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ContextThemeWrapper;
@@ -41,7 +43,7 @@ public class MenuPrincipalOrganizacaoActivity extends AppCompatActivity {
     @BindView(R.id.toolbar_layout_menu_organizacao)
     Toolbar toolbar_layout_menu_organizacao;
     @BindView(R.id.pager_menu_principal_organizacao)
-    CustomViewPager pager_menu_principal_organizacao;
+    ViewPager pager_menu_principal_organizacao;
     @BindView(R.id.tab_layout_menu_principal_organizacao)
     TabLayout tab_layout_menu_principal_organizacao;
 
@@ -66,7 +68,6 @@ public class MenuPrincipalOrganizacaoActivity extends AppCompatActivity {
             getSupportActionBar().setTitle(R.string.app_name);
         }
 
-        pager_menu_principal_organizacao.setPagingEnabled(false);
         pager_menu_principal_organizacao.setAdapter(new TabsPagerAdapterOrganizacao(getSupportFragmentManager(), this));
         tab_layout_menu_principal_organizacao.setTabTextColors(ColorStateList.valueOf(getResources().getColor(R.color.textColorWhite)));
         tab_layout_menu_principal_organizacao.setSelectedTabIndicatorColor(getResources().getColor(R.color.textColorWhite));
@@ -124,15 +125,23 @@ public class MenuPrincipalOrganizacaoActivity extends AppCompatActivity {
                 break;
             case R.id.item_perfil:
                 abrirPerfilOrganizacao();
+                break;
+            case R.id.item_sobre:
+                abrirTelaSobre();
+                break;
         }
 
         return super.onOptionsItemSelected(item);
     }
 
-    private void abrirPerfilOrganizacao() {
-        Intent intent = new Intent(MenuPrincipalOrganizacaoActivity.this, PerfilOrganizacaoActivity.class);
+    private void abrirTelaSobre() {
+        Intent intent = new Intent(getApplicationContext(), SobreActivity.class);
         startActivity(intent);
-        finish();
+    }
+
+    private void abrirPerfilOrganizacao() {
+        Intent intent = new Intent(getApplicationContext(), PerfilOrganizacaoActivity.class);
+        startActivity(intent);
     }
 
     @Override
@@ -141,7 +150,7 @@ public class MenuPrincipalOrganizacaoActivity extends AppCompatActivity {
     }
 
     private void sairDoApp() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.AppTheme));
+        @SuppressLint("RestrictedApi") AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.AppTheme));
         builder.setMessage(R.string.sair_app);
         builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
             @Override

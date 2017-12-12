@@ -103,6 +103,8 @@ public class CompletarRegistroOrganizacaoActivity extends AppCompatActivity {
     Button button_cadastrar_completar_registro_organizacao;
     private String mCurrentPhotoPath;
     private Bitmap mImageBitmap;
+    private double latitude = 0;
+    private double longitude = 0;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -199,6 +201,15 @@ public class CompletarRegistroOrganizacaoActivity extends AppCompatActivity {
                     organizacao.setEmail(edit_text_email_completar_registro_organizacao.getText().toString());
                     organizacao.setTelefone(edit_text_telefone_completar_registro_organizacao.getText().toString());
                     organizacao.setDescricao(edit_text_descricao_completar_registro_organizacao.getText().toString());
+                    if(latitude != 0 && longitude != 0){
+                        organizacao.setLatitude(latitude);
+                        organizacao.setLongitude(longitude);
+                        organizacao.setHasPosition(true);
+                    }else{
+                        organizacao.setLatitude(latitude);
+                        organizacao.setLongitude(longitude);
+                        organizacao.setHasPosition(false);
+                    }
                     organizacaoRepository.salvarDadosOrganizacao(organizacao, bmap, new OrganizacaoRepository.OnSaveOrganizacao() {
                         @Override
                         public void onSaveOrganizacaoSuccess(Organizacao organizacao) {
@@ -300,8 +311,8 @@ public class CompletarRegistroOrganizacaoActivity extends AppCompatActivity {
             if(resultCode == RESULT_OK){
                 if(data != null){
                     Bundle extras = data.getExtras();
-                    double latitude = (double) extras.get("latitude");
-                    double longitude = (double) extras.get("longitude");
+                    latitude = (double) extras.get("latitude");
+                    longitude = (double) extras.get("longitude");
                     Geocoder geocoder = new Geocoder(CompletarRegistroOrganizacaoActivity.this, Locale.getDefault());
                     try{
                         List<Address> addresses = geocoder.getFromLocation(latitude, longitude, 1);

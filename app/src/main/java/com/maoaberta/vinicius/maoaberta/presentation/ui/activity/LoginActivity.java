@@ -137,9 +137,16 @@ public class LoginActivity extends AppCompatActivity {
             case R.id.item_esqueceu_sua_senha:
                 abrirEsqueceuSuaSenha();
                 break;
+            case R.id.item_sobre:
+                abrirTelaSobre();
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void abrirTelaSobre() {
+        Intent intent = new Intent(getApplicationContext(), SobreActivity.class);
+        startActivity(intent);
     }
 
     public void abrirEsqueceuSuaSenha(){

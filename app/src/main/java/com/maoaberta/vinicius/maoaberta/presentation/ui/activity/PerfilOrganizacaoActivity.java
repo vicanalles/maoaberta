@@ -229,7 +229,6 @@ public class PerfilOrganizacaoActivity extends AppCompatActivity {
                         public void onUpdateOrganizacaoSuccess(String sucesso) {
                             hideProgressDialog();
                             Toast.makeText(getApplicationContext(), "Usuário atualizado com sucesso!", Toast.LENGTH_SHORT).show();
-                            finish();
                         }
 
                         @Override
@@ -244,7 +243,6 @@ public class PerfilOrganizacaoActivity extends AppCompatActivity {
                         public void onUpdateOrganizacaoSuccess(String sucesso) {
                             hideProgressDialog();
                             Toast.makeText(getApplicationContext(), "Usuário atualizado com sucesso!", Toast.LENGTH_SHORT).show();
-                            finish();
                         }
 
                         @Override

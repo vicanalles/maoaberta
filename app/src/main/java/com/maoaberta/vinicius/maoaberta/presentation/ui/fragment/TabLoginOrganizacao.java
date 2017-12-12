@@ -124,7 +124,6 @@ public class TabLoginOrganizacao extends Fragment {
     public void abrirActivityCadastro(){
         Intent intent = new Intent(getContext(), CadastroActivity.class);
         startActivity(intent);
-        getActivity().finish();
     }
 
     @Override

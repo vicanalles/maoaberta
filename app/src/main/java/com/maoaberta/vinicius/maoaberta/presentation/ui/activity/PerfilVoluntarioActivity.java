@@ -208,7 +208,6 @@ public class PerfilVoluntarioActivity extends AppCompatActivity {
                         public void onUpdateUsuarioSuccess(String sucesso) {
                             hideProgressDialog();
                             Toast.makeText(PerfilVoluntarioActivity.this, "Usuário atualizado com sucesso!", Toast.LENGTH_SHORT).show();
-                            finish();
                         }
 
                         @Override
@@ -225,7 +224,6 @@ public class PerfilVoluntarioActivity extends AppCompatActivity {
                         public void onUpdateUsuarioSuccess(String sucesso) {
                             hideProgressDialog();
                             Toast.makeText(PerfilVoluntarioActivity.this, "Usuário atualizado com sucesso!", Toast.LENGTH_SHORT).show();
-                            finish();
                         }
 
                         @Override

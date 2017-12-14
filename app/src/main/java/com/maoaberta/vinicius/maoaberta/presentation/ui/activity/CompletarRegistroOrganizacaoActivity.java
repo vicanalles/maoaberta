@@ -1,11 +1,14 @@
 package com.maoaberta.vinicius.maoaberta.presentation.ui.activity;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.location.Address;
+import android.location.Geocoder;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -23,6 +26,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -45,6 +49,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -59,6 +65,7 @@ public class CompletarRegistroOrganizacaoActivity extends AppCompatActivity {
     private static final int SELECT_PICTURE = 1596;
     private static final int REQUEST_IMAGE_CAPTURE = 1595;
     private static final int PERMISSION_WRITE_EXTERNAL = 1594;
+    private static final int REQUEST_POSITION = 4569;
     private FirebaseAuth mAuth;
     private FirebaseUser user;
     private OrganizacaoRepository organizacaoRepository;
@@ -84,6 +91,10 @@ public class CompletarRegistroOrganizacaoActivity extends AppCompatActivity {
     EditText edit_text_nome_responsavel_completar_registro_organizacao;
     @BindView(R.id.edit_text_email_completar_registro_organizacao)
     EditText edit_text_email_completar_registro_organizacao;
+    @BindView(R.id.edit_text_enderedo_completar_registro_organizacao)
+    EditText edit_text_enderedo_completar_registro_organizacao;
+    @BindView(R.id.image_view_add_position)
+    ImageView image_view_add_position;
     @BindView(R.id.edit_text_telefone_completar_registro_organizacao)
     EditText edit_text_telefone_completar_registro_organizacao;
     @BindView(R.id.edit_text_descricao_completar_registro_organizacao)
@@ -92,6 +103,8 @@ public class CompletarRegistroOrganizacaoActivity extends AppCompatActivity {
     Button button_cadastrar_completar_registro_organizacao;
     private String mCurrentPhotoPath;
     private Bitmap mImageBitmap;
+    private double latitude = 0;
+    private double longitude = 0;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -160,6 +173,13 @@ public class CompletarRegistroOrganizacaoActivity extends AppCompatActivity {
             }
         });
 
+        image_view_add_position.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                abrirMapsActivity();
+            }
+        });
+
         button_cadastrar_completar_registro_organizacao.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -181,6 +201,15 @@ public class CompletarRegistroOrganizacaoActivity extends AppCompatActivity {
                     organizacao.setEmail(edit_text_email_completar_registro_organizacao.getText().toString());
                     organizacao.setTelefone(edit_text_telefone_completar_registro_organizacao.getText().toString());
                     organizacao.setDescricao(edit_text_descricao_completar_registro_organizacao.getText().toString());
+                    if(latitude != 0 && longitude != 0){
+                        organizacao.setLatitude(latitude);
+                        organizacao.setLongitude(longitude);
+                        organizacao.setHasPosition(true);
+                    }else{
+                        organizacao.setLatitude(latitude);
+                        organizacao.setLongitude(longitude);
+                        organizacao.setHasPosition(false);
+                    }
                     organizacaoRepository.salvarDadosOrganizacao(organizacao, bmap, new OrganizacaoRepository.OnSaveOrganizacao() {
                         @Override
                         public void onSaveOrganizacaoSuccess(Organizacao organizacao) {
@@ -210,6 +239,11 @@ public class CompletarRegistroOrganizacaoActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private void abrirMapsActivity() {
+        Intent intent = new Intent(CompletarRegistroOrganizacaoActivity.this, MapsActivity.class);
+        startActivityForResult(intent, REQUEST_POSITION);
     }
 
     private File createImageFile() throws IOException{
@@ -246,6 +280,37 @@ public class CompletarRegistroOrganizacaoActivity extends AppCompatActivity {
                         .into(image_view_logo_completar_registro_organizacao);
                 text_view_escolher_foto_completar_registro_organizacao.setVisibility(View.GONE);
                 text_view_escolher_foto_completar_registro_organizacao.setEnabled(false);
+            }
+        }else if(requestCode == REQUEST_POSITION){
+            if(resultCode == RESULT_OK){
+                if(data != null){
+                    Bundle extras = data.getExtras();
+                    latitude = (double) extras.get("latitude");
+                    longitude = (double) extras.get("longitude");
+                    Geocoder geocoder = new Geocoder(CompletarRegistroOrganizacaoActivity.this, Locale.getDefault());
+                    try{
+                        List<Address> addresses = geocoder.getFromLocation(latitude, longitude, 1);
+                        if(addresses != null && addresses.size() != 0){
+                            Address returnedAddress = addresses.get(0);
+                            String returnString = (returnedAddress.getThoroughfare() != null ?
+                                    String.format("%s, ", returnedAddress.getThoroughfare()) : "") +
+                                    (returnedAddress.getSubThoroughfare() != null ?
+                                            String.format("%s, ", returnedAddress.getSubThoroughfare()) : "") +
+                                    (returnedAddress.getSubAdminArea() != null ?
+                                            String.format("%s - ", returnedAddress.getSubAdminArea()) : "") +
+                                    (returnedAddress.getAdminArea() != null ? returnedAddress.getAdminArea() : "");
+                            returnString = returnString.replace("Unnamed Road,", "");
+                            edit_text_enderedo_completar_registro_organizacao.setText(returnString);
+                            if (returnString.equals(""))
+                                edit_text_enderedo_completar_registro_organizacao.setText(R.string.endereco_desconhecido);
+                        }else{
+                            edit_text_enderedo_completar_registro_organizacao.setText(R.string.endereco_desconhecido);
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        edit_text_enderedo_completar_registro_organizacao.setText(R.string.endereco_desconhecido);
+                    }
+                }
             }
         }
     }

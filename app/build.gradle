@@ -10,6 +10,8 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        multiDexEnabled true
     }
     buildTypes {
         release {
@@ -93,6 +95,9 @@ dependencies {
 
     //Facebook SDK
     compile 'com.facebook.android:facebook-android-sdk:4.18.0'
+
+    //Google Play Services
+    compile 'com.google.android.gms:play-services:11.2.2'
 
     compile 'ru.egslava:MaskedEditText:1.0.5'
 }

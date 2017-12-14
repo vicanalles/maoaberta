@@ -115,8 +115,7 @@ public class TabCadastroOrganizacao extends Fragment {
 
                                 @Override
                                 public void onGetOrganizacaoByIdError(String error) {
-                                    ((CadastroActivity) getActivity()).hideProgressDialog();
-                                    Toast.makeText(getActivity(), "Erro ao cadastrar os dados. Por favor tente novamente", Toast.LENGTH_SHORT).show();
+
                                 }
                             });
                         }

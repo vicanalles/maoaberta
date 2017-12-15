@@ -2,7 +2,7 @@
     <string name="app_name">Mão Aberta</string>
     <string name="facebook_app_id">256614064868751</string>
     <string name="nome_projeto">Projeto Mão Aberta</string>
-    <string name="google_maps_key">AIzaSyBYICIqdQfqjLNacQ-57Q_bZUnpTeslo14</string>
+    <string name="google_maps_key">AIzaSyDe22eevXf3tDGFtOO2memAmjo4IgGuaGU</string>
     <string name="email">Email</string>
     <string name="senha">Senha</string>
     <string name="entrar">Entrar</string>
@@ -92,4 +92,5 @@
     <string name="versao_app">© 2017 - v%s</string>
     <string name="nova_senha">Nova Senha</string>
     <string name="endereco_desconhecido">Enredeço desconhecido</string>
+    <string name="selecionar_posicao">Selecionar Posição</string>
 </resources>

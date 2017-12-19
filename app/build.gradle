@@ -74,6 +74,9 @@ dependencies {
     //Firebase Storage
     compile 'com.google.firebase:firebase-storage:11.2.2'
 
+    //Firebase Messaging
+    compile 'com.google.firebase:firebase-messaging:11.2.2'
+
     //Mascara para CPF/CNPJ
     compile 'br.com.concretesolutions:canarinho:1.2.0'
 
@@ -99,6 +102,7 @@ dependencies {
     //Google Play Services
     compile 'com.google.android.gms:play-services:11.2.2'
 
+    //Masked Edit Text
     compile 'ru.egslava:MaskedEditText:1.0.5'
 }
 

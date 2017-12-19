@@ -321,17 +321,30 @@ public class CompletarRegistroOrganizacaoActivity extends AppCompatActivity {
     }
 
     private void sairDoApp() {
-        user.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Deseja mesmo sair do aplicativo?");
+        builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
             @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                abrirTelaLogin();
+            public void onClick(DialogInterface dialog, int which) {
+                user.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        abrirTelaLogin();
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(CompletarRegistroOrganizacaoActivity.this, "Ocorreu um erro. Por favor, tente novamente!!", Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
-        }).addOnFailureListener(new OnFailureListener() {
+        }).setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
             @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(CompletarRegistroOrganizacaoActivity.this, "Ocorreu um erro. Por favor, tente novamente!!", Toast.LENGTH_SHORT).show();
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
             }
         });
+        builder.show();
     }
 
     private void abrirTelaLogin() {

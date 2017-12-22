@@ -1,13 +1,10 @@
 package com.maoaberta.vinicius.maoaberta.service;
 
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
-import com.maoaberta.vinicius.maoaberta.app.Config;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 /**
  * Created by vinicius on 19/12/17.
@@ -15,34 +12,17 @@ import com.maoaberta.vinicius.maoaberta.app.Config;
 
 public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService{
 
-    private static final String TAG = MyFirebaseInstanceIDService.class.getSimpleName();
+    private static final String TAG = "MyFirebaseIIDService";
+    private static final String FRIENDLY_ENGAGE_TOPIC = "friendly_engage";
 
     @Override
     public void onTokenRefresh() {
-        super.onTokenRefresh();
-        String refreshedToken = FirebaseInstanceId.getInstance().getToken();
+        // If you need to handle the generation of a token, initially or
+        // after a refresh this is where you should do that.
+        String token = FirebaseInstanceId.getInstance().getToken();
+        Log.d(TAG, "FCM Token: " + token);
 
-        // Saving reg id to shared preferences
-        storeRegIdInPref(refreshedToken);
-
-        // sending reg id to your server
-        sendRegistrationToServer(refreshedToken);
-
-        // Notify UI that registration has completed, so the progress indicator can be hidden.
-        Intent registrationComplete = new Intent(Config.REGISTRATION_COMPLETE);
-        registrationComplete.putExtra("token", refreshedToken);
-        LocalBroadcastManager.getInstance(this).sendBroadcast(registrationComplete);
-    }
-
-    private void sendRegistrationToServer(final String token) {
-        // sending gcm token to server
-        Log.e(TAG, "sendRegistrationToServer: " + token);
-    }
-
-    private void storeRegIdInPref(String token) {
-        SharedPreferences pref = getApplicationContext().getSharedPreferences(Config.SHARED_PREF, 0);
-        SharedPreferences.Editor editor = pref.edit();
-        editor.putString("regId", token);
-        editor.commit();
+        // Once a token is generated, we subscribe to topic.
+        FirebaseMessaging.getInstance().subscribeToTopic(FRIENDLY_ENGAGE_TOPIC);
     }
 }

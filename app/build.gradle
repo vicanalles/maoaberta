@@ -104,6 +104,9 @@ dependencies {
 
     //Masked Edit Text
     compile 'ru.egslava:MaskedEditText:1.0.5'
+
+    //Gson
+    compile 'com.google.code.gson:gson:2.8.0'
 }
 
 apply plugin: 'com.google.gms.google-services'

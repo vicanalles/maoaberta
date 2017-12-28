@@ -93,4 +93,5 @@
     <string name="nova_senha">Nova Senha</string>
     <string name="endereco_desconhecido">Enredeço desconhecido</string>
     <string name="selecionar_posicao">Selecionar Posição</string>
+    <string name="notif_action_reply">RESPONDER</string>
 </resources>
